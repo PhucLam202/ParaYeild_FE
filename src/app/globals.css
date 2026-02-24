@@ -33,6 +33,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
+  --color-accent-purple: #552BBF;
+  --color-accent-neon: #00FFA3;
+  --color-background-dark-start: #021200;
+  --color-background-dark-end: #041B08;
+  --color-card-dark: #0A140B;
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -85,4 +91,32 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.polkadot-gradient {
+  background: linear-gradient(135deg, #e6007a 0%, #552BBF 100%);
+}
+
+.neon-text {
+  color: #00FFA3;
+  text-shadow: 0 0 15px rgba(0, 255, 163, 0.4);
+}
+
+.glass-card {
+  background-color: rgba(10, 20, 11, 0.7);
+  border: 1px solid rgba(0, 255, 163, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #021200;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1a2e1c;
+  border-radius: 10px;
 }

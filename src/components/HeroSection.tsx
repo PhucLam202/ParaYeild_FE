@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, BarChart2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -72,10 +73,12 @@ export default function HeroSection() {
                         transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                         className="flex flex-col sm:flex-row items-center justify-center gap-6 pointer-events-auto"
                     >
-                        <Button className="px-8 py-6 bg-[#00FFA3] text-[#020402] hover:bg-[#00CC82] rounded-md hover:scale-105 transition-all duration-300 flex items-center gap-2 group font-mono font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(0,255,163,0.3)]">
-                            Launch Simulator
-                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                        </Button>
+                        <Link href="/simulator" passHref>
+                            <Button className="px-8 py-6 bg-[#00FFA3] text-[#020402] hover:bg-[#00CC82] rounded-md hover:scale-105 transition-all duration-300 flex items-center gap-2 group font-mono font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(0,255,163,0.3)]">
+                                Launch Simulator
+                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+                        </Link>
                         <Button variant="outline" className="px-8 py-6 border-[#00FFA3]/30 text-[#00FFA3] hover:bg-[#00FFA3]/10 hover:text-[#00FFA3] rounded-md transition-all duration-300 flex items-center gap-2 font-mono uppercase tracking-widest backdrop-blur-md">
                             <BarChart2 className="w-5 h-5" />
                             Explore Data

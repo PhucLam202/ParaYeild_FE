@@ -96,7 +96,15 @@ export default function HeroBgAnimation() {
             />
             {/* Overlay to ensure text readability */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#020402]/80 via-transparent to-[#020402] pointer-events-none mix-blend-multiply" />
-            <div className="absolute inset-0 bg-[#00FFA3]/5 pointer-events-none mix-blend-color-dodge" />
+            {/* Robust Watermark Mask */}
+            {/* 1. Vignette at the bottom to transition into other sections */}
+            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#020402] to-transparent pointer-events-none z-10" />
+
+            {/* 2. Targeted mask for the "Veo" watermark location (bottom-right) */}
+            <div className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-bl from-[#020402] via-[#020402]/80 to-transparent pointer-events-none z-10" />
+
+            {/* 3. Global darkening overlay for consistency */}
+            <div className="absolute inset-0 bg-[#020402]/30 pointer-events-none z-10" />
         </div>
     );
 }

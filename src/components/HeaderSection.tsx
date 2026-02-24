@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
 export default function HeaderSection() {
     const [scrolled, setScrolled] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -29,12 +31,14 @@ export default function HeaderSection() {
                     </nav>
                 </div>
 
-                <div className="flex items-center">
-                    <button className="px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-semibold text-sm transition-all duration-300 flex items-center gap-2 group">
-                        Launch App
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                </div>
+                {pathname !== '/simulator' && (
+                    <div className="flex items-center">
+                        <Link href="/simulator" className="px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white font-semibold text-sm transition-all duration-300 flex items-center gap-2 group">
+                            Launch App
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
+                )}
             </div>
         </header>
     );
