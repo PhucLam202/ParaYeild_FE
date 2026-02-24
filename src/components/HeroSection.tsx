@@ -38,10 +38,14 @@ export default function HeroSection() {
                             </Badge>
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-sans font-bold mb-8 leading-tight tracking-tight text-white">
-                            The Yield Engine <br className="hidden md:block" />
-                            <span className="text-gradient">For Polkadot</span>
+                        <h1 className="text-5xl md:text-7xl font-sans font-bold mb-8 leading-[1.1] tracking-tighter text-white px-4 md:px-0">
+                            Optimize Your DeFi Yield <br className="hidden md:block" />
+                            With Polkadot’s <span className="text-gradient">Precise Engine</span>
                         </h1>
+                        <p className="text-gray-400 text-lg md:text-xl font-sans max-w-2xl mx-auto mb-10 leading-relaxed opacity-80">
+                            Stop guessing your DeFi returns. Use real-time parachain data to simulate entry/exit points,
+                            calculate IL, and find the most profitable routes across the Polkadot ecosystem.
+                        </p>
                     </motion.div>
 
                     <motion.div
@@ -49,20 +53,24 @@ export default function HeroSection() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                     >
-                        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-12 text-gray-400 font-mono text-sm md:text-base bg-[#101810]/50 border border-white/5 py-6 px-12 rounded-xl backdrop-blur-md mx-auto w-fit">
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-12 text-gray-400 font-mono text-sm md:text-base bg-[#0A0C14]/80 border border-white/10 py-8 px-12 rounded-none backdrop-blur-md mx-auto w-fit relative">
+                            {/* Technical Corner Accents */}
+                            <div className="absolute -top-px -left-px w-2 h-2 border-t border-l border-[#00FFA3]" />
+                            <div className="absolute -bottom-px -right-px w-2 h-2 border-b border-r border-[#00FFA3]" />
+
                             <div className="flex flex-col items-center">
                                 <span className="text-3xl font-bold text-white mb-1"><CountUp from={0} to={450} duration={2} prefix="$" suffix="M+" /></span>
-                                <span className="uppercase tracking-widest text-[#00FFA3]/70 text-xs text-center">Liquid Indexed</span>
+                                <span className="uppercase tracking-[0.2em] text-[#00FFA3]/70 text-[10px] text-center font-bold">Liquid Indexed</span>
                             </div>
                             <div className="hidden md:block w-px h-12 bg-white/10" />
                             <div className="flex flex-col items-center">
                                 <span className="text-3xl font-bold text-white mb-1"><CountUp from={0} to={120} duration={2.5} suffix="+" /></span>
-                                <span className="uppercase tracking-widest text-[#00FFA3]/70 text-xs text-center">Live Pools<br />(Acala, Hydration, Bifrost)</span>
+                                <span className="uppercase tracking-[0.2em] text-[#00FFA3]/70 text-[10px] text-center font-bold">Live Pools<br />(Acala, Hydration, Bifrost)</span>
                             </div>
                             <div className="hidden md:block w-px h-12 bg-white/10" />
                             <div className="flex flex-col items-center">
                                 <span className="text-3xl font-bold text-white mb-1">24/7</span>
-                                <span className="uppercase tracking-widest text-[#00FFA3]/70 text-xs text-center">Real-time Sync</span>
+                                <span className="uppercase tracking-[0.2em] text-[#00FFA3]/70 text-[10px] text-center font-bold">Real-time Sync</span>
                             </div>
                         </div>
                     </motion.div>

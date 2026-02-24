@@ -100,8 +100,13 @@ export default function HeroBgAnimation() {
             {/* 1. Vignette at the bottom to transition into other sections */}
             <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#020402] to-transparent pointer-events-none z-10" />
 
-            {/* 2. Targeted mask for the "Veo" watermark location (bottom-right) */}
-            <div className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-bl from-[#020402] via-[#020402]/80 to-transparent pointer-events-none z-10" />
+            {/* 2. Surgical radial-gradient mask for the "Veo" watermark (bottom-right) */}
+            <div
+                className="absolute bottom-0 right-0 w-40 h-20 pointer-events-none z-10"
+                style={{
+                    background: 'radial-gradient(circle at bottom right, #020402 0%, #020402 40%, transparent 100%)'
+                }}
+            />
 
             {/* 3. Global darkening overlay for consistency */}
             <div className="absolute inset-0 bg-[#020402]/30 pointer-events-none z-10" />

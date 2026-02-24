@@ -14,8 +14,8 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DeFi Analytics Platform | Polkadot",
-  description: "Backtest DeFi Strategies Across Polkadot Parachains",
+  title: "ParaYield Lab | Polkadot DeFi Backtesting & Yield Optimizer",
+  description: "Maximize Polkadot DeFi returns. Backtest liquidity strategies, simulate impermanent loss, and optimize XCM fees across Acala, Bifrost, and Hydration.",
 };
 
 export default function RootLayout({
