@@ -169,6 +169,8 @@ export default function SimulatorPage() {
                 from: dateRange.from,
                 to: dateRange.to,
                 includeIL: protocol !== 'vstaking',
+                isCompound: compoundYield,
+                slippageTolerancePercent: slippage,
                 xcmFeeUsd: xcmFees ? 0.5 : 0,
                 allocations: customAllocations || [
                     {

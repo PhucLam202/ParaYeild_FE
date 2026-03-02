@@ -11,7 +11,9 @@ export interface SimulationRequest {
     to: string;
     allocations: SimulationAllocation[];
     includeIL?: boolean;
+    isCompound?: boolean;
     rebalanceIntervalDays?: number;
+    slippageTolerancePercent?: number;
     xcmFeeUsd?: number;
 }
 
