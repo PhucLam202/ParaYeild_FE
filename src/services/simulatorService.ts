@@ -11,9 +11,7 @@ export interface SimulationRequest {
     to: string;
     allocations: SimulationAllocation[];
     includeIL?: boolean;
-    isCompound?: boolean;
     rebalanceIntervalDays?: number;
-    slippageTolerancePercent?: number;
     xcmFeeUsd?: number;
 }
 
@@ -151,21 +149,29 @@ export const simulatorService = {
     },
 
     async getTokens(protocol?: string) {
-        const pools = await this.getPools(protocol);
-        const symbols = Array.from(new Set(pools.map(p => p.assetSymbol)));
-        return symbols.map(s => ({ symbol: s }));
+        const url = protocol ? `${API_BASE_URL}/simulation/tokens?protocol=${protocol}` : `${API_BASE_URL}/simulation/tokens`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch tokens");
+        const json = await response.json();
+        const data = Array.isArray(json) ? json : json.data ?? [];
+        return data.map((t: any) => ({ symbol: t.symbol || t }));
     },
 
     async getParachains() {
-        const pools = await this.getPools();
-        const protocols = Array.from(new Set(pools.map(p => p.protocol)));
-        return protocols.map(p => ({ id: p, name: p }));
+        const response = await fetch(`${API_BASE_URL}/simulation/parachains`);
+        if (!response.ok) throw new Error("Failed to fetch parachains");
+        const json = await response.json();
+        const data = Array.isArray(json) ? json : json.data ?? [];
+        return data.map((p: any) => ({ id: p.id || p, name: p.name || p.id || p }));
     },
 
     async getProtocolTypes(protocol?: string) {
-        const pools = await this.getPools(protocol);
-        const types = Array.from(new Set(pools.map(p => p.poolType)));
-        return types.map(t => ({ id: t, label: t }));
+        const url = protocol ? `${API_BASE_URL}/simulation/protocol-types?protocol=${protocol}` : `${API_BASE_URL}/simulation/protocol-types`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch protocol types");
+        const json = await response.json();
+        const data = Array.isArray(json) ? json : json.data ?? [];
+        return data.map((t: any) => ({ id: t.id || t, label: t.label || t.id || t }));
     },
 };
 
