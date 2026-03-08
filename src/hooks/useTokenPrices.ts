@@ -32,7 +32,7 @@ export function useTokenPrices(availableTokens: string[]) {
             if (selectedTokens.length === 0) return;
             try {
                 const symbols = selectedTokens.join(',');
-                const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3005/api/v1";
+                const baseUrl = "/api/proxy";
                 const res = await fetch(`${baseUrl}/price-indexer/tokens/realtime?symbols=${symbols}`);
                 if (res.ok) {
                     const data = await res.json();

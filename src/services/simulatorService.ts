@@ -34,7 +34,9 @@ export function getEffectiveApy(pool: LpFarmPool): number {
     return (pool.supplyApy ?? 0) + (pool.rewardApy ?? 0);
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3005/api/v1";
+const API_BASE_URL = typeof window !== "undefined"
+    ? "/api/proxy"
+    : (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3005/api/v1");
 
 export const simulatorService = {
     async getBacktestMetadata(): Promise<BacktestMetadataResponse> {
