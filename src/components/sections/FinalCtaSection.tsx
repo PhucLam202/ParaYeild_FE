@@ -18,17 +18,6 @@ export default function FinalCtaSection() {
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00FFA3]/30 to-transparent" />
 
             <div className="container mx-auto px-6 relative z-10 text-center">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00FFA3]/30 bg-[#00FFA3]/5 mb-8"
-                >
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#00FFA3] animate-pulse" />
-                    <span className="text-xs font-mono text-[#00FFA3] uppercase tracking-widest">Ready to optimize?</span>
-                </motion.div>
-
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -36,9 +25,9 @@ export default function FinalCtaSection() {
                     transition={{ delay: 0.1 }}
                     className="text-4xl md:text-6xl font-sans font-bold mb-6 text-white leading-tight tracking-tight"
                 >
-                    Start Backtesting
+                    See your numbers
                     <br />
-                    <span className="text-gradient">Your Strategy Today</span>
+                    <span className="text-gradient">before you commit capital.</span>
                 </motion.h2>
 
                 <motion.p
@@ -46,16 +35,44 @@ export default function FinalCtaSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
-                    className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
+                    className="text-gray-400 text-lg md:text-xl max-w-xl mx-auto mb-10 leading-relaxed"
                 >
-                    Join traders analyzing over $450M in liquidity across the Polkadot ecosystem. No wallet required to simulate.
+                    No wallet required. Run a simulation in under 30 seconds.
                 </motion.p>
 
+                {/* Mini product mockup */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 }}
+                    className="max-w-sm mx-auto mb-12 border border-white/10 rounded-xl bg-white/[0.03] p-4 font-mono text-xs text-left"
+                >
+                    <div className="flex justify-between text-gray-500 mb-3">
+                        <span>Pool: DOT / USDC</span>
+                        <span className="text-[#00FFA3]">● Live</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300 mb-1">
+                        <span>Deposit</span><span>10,000 USDC</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300 mb-3">
+                        <span>Range</span><span>−15% / +20%</span>
+                    </div>
+                    <div className="border-t border-white/5 pt-3 flex justify-between">
+                        <span className="text-gray-500">Est. APY</span>
+                        <span className="text-[#00FFA3] font-bold">28.4%</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-gray-500">IL Risk</span>
+                        <span className="text-orange-400">−6.3%</span>
+                    </div>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
                     className="flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
                     <Link

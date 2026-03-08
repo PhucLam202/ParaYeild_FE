@@ -45,6 +45,7 @@
 
   --font-sans: var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-space-mono), monospace;
+  --font-heading: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
 }
 
 /* Dark Mode Only UI by default */
@@ -126,6 +127,7 @@ body {
   pointer-events: none;
   filter: blur(120px);
   mix-blend-mode: screen;
+  opacity: 0.5;
 }
 
 .custom-scrollbar::-webkit-scrollbar {

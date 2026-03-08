@@ -34,6 +34,13 @@ const AnimatedCounter = ({ value, suffix = "", prefix = "", duration = 2, color 
 };
 
 export default function KeyMetricsSection() {
+    const [secondsAgo, setSecondsAgo] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => setSecondsAgo(s => s + 1), 1000);
+        return () => clearInterval(interval);
+    }, []);
+
     const metrics = [
         { title: "Total Value Tracked", value: 450, prefix: "$", suffix: "M", color: "#00FFA3", label: "Across active pools" },
         { title: "Live Pools Indexed", value: 120, prefix: "", suffix: "+", color: "#60A5FA", label: "Acala · Hydration · Bifrost" },
@@ -52,7 +59,7 @@ export default function KeyMetricsSection() {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
-                                transition={{ duration: 0.5, delay: 0.08 * index }}
+                                transition={{ duration: 0.5, delay: 0.05 * index }}
                                 className="relative flex flex-col items-center justify-center text-center p-8 group"
                             >
                                 {/* Vertical dividers between items */}
@@ -80,6 +87,11 @@ export default function KeyMetricsSection() {
                                 <p className="text-gray-500 text-xs font-mono">{metric.label}</p>
                             </motion.div>
                         ))}
+                    </div>
+                    <div className="text-center py-3 border-t border-white/5">
+                        <p className="text-xs font-mono text-gray-600">
+                            Live · Updated {secondsAgo}s ago
+                        </p>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,7 @@ export default function CoreFeaturesSection() {
         <section className="py-24 bg-background relative overflow-hidden">
             {/* Decorative background grid and glow */}
             <div className="absolute inset-0 z-0 bg-[url('/grid-pattern.svg')] opacity-[0.02] pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-[#00FFA3]/5 blur-[120px] rounded-full mix-blend-screen transform -translate-y-1/2 -translate-x-1/2 pointer-events-none fade-in-out"></div>
+            <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-[#00FFA3]/3 blur-[120px] rounded-full mix-blend-screen transform -translate-y-1/2 -translate-x-1/2 pointer-events-none opacity-50"></div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center max-w-2xl mx-auto mb-16">
@@ -19,7 +19,7 @@ export default function CoreFeaturesSection() {
                         viewport={{ once: true }}
                         className="text-4xl md:text-5xl font-heading font-bold mb-6 text-white"
                     >
-                        Pro-Grade <span className="text-gradient">DeFi Simulation Tools</span>
+                        Backtest before you <span className="text-gradient">risk capital.</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -28,7 +28,7 @@ export default function CoreFeaturesSection() {
                         transition={{ delay: 0.1 }}
                         className="text-gray-400 text-lg font-sans"
                     >
-                        Advanced DeFi simulation tools powered by real-time parachain data.
+                        Three tools to understand returns, IL, and routing — before entering a position.
                     </motion.p>
                 </div>
 
@@ -39,6 +39,7 @@ export default function CoreFeaturesSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.6, delay: 0.1 }}
+                        whileHover={{ y: -4, scale: 1.015, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                         className="md:col-span-2 group flex"
                     >
                         <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#00FFA3]/30 transition-all duration-500 overflow-hidden relative flex flex-col justify-between min-h-[300px]">
@@ -49,11 +50,8 @@ export default function CoreFeaturesSection() {
                                 <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#00FFA3]" />
                             </div>
 
-                            {/* Hover Neon Glow */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#00FFA3]/0 to-[#00FFA3]/0 group-hover:from-[#00FFA3]/5 group-hover:to-transparent transition-colors duration-500"></div>
-
                             <CardHeader className="relative z-10 pb-2">
-                                <div className="w-12 h-12 rounded-none bg-[#00FFA3]/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#00FFA3]/20">
+                                <div className="w-12 h-12 rounded-none bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-[#00FFA3]/30">
                                     <TrendingUp className="w-6 h-6 text-[#00FFA3]" />
                                 </div>
                                 <CardTitle className="text-2xl font-bold font-sans text-white group-hover:text-[#00FFA3] transition-colors tracking-tight">Historical Backtester</CardTitle>
@@ -78,6 +76,7 @@ export default function CoreFeaturesSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.6, delay: 0.2 }}
+                        whileHover={{ y: -4, scale: 1.015, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                         className="md:col-span-1 group flex"
                     >
                         <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#A78BFA]/30 transition-all duration-500 relative flex flex-col justify-between overflow-hidden min-h-[300px]">
@@ -86,9 +85,8 @@ export default function CoreFeaturesSection() {
                             <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none opacity-20 group-hover:opacity-100 transition-opacity">
                                 <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#00FFA3]" />
                             </div>
-                            <div className="absolute inset-0 bg-gradient-to-tr from-[#00FFA3]/0 to-[#00FFA3]/0 group-hover:from-[#00FFA3]/5 group-hover:to-transparent transition-colors duration-500"></div>
                             <CardHeader className="relative z-10">
-                                <div className="w-12 h-12 rounded-none bg-[#00FFA3]/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#00FFA3]/20">
+                                <div className="w-12 h-12 rounded-none bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-[#00FFA3]/30">
                                     <Scale className="w-6 h-6 text-[#00FFA3]" />
                                 </div>
                                 <CardTitle className="text-2xl font-bold font-sans text-white group-hover:text-[#00FFA3] transition-colors tracking-tight">IL Simulator</CardTitle>
@@ -110,6 +108,7 @@ export default function CoreFeaturesSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.6, delay: 0.3 }}
+                        whileHover={{ y: -4, scale: 1.015, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                         className="md:col-span-3 group flex"
                     >
                         <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#60A5FA]/30 transition-all duration-500 overflow-hidden relative flex flex-col md:flex-row items-center min-h-[220px]">
@@ -118,11 +117,10 @@ export default function CoreFeaturesSection() {
                             <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none opacity-10 group-hover:opacity-100 transition-opacity">
                                 <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#00FFA3]" />
                             </div>
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#00FFA3]/0 to-transparent group-hover:via-[#00FFA3]/5 transition-colors duration-700"></div>
 
                             <div className="md:w-1/2 flex flex-col justify-center h-full">
                                 <CardHeader className="relative z-10">
-                                    <div className="w-12 h-12 rounded-none bg-[#00FFA3]/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#00FFA3]/20">
+                                    <div className="w-12 h-12 rounded-none bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-[#00FFA3]/30">
                                         <Network className="w-6 h-6 text-[#00FFA3]" />
                                     </div>
                                     <CardTitle className="text-2xl font-bold font-sans text-white group-hover:text-[#00FFA3] transition-colors tracking-tight">XCM Fee Optimizer</CardTitle>
