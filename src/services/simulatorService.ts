@@ -1,103 +1,48 @@
-export interface SimulationAllocation {
-    protocol: string;
-    assetSymbol: string;
-    percentage: number;
-    poolType?: string;
+export type {
+    SimulationAllocation,
+    SimulationRequest,
+    SimulationSummary,
+    YieldFarmingStats,
+    SimulationBreakdownItem,
+    TimeSeriesPoint,
+    SimulationResponse,
+    LpFarmPool,
+    PoolItem,
+    StrategyAllocation,
+    SuggestedStrategy,
+    SuggestStrategiesResponse,
+    BacktestMetadataMappingItem,
+    BacktestMetadataResponse,
+} from "@/types/simulator";
+
+import type {
+    LpFarmPool,
+    BacktestMetadataResponse,
+    SimulationRequest,
+    SimulationResponse,
+    PoolItem,
+    SuggestStrategiesResponse,
+} from "@/types/simulator";
+
+interface LpFarmsResponse {
+    count: number;
+    data: LpFarmPool[];
 }
 
-export interface SimulationRequest {
-    initialAmountUsd: number;
-    from: string;
-    to: string;
-    allocations: SimulationAllocation[];
-    includeIL?: boolean;
-    rebalanceIntervalDays?: number;
-    xcmFeeUsd?: number;
+export function getEffectiveApy(pool: LpFarmPool): number {
+    if (pool.totalApy != null) return pool.totalApy;
+    return (pool.supplyApy ?? 0) + (pool.rewardApy ?? 0);
 }
 
-export interface SimulationSummary {
-    initialAmountUsd: number;
-    finalAmountUsd: number;
-    totalReturnUsd: number;
-    totalReturnPercent: number;
-    annualizedApyPercent: number;
-    maxDrawdownPercent: number;
-    sharpeRatio: number;
-    durationDays: number;
-    xcmFeesPaidUsd: number;
-    ilIncluded: boolean;
-}
-
-export interface SimulationBreakdownItem {
-    protocol: string;
-    assetSymbol: string;
-    poolType: string;
-    allocationPercent: number;
-    allocatedUsd: number;
-    avgApyPercent: number;
-    minApyPercent?: number;
-    maxApyPercent?: number;
-    dataPointsUsed?: number;
-    hasHistoricalData?: boolean;
-    warning?: string;
-    ilLossUsd: number;
-    finalUsd: number;
-    returnUsd: number;
-    returnPercent: number;
-}
-
-export interface TimeSeriesPoint {
-    date: string;
-    totalValueUsd: number;
-    dailyReturnPct: number;
-}
-
-export interface SimulationResponse {
-    summary: SimulationSummary;
-    breakdown: SimulationBreakdownItem[];
-    timeSeries: TimeSeriesPoint[];
-}
-
-export interface PoolItem {
-    protocol: string;
-    assetSymbol: string;
-    poolType: string;
-    currentApy?: number;
-}
-
-export interface StrategyAllocation {
-    protocol: string;
-    assetSymbol: string;
-    percentage: number;
-    poolType: string;
-    apyMin: number;
-    apyMax: number;
-    network?: string;
-    tvlUsd?: number;
-    currentApy?: number;
-    supplyApy?: number;
-    dataTimestamp?: string;
-}
-
-export interface SuggestedStrategy {
-    id: string;
-    title: string;
-    description: string;
-    riskLevel: 'low' | 'medium' | 'high';
-    estimatedApyMin: number;
-    estimatedApyMax: number;
-    allocations: StrategyAllocation[];
-}
-
-export interface SuggestStrategiesResponse {
-    generatedAt: string;
-    totalPools: number;
-    chains: SuggestedStrategy[];
-}
-
-const API_BASE_URL = "http://localhost:3005/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3005/api/v1";
 
 export const simulatorService = {
+    async getBacktestMetadata(): Promise<BacktestMetadataResponse> {
+        const response = await fetch(`${API_BASE_URL}/backtest/metadata`);
+        if (!response.ok) throw new Error("Failed to fetch backtest metadata");
+        return response.json();
+    },
+
     async runSimulation(data: SimulationRequest): Promise<SimulationResponse> {
         const response = await fetch(`${API_BASE_URL}/backtest/run`, {
             method: "POST",
@@ -163,6 +108,25 @@ export const simulatorService = {
         const json = await response.json();
         const data = Array.isArray(json) ? json : json.data ?? [];
         return data.map((p: any) => ({ id: p.id || p, name: p.name || p.id || p }));
+    },
+
+    async getLpFarms(params?: {
+        protocol?: string;
+        network?: string;
+        asset?: string;
+        minApy?: number;
+        limit?: number;
+    }): Promise<LpFarmsResponse> {
+        const qs = new URLSearchParams();
+        if (params?.protocol) qs.append("protocol", params.protocol);
+        if (params?.network) qs.append("network", params.network);
+        if (params?.asset) qs.append("asset", params.asset);
+        if (params?.minApy !== undefined) qs.append("minApy", params.minApy.toString());
+        if (params?.limit !== undefined) qs.append("limit", params.limit.toString());
+        const url = `${API_BASE_URL}/pools/lp-farms${qs.toString() ? `?${qs}` : ""}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch LP farms");
+        return response.json();
     },
 
     async getProtocolTypes(protocol?: string) {

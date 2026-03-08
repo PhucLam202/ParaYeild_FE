@@ -95,7 +95,8 @@ export default function HeroBgAnimation() {
                 style={{ backgroundImage: `url(${currentImagePath})` }}
             />
             {/* Overlay to ensure text readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#020402]/80 via-transparent to-[#020402] pointer-events-none mix-blend-multiply" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#020402]/40 via-transparent to-[#020402] pointer-events-none mix-blend-multiply" />
+
             {/* Robust Watermark Mask */}
             {/* 1. Vignette at the bottom to transition into other sections */}
             <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#020402] to-transparent pointer-events-none z-10" />
@@ -108,8 +109,8 @@ export default function HeroBgAnimation() {
                 }}
             />
 
-            {/* 3. Global darkening overlay for consistency */}
-            <div className="absolute inset-0 bg-[#020402]/30 pointer-events-none z-10" />
+            {/* 3. Significantly reduced darkening overlay */}
+            <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#020402]/60 to-transparent pointer-events-none z-10" />
         </div>
     );
 }

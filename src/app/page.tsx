@@ -1,11 +1,5 @@
-import HeroSection from "@/components/HeroSection";
-import KeyMetricsSection from "@/components/KeyMetricsSection";
-import CoreFeaturesSection from "@/components/CoreFeaturesSection";
-import SupportedParachainsSection from "@/components/SupportedParachainsSection";
-import HowItWorksSection from "@/components/HowItWorksSection";
-import FinalCtaSection from "@/components/FinalCtaSection";
-import FooterSection from "@/components/FooterSection";
-import HeaderSection from "@/components/HeaderSection";
+import { HeroSection, KeyMetricsSection, CoreFeaturesSection, SupportedParachainsSection, HowItWorksSection, FinalCtaSection } from "@/components/sections";
+import { HeaderSection, FooterSection } from "@/components/layout";
 
 export default function Home() {
   return (

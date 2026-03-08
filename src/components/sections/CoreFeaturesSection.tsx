@@ -32,7 +32,7 @@ export default function CoreFeaturesSection() {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto auto-rows-[300px]">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                     {/* Item 1: Historical Backtester (Spans 2 columns) */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
@@ -41,7 +41,9 @@ export default function CoreFeaturesSection() {
                         transition={{ duration: 0.6, delay: 0.1 }}
                         className="md:col-span-2 group flex"
                     >
-                        <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#00FFA3]/50 transition-all duration-500 overflow-hidden relative flex flex-col justify-between">
+                        <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#00FFA3]/30 transition-all duration-500 overflow-hidden relative flex flex-col justify-between min-h-[300px]">
+                            {/* Top gradient accent line */}
+                            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#00FFA3] to-[#00CC82] opacity-60 group-hover:opacity-100 transition-opacity" />
                             {/* Technical Corner Accent */}
                             <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none opacity-20 group-hover:opacity-100 transition-opacity">
                                 <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#00FFA3]" />
@@ -78,7 +80,9 @@ export default function CoreFeaturesSection() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="md:col-span-1 group flex"
                     >
-                        <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#00FFA3]/50 transition-all duration-500 relative flex flex-col justify-between overflow-hidden">
+                        <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#A78BFA]/30 transition-all duration-500 relative flex flex-col justify-between overflow-hidden min-h-[300px]">
+                            {/* Top gradient accent line */}
+                            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#A78BFA] to-[#552BBF] opacity-60 group-hover:opacity-100 transition-opacity" />
                             <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none opacity-20 group-hover:opacity-100 transition-opacity">
                                 <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#00FFA3]" />
                             </div>
@@ -108,7 +112,9 @@ export default function CoreFeaturesSection() {
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="md:col-span-3 group flex"
                     >
-                        <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#00FFA3]/50 transition-all duration-500 overflow-hidden relative flex flex-col md:flex-row items-center">
+                        <Card className="w-full h-full bg-[#0A0C14]/40 border-white/10 backdrop-blur-md rounded-none hover:border-[#60A5FA]/30 transition-all duration-500 overflow-hidden relative flex flex-col md:flex-row items-center min-h-[220px]">
+                            {/* Top gradient accent line */}
+                            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#60A5FA] to-[#3B82F6] opacity-60 group-hover:opacity-100 transition-opacity" />
                             <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none opacity-10 group-hover:opacity-100 transition-opacity">
                                 <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#00FFA3]" />
                             </div>
