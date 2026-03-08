@@ -1,4 +1,5 @@
 import CustomSelect from "@/components/ui/CustomSelect";
+import { format, subDays, addDays, parseISO } from "date-fns";
 
 interface Props {
     amount: number;
@@ -63,7 +64,15 @@ export default function SimulationParameters({
                                         <input
                                             type="date"
                                             value={customRange.from}
-                                            onChange={(e) => setCustomRange({ ...customRange, from: e.target.value })}
+                                            max={customRange.to ? format(subDays(parseISO(customRange.to), 1), 'yyyy-MM-dd') : format(subDays(new Date(), 1), 'yyyy-MM-dd')}
+                                            onChange={(e) => {
+                                                const newFrom = e.target.value;
+                                                if (newFrom >= customRange.to) {
+                                                    setCustomRange({ from: newFrom, to: format(addDays(parseISO(newFrom), 1), 'yyyy-MM-dd') });
+                                                } else {
+                                                    setCustomRange({ ...customRange, from: newFrom });
+                                                }
+                                            }}
                                             className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 pl-10 pr-3 text-sm text-white outline-none focus:border-accent-neon transition-colors hover:bg-white/10 hover:border-white/20 [color-scheme:dark]"
                                         />
                                     </div>
@@ -75,7 +84,16 @@ export default function SimulationParameters({
                                         <input
                                             type="date"
                                             value={customRange.to}
-                                            onChange={(e) => setCustomRange({ ...customRange, to: e.target.value })}
+                                            min={customRange.from ? format(addDays(parseISO(customRange.from), 1), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')}
+                                            max={format(new Date(), 'yyyy-MM-dd')}
+                                            onChange={(e) => {
+                                                const newTo = e.target.value;
+                                                if (newTo <= customRange.from) {
+                                                    setCustomRange({ from: format(subDays(parseISO(newTo), 1), 'yyyy-MM-dd'), to: newTo });
+                                                } else {
+                                                    setCustomRange({ ...customRange, to: newTo });
+                                                }
+                                            }}
                                             className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 pl-10 pr-3 text-sm text-white outline-none focus:border-accent-neon transition-colors hover:bg-white/10 hover:border-white/20 [color-scheme:dark]"
                                         />
                                     </div>

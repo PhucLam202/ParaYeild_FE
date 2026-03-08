@@ -112,7 +112,10 @@ export function useSimulation(): SimulationState {
     const [isPairProtocol, setIsPairProtocol] = useState(true);
     const [amount, setAmount] = useState(10000);
     const [timeRange, setTimeRange] = useState("90 Days");
-    const [customRange, setCustomRange] = useState({ from: "", to: "" });
+    const [customRange, setCustomRange] = useState({
+        from: format(subDays(new Date(), 2), 'yyyy-MM-dd'),
+        to: format(new Date(), 'yyyy-MM-dd'),
+    });
     const [slippage, setSlippage] = useState(0.5);
     const [compoundYield, setCompoundYield] = useState(true);
     const [xcmFees, setXcmFees] = useState(true);
@@ -226,8 +229,14 @@ export function useSimulation(): SimulationState {
             case "180 Days": fromDate = subDays(today, 180); break;
             case "1 Year": fromDate = subDays(today, 365); break;
             case "Custom Range":
-                if (customRange.from && customRange.to) return { from: customRange.from, to: customRange.to };
-                break;
+                if (customRange.from && customRange.to && customRange.from < customRange.to) {
+                    return { from: customRange.from, to: customRange.to };
+                }
+                // fallback: last 2 days
+                return {
+                    from: format(subDays(today, 2), 'yyyy-MM-dd'),
+                    to: format(today, 'yyyy-MM-dd'),
+                };
         }
         return { from: format(fromDate, 'yyyy-MM-dd'), to: format(today, 'yyyy-MM-dd') };
     }, [timeRange, customRange]);
