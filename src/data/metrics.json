@@ -1,0 +1,23 @@
+[
+    {
+        "label": "Total Value Locked",
+        "value": "$450M",
+        "icon": "lock",
+        "trend": "up",
+        "trendLabel": "+12.5% this month"
+    },
+    {
+        "label": "Active Users",
+        "value": "120K+",
+        "icon": "group",
+        "trend": "bolt",
+        "trendLabel": "+8.2% new wallets"
+    },
+    {
+        "label": "Total Yield Paid",
+        "value": "$12.5M",
+        "icon": "payments",
+        "trend": "verified",
+        "trendLabel": "100% distribution rate"
+    }
+]

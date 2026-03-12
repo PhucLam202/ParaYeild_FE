@@ -1,46 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Database, SlidersHorizontal, Play, LineChart } from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import stepsData from "@/data/how-it-works.json";
 
-const steps = [
-    {
-        num: "01",
-        title: "Select Data Sources",
-        heading: "Historical On-Chain Data",
-        description: "Choose from multiple Polkadot parachains to fetch highly accurate historical liquidity and pricing data. Our indexer continually synchronizes with Acala, Bifrost, and Hydration.",
-        features: ["Multi-chain data aggregation", "High-fidelity tick data", "Real-time synchronization"],
-        icon: Database,
-        color: "#00FFA3",
-    },
-    {
-        num: "02",
-        title: "Configure Parameters",
-        heading: "Set Your Strategy Variables",
-        description: "Define token weights, virtual amounts, fee tiers, and the historical timeframe. Fine-tune slippage tolerance and choose whether to model XCM cross-chain overhead.",
-        features: ["Custom timeframes", "Dynamic token weights", "Fee tier configuration"],
-        icon: SlidersHorizontal,
-        color: "#60A5FA",
-    },
-    {
-        num: "03",
-        title: "Run Simulation",
-        heading: "Local Compute Engine",
-        description: "Execute the backtest engine. Our simulator locally computes exact impermanent loss, accrued fees, and overall yield based on configured parameters in milliseconds.",
-        features: ["Local compute engine", "Millisecond execution", "Accurate IL math"],
-        icon: Play,
-        color: "#A78BFA",
-    },
-    {
-        num: "04",
-        title: "Analyze Results",
-        heading: "Visualize & Optimize",
-        description: "Study the equity curve, break down yields versus impermanent loss, and discover XCM routing optimizations to maximize returns on your next deployment.",
-        features: ["Equity curve visualization", "XCM fee comparison", "Yield breakdown"],
-        icon: LineChart,
-        color: "#FB923C",
-    },
-];
+const steps = stepsData.map(step => ({
+    ...step,
+    icon: (LucideIcons as any)[step.iconName] || LucideIcons.HelpCircle
+}));
 
 export default function HowItWorksSection() {
     return (

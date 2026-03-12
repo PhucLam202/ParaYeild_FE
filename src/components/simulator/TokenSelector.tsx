@@ -19,8 +19,8 @@ export default function TokenSelector({
 }: Props) {
     return (
         <div className="space-y-2 flex flex-col justify-end">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                {isPairProtocol ? 'Token Pair' : 'Token Selection'}
+            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4 mb-2">
+                {isPairProtocol ? 'Token Pair' : 'Asset Pair'}
             </label>
             <div className="flex items-center gap-2">
                 <div className="flex-1">
@@ -30,7 +30,8 @@ export default function TokenSelector({
                         options={availableTokenAs.map(t => ({
                             label: formatLabel(t.symbol, ' / '),
                             value: t.symbol,
-                            colorIndicator: t.color
+                            colorIndicator: !t.iconPath ? t.color : undefined,
+                            icon: t.iconPath ? <img src={t.iconPath} className="w-5 h-5 object-contain" alt={t.symbol} /> : undefined
                         }))}
                     />
                 </div>
@@ -47,7 +48,8 @@ export default function TokenSelector({
                                 options={availableTokenBs.map(t => ({
                                     label: formatLabel(t.symbol, ' / '),
                                     value: t.symbol,
-                                    colorIndicator: t.color
+                                    colorIndicator: !t.iconPath ? t.color : undefined,
+                                    icon: t.iconPath ? <img src={t.iconPath} className="w-5 h-5 object-contain" alt={t.symbol} /> : undefined
                                 }))}
                             />
                         </div>

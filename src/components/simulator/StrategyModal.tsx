@@ -11,134 +11,135 @@ interface Props {
     onRunSimulation: (strategy: SuggestedStrategy) => void;
 }
 
-export default function StrategyModal({ strategy, fetchedTokens, onClose, onApplyParams, onRunSimulation }: Props) {
+export default function StrategyModal({ strategy, onClose, onApplyParams, onRunSimulation }: Props) {
+    if (!strategy) return null;
+
     return (
         <AnimatePresence>
             {strategy && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-                    onClick={onClose}
-                >
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <motion.div
-                        initial={{ scale: 0.95, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.95, opacity: 0 }}
-                        className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] relative flex flex-col max-h-[90vh]"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="p-6 border-b border-white/5 flex justify-between items-center shrink-0">
-                            <div>
-                                <div className="flex items-center gap-3 mb-1">
-                                    <h2 className="text-xl font-black text-white">{strategy.title}</h2>
-                                    <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-widest ${strategy.riskLevel === 'low' ? 'bg-green-500/10 text-green-500' :
-                                        strategy.riskLevel === 'medium' ? 'bg-orange-500/10 text-orange-500' :
-                                            'bg-red-500/10 text-red-500'
-                                        }`}>
-                                        {strategy.riskLevel} risk
-                                    </span>
-                                </div>
-                                <p className="text-sm text-slate-400">{strategy.description}</p>
-                            </div>
-                            <button
-                                onClick={onClose}
-                                className="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-400 hover:text-white"
-                            >
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={onClose}
+                        className="absolute inset-0 bg-slate-500/20 backdrop-blur-md"
+                    />
 
-                        <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-1 relative bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.03] to-transparent">
-                            <div className="space-y-4">
-                                <h3 className="text-sm uppercase tracking-widest text-slate-500 font-bold mb-4">Allocation Details</h3>
-                                {strategy.allocations.map((alloc, idx) => (
-                                    <div key={idx} className="bg-black/40 border border-white/5 rounded-xl p-5 hover:border-white/10 transition-colors relative overflow-hidden group">
-                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-white/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
-                                            <div className="flex items-center gap-4">
-                                                <div className="size-12 rounded-xl bg-gradient-to-br from-slate-800 to-black flex items-center justify-center font-black text-white text-lg border border-white/10 shadow-inner">
-                                                    {alloc.assetSymbol[0]}
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-bold text-white text-lg flex items-center gap-2">
-                                                        {alloc.assetSymbol}
-                                                        {alloc.network && (
-                                                            <span className="text-[10px] font-medium bg-white/10 px-1.5 py-0.5 rounded text-slate-300 capitalize">{alloc.network}</span>
-                                                        )}
-                                                    </h4>
-                                                    <p className="text-xs text-slate-400 uppercase tracking-wider mt-0.5">{alloc.protocol} • <span className="text-slate-500">{alloc.poolType}</span></p>
-                                                </div>
-                                            </div>
-                                            <div className="sm:text-right bg-white/5 sm:bg-transparent p-3 sm:p-0 rounded-lg">
-                                                <div className="text-2xl font-black text-accent-neon font-mono">{alloc.percentage}%</div>
-                                                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-1">Portfolio Allocation</p>
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mt-4 pt-4 border-t border-white/5">
-                                            <div className="bg-white/5 p-3 rounded-lg">
-                                                <div className="flex items-center gap-1.5 mb-1.5">
-                                                    <span className="material-symbols-outlined text-[14px] text-slate-400">monitoring</span>
-                                                    <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">APY Range</p>
-                                                </div>
-                                                <p className="font-mono text-sm font-medium text-white">{alloc.apyMin}% - {alloc.apyMax}%</p>
-                                            </div>
-                                            <div className="bg-white/5 p-3 rounded-lg">
-                                                <div className="flex items-center gap-1.5 mb-1.5">
-                                                    <span className="material-symbols-outlined text-[14px] text-slate-400">moving</span>
-                                                    <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Current APY</p>
-                                                </div>
-                                                <p className="font-mono text-sm font-medium text-white">{alloc.currentApy ? `${alloc.currentApy.toFixed(2)}%` : '-'}</p>
-                                            </div>
-                                            <div className="bg-white/5 p-3 rounded-lg">
-                                                <div className="flex items-center gap-1.5 mb-1.5">
-                                                    <span className="material-symbols-outlined text-[14px] text-slate-400">account_balance</span>
-                                                    <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">TVL (USD)</p>
-                                                </div>
-                                                <p className="font-mono text-sm font-medium text-white">
-                                                    {alloc.tvlUsd ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(alloc.tvlUsd) : '-'}
-                                                </p>
-                                            </div>
-                                            <div className="bg-white/5 p-3 rounded-lg">
-                                                <div className="flex items-center gap-1.5 mb-1.5">
-                                                    <span className="material-symbols-outlined text-[14px] text-slate-400">update</span>
-                                                    <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Last Updated</p>
-                                                </div>
-                                                <p className="text-xs text-slate-300">
-                                                    {alloc.dataTimestamp ? format(new Date(alloc.dataTimestamp), "MMM dd, yyyy HH:mm") : '-'}
-                                                </p>
-                                            </div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="relative w-full max-w-2xl bg-white rounded-3xl overflow-hidden shadow-clay-lg border border-white flex flex-col max-h-[90vh]"
+                    >
+                        {/* Header */}
+                        <div className="p-8 pb-4 shrink-0 border-b border-slate-100">
+                            <div className="flex justify-between items-start mb-6">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-clay-sm">
+                                        <span className="material-symbols-outlined text-primary text-3xl">insights</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-slate-900">{strategy.title}</h2>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${strategy.riskLevel === 'low' ? 'bg-green-500/10 text-green-600 border-green-500/20' :
+                                                    strategy.riskLevel === 'medium' ? 'bg-orange-500/10 text-orange-600 border-orange-500/20' :
+                                                        'bg-red-500/10 text-red-600 border-red-500/20'
+                                                }`}>
+                                                {strategy.riskLevel} risk
+                                            </span>
                                         </div>
                                     </div>
-                                ))}
+                                </div>
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                                >
+                                    <span className="material-symbols-outlined">close</span>
+                                </button>
+                            </div>
+
+                            <p className="text-slate-600 leading-relaxed text-lg">
+                                {strategy.description}
+                            </p>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-8 pt-6 space-y-8 overflow-y-auto custom-scrollbar">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="clay-card bg-slate-50 p-4 rounded-2xl shadow-clay-sm border border-white">
+                                    <p className="text-slate-500 text-sm mb-1 uppercase font-bold tracking-wider">Complexity</p>
+                                    <p className="text-3xl font-bold text-slate-900">Medium</p>
+                                </div>
+                                <div className="clay-card bg-slate-50 p-4 rounded-2xl shadow-clay-sm border border-white font-mono">
+                                    <p className="text-slate-500 text-sm mb-1 uppercase font-bold tracking-wider">Historical Perf</p>
+                                    <p className="text-3xl font-bold text-primary">+14.2%</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-primary">analytics</span>
+                                    Allocations
+                                </h3>
+                                <div className="space-y-3">
+                                    {strategy.allocations.map((alloc, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="flex flex-col gap-3 p-5 rounded-2xl bg-slate-50 border border-white shadow-clay-sm"
+                                        >
+                                            <div className="flex justify-between items-center">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="size-10 rounded-xl bg-white flex items-center justify-center font-black text-slate-700 text-sm border border-slate-100 shadow-clay-sm">
+                                                        {alloc.assetSymbol[0]}
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-slate-900">{alloc.assetSymbol}</h4>
+                                                        <p className="text-[10px] text-slate-500 uppercase font-bold">{alloc.protocol}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="text-lg font-black text-primary">{alloc.percentage}%</div>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200/50">
+                                                <div>
+                                                    <p className="text-[10px] text-slate-400 uppercase font-bold">APY Range</p>
+                                                    <p className="text-sm font-bold text-slate-700">{alloc.apyMin}% - {alloc.apyMax}%</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] text-slate-400 uppercase font-bold">TVL</p>
+                                                    <p className="text-sm font-bold text-slate-700">
+                                                        {alloc.tvlUsd ? `$${(alloc.tvlUsd / 1000000).toFixed(1)}M` : '-'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
-                        <div className="p-4 sm:p-6 border-t border-white/5 bg-black/40 flex flex-col-reverse sm:flex-row justify-end gap-3 shrink-0">
-                            <button
-                                onClick={onClose}
-                                className="px-6 py-3 rounded-xl font-bold text-slate-400 hover:text-white hover:bg-white/5 transition-colors w-full sm:w-auto text-center"
-                            >
-                                Close
-                            </button>
+                        {/* Footer Actions */}
+                        <div className="p-8 pt-4 border-t border-slate-100 bg-slate-50/50 shrink-0 flex flex-col sm:flex-row gap-4">
                             <button
                                 onClick={() => onApplyParams(strategy)}
-                                className="px-6 py-3 rounded-xl font-bold bg-white/5 text-white hover:bg-white/10 transition-colors border border-white/10 w-full sm:w-auto flex justify-center items-center gap-2"
+                                className="clay-card flex-1 bg-white text-slate-700 font-bold py-4 rounded-2xl shadow-clay-sm border border-white hover:bg-slate-50 transition-all uppercase tracking-wider flex items-center justify-center gap-2"
                             >
-                                <span className="material-symbols-outlined text-[18px]">tune</span>
-                                Apply Parameters
+                                <span className="material-symbols-outlined">tune</span>
+                                Apply Params
                             </button>
                             <button
                                 onClick={() => onRunSimulation(strategy)}
-                                className="px-6 py-3 rounded-xl font-bold bg-accent-neon text-black hover:shadow-[0_0_20px_rgba(0,255,163,0.3)] transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
+                                className="clay-button-primary flex-1 bg-primary text-white font-bold py-4 rounded-2xl shadow-clay-primary active:shadow-clay-inner transition-all hover:brightness-105 uppercase tracking-wider flex items-center justify-center gap-2"
                             >
-                                <span className="material-symbols-outlined text-[18px]">play_arrow</span>
+                                <span className="material-symbols-outlined">play_arrow</span>
                                 Run Simulation
                             </button>
                         </div>
                     </motion.div>
-                </motion.div>
+                </div>
             )}
         </AnimatePresence>
     );

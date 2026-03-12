@@ -58,7 +58,7 @@ export default function PerformanceChart({
 }: Props) {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const tsKey = chartMetric === 'value' ? 'totalValueUsd' : 'dailyReturnPct';
-    const color = chartMetric === "value" ? "#00FFA3" : "#A855F7";
+    const color = chartMetric === "value" ? "#4CAF50" : "#8B5CF6";
     const initialAmount = simulationResult.summary.initialAmountUsd;
 
     const handleChartMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -69,24 +69,24 @@ export default function PerformanceChart({
     };
 
     return (
-        <div className="glass-card rounded-xl p-6 md:p-8 space-y-8">
+        <div className="clay-card rounded-clay-lg p-6 md:p-8 lg:p-10 space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-lg font-bold text-white">Portfolio Performance</h3>
-                    <p className="text-sm text-slate-500">
+                    <h3 className="text-2xl font-black font-display text-slate-800">Portfolio Performance</h3>
+                    <p className="text-sm font-bold text-slate-400">
                         Simulated strategy {chartMetric === "value" ? "value ($)" : "yield (%)"} over {simulationResult.summary.durationDays} days
                     </p>
                 </div>
-                <div className="flex items-center gap-4 bg-white/5 p-1 rounded-lg">
+                <div className="flex items-center gap-2 clay-inset p-1.5 rounded-2xl">
                     <button
                         onClick={() => setChartMetric("value")}
-                        className={`px-3 py-1 text-xs font-bold rounded transition-all ${chartMetric === "value" ? 'bg-accent-neon text-black' : 'text-slate-500 hover:text-slate-300'}`}
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${chartMetric === "value" ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
                     >
                         Value ($)
                     </button>
                     <button
                         onClick={() => setChartMetric("yield")}
-                        className={`px-3 py-1 text-xs font-bold rounded transition-all ${chartMetric === "yield" ? 'bg-accent-neon text-black' : 'text-slate-500 hover:text-slate-300'}`}
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${chartMetric === "yield" ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
                     >
                         Yield (%)
                     </button>
@@ -97,10 +97,10 @@ export default function PerformanceChart({
                 ref={chartContainerRef}
                 onMouseMove={handleChartMouseMove}
                 onMouseLeave={() => setHoveredPoint(null)}
-                className="relative w-full h-80 rounded-lg overflow-hidden flex items-end cursor-crosshair group/chart"
+                className="relative w-full h-[400px] clay-inset rounded-[3rem] p-0 md:p-8 overflow-hidden flex items-end cursor-crosshair group/chart"
             >
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                    <div className="w-full h-[1px] bg-emerald-900 border-dashed"></div>
+                    <div className="w-full h-[1px] bg-primary/30 border-dashed"></div>
                 </div>
 
                 <svg className="w-full h-full" viewBox="0 0 1000 300" preserveAspectRatio="none">
@@ -129,9 +129,10 @@ export default function PerformanceChart({
                         transition={{ duration: 2, ease: "easeInOut" }}
                         d={generateChartPath(simulationResult.timeSeries, tsKey, initialAmount, true)}
                         fill="none"
-                        stroke="#64748b"
+                        stroke="#ffffff"
                         strokeDasharray="8 4"
-                        strokeWidth="2"
+                        strokeWidth="3"
+                        strokeOpacity="0.8"
                     />
                     <motion.path
                         key={`line-${chartMetric}`}
@@ -177,20 +178,20 @@ export default function PerformanceChart({
                             initial={{ opacity: 0, y: 10, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                            className="absolute z-50 pointer-events-none glass-card p-3 rounded-lg border-white/10 shadow-2xl"
+                            className="absolute z-50 pointer-events-none clay-button-tactile p-4 rounded-2xl flex flex-col gap-1"
                             style={{
                                 left: `${(hoveredPoint / (simulationResult.timeSeries.length - 1)) * 100}%`,
                                 bottom: '40%',
                                 transform: `translateX(${hoveredPoint > simulationResult.timeSeries.length / 2 ? '-110%' : '10%'})`
                             }}
                         >
-                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter mb-1">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
                                 {format(new Date(simulationResult.timeSeries[hoveredPoint].date), 'MMM dd, yyyy')}
                             </p>
                             <div className="flex flex-col gap-1">
                                 <div className="flex items-center justify-between gap-4">
-                                    <span className="text-xs text-slate-300">Strategy</span>
-                                    <span className={`text-sm font-bold ${chartMetric === 'value' ? 'neon-text' : 'text-purple-400'}`}>
+                                    <span className="text-xs font-bold text-slate-800">Strategy</span>
+                                    <span className={`text-sm font-black ${chartMetric === 'value' ? 'text-primary' : 'text-violet-500'}`}>
                                         {chartMetric === 'value'
                                             ? `$${simulationResult.timeSeries[hoveredPoint].totalValueUsd.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
                                             : `${simulationResult.timeSeries[hoveredPoint].dailyReturnPct.toFixed(2)}%`}
@@ -201,13 +202,13 @@ export default function PerformanceChart({
                     )}
                 </AnimatePresence>
 
-                <div className="absolute bottom-4 right-8 flex gap-6">
+                <div className="absolute bottom-6 right-10 flex gap-6">
                     <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full transition-colors ${chartMetric === "value" ? 'bg-accent-neon' : 'bg-purple-500'}`}></div>
+                        <div className={`w-3 h-3 rounded-full shadow-sm transition-colors ${chartMetric === "value" ? 'bg-primary' : 'bg-violet-500'}`}></div>
                         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Simulation</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-slate-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-white shadow-sm border border-slate-200"></div>
                         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">HODL</span>
                     </div>
                 </div>

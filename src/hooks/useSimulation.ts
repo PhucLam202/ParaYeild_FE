@@ -5,12 +5,14 @@ import { format, subDays } from "date-fns";
 import {
     simulatorService,
 } from "@/services/simulatorService";
+import { TOKEN_CONFIG, getTokenConfig } from "@/constants/tokens";
 import type {
     SimulationResponse,
     SimulationRequest,
     SuggestStrategiesResponse,
     SuggestedStrategy,
     BacktestMetadataResponse,
+    SimulationAllocation,
 } from "@/types/simulator";
 
 export const formatLabel = (str: string, separator: string = ' ') => {
@@ -33,17 +35,17 @@ export const formatLabel = (str: string, separator: string = ' ') => {
 };
 
 export const DEFAULT_TOKENS = [
-    { symbol: "DOT", color: "polkadot-gradient" },
-    { symbol: "vDOT", color: "bg-pink-500" },
-    { symbol: "USDC", color: "bg-blue-500" },
-    { symbol: "USDT", color: "bg-green-500" },
-    { symbol: "LDOT", color: "bg-orange-500" },
-    { symbol: "ACA", color: "bg-purple-500" },
+    { symbol: "DOT", color: TOKEN_CONFIG.DOT.color, iconPath: TOKEN_CONFIG.DOT.iconPath },
+    { symbol: "vDOT", color: TOKEN_CONFIG.VDOT.color, iconPath: TOKEN_CONFIG.VDOT.iconPath },
+    { symbol: "USDC", color: TOKEN_CONFIG.USDC.color, iconPath: TOKEN_CONFIG.USDC.iconPath },
+    { symbol: "USDT", color: TOKEN_CONFIG.USDT.color, iconPath: TOKEN_CONFIG.USDT.iconPath },
+    { symbol: "LDOT", color: TOKEN_CONFIG.LDOT.color, iconPath: TOKEN_CONFIG.LDOT.iconPath },
+    { symbol: "ACA", color: TOKEN_CONFIG.ACA.color },
 ];
 
 export const HODL_RETURN_PERCENT = 3.5;
 
-export type TokenEntry = { symbol: string; color: string; poolTypes?: string[] };
+export type TokenEntry = { symbol: string; color: string; poolTypes?: string[]; iconPath?: string };
 
 export interface SimulationState {
     // Network & protocol
@@ -99,7 +101,7 @@ export interface SimulationState {
     // Derived
     dateRange: { from: string; to: string };
     // Handlers
-    handleRunSimulation: (customAllocations?: any[]) => Promise<void>;
+    handleRunSimulation: (customAllocations?: SimulationAllocation[]) => Promise<void>;
     handleSuggestStrategies: (refresh?: boolean) => Promise<void>;
     handleSelectStrategy: (strategy: SuggestedStrategy, shouldRun?: boolean) => void;
 }
@@ -162,8 +164,13 @@ export function useSimulation(): SimulationState {
         const fallbackColors = ["bg-blue-500", "bg-green-500", "bg-purple-500", "bg-orange-500", "bg-pink-500"];
         const tokensData = metadata.mappings[network] || [];
         const mappedTokens = tokensData.map((t, i) => {
-            const preset = DEFAULT_TOKENS.find(dt => dt.symbol === t.symbol);
-            return { symbol: t.symbol, poolTypes: t.poolTypes, color: preset?.color || fallbackColors[i % fallbackColors.length] };
+            const config = getTokenConfig(t.symbol);
+            return {
+                symbol: t.symbol,
+                poolTypes: t.poolTypes,
+                color: config.color,
+                iconPath: config.iconPath
+            };
         });
         setFetchedTokens(mappedTokens);
 
@@ -178,7 +185,7 @@ export function useSimulation(): SimulationState {
             setProtocol(protocols[0].id);
         }
         setIsLoadingInitial(false);
-    }, [network, metadata]);
+    }, [network, metadata, protocol]);
 
     useEffect(() => {
         setIsPairProtocol(protocol === 'blp_farm' || protocol === 'lp_farm');
@@ -189,8 +196,13 @@ export function useSimulation(): SimulationState {
                 if (t.poolTypes?.includes(protocol) && t.symbol.includes('-')) {
                     const baseSymbol = t.symbol.split('-')[0];
                     if (!baseTokensMap.has(baseSymbol)) {
-                        const presetColor = DEFAULT_TOKENS.find(dt => dt.symbol === baseSymbol)?.color || t.color;
-                        baseTokensMap.set(baseSymbol, { symbol: baseSymbol, color: presetColor, poolTypes: t.poolTypes });
+                        const config = getTokenConfig(baseSymbol);
+                        baseTokensMap.set(baseSymbol, {
+                            symbol: baseSymbol,
+                            color: config.color,
+                            poolTypes: t.poolTypes,
+                            iconPath: config.iconPath
+                        });
                     }
                 }
             });
@@ -210,8 +222,13 @@ export function useSimulation(): SimulationState {
             .filter(t => t.poolTypes?.includes(protocol) && t.symbol.startsWith(`${tokenA.symbol}-`))
             .map(t => {
                 const quoteSymbol = t.symbol.split('-').slice(1).join('-');
-                const presetColor = DEFAULT_TOKENS.find(dt => dt.symbol === quoteSymbol)?.color || t.color;
-                return { symbol: quoteSymbol, color: presetColor, poolTypes: t.poolTypes };
+                const config = getTokenConfig(quoteSymbol);
+                return {
+                    symbol: quoteSymbol,
+                    color: config.color,
+                    poolTypes: t.poolTypes,
+                    iconPath: config.iconPath
+                };
             });
         setAvailableTokenBs(validTokenBs);
         if (validTokenBs.length > 0 && !validTokenBs.find(t => t.symbol === tokenB.symbol)) {
@@ -251,7 +268,7 @@ export function useSimulation(): SimulationState {
         if (token) setTokenB(token);
     };
 
-    const handleRunSimulation = async (customAllocations?: any[]) => {
+    const handleRunSimulation = async (customAllocations?: SimulationAllocation[]) => {
         setIsSimulating(true);
         setToastState(null);
         setSimulationSteps([
@@ -295,8 +312,9 @@ export function useSimulation(): SimulationState {
             setTimeout(() => {
                 document.getElementById('simulation-results')?.scrollIntoView({ behavior: 'smooth' });
             }, 100);
-        } catch (err: any) {
-            setToastState({ message: err.message || "An error occurred during simulation.", type: "error" });
+        } catch (err: unknown) {
+            const error = err as Error;
+            setToastState({ message: error.message || "An error occurred during simulation.", type: "error" });
             setSimulationSteps(["Simulation failed. Please check your inputs."]);
         } finally {
             setIsSimulating(false);
@@ -317,8 +335,9 @@ export function useSimulation(): SimulationState {
             ]);
             setSuggestedStrategies(response);
             setToastState({ message: "AI suggestions updated successfully!", type: "success" });
-        } catch (err: any) {
-            setToastState({ message: err.message || "Failed to get suggestions. The OpenAI service may be unavailable.", type: "error" });
+        } catch (err: unknown) {
+            const error = err as Error;
+            setToastState({ message: error.message || "Failed to get suggestions. The OpenAI service may be unavailable.", type: "error" });
         } finally {
             setIsSuggesting(false);
         }

@@ -1,0 +1,146 @@
+[
+    {
+        "id": "acala",
+        "name": "Acala",
+        "subtitle": "Stablecoin & DeFi",
+        "description": "Native stablecoin hub with deep liquidity across aUSD and DOT pairs.",
+        "stats": "24 Pools Indexed",
+        "color": "#FF3E3E",
+        "icon": "all_inclusive",
+        "orbit": {
+            "radius": 270,
+            "speed": 130,
+            "initialAngle": 288
+        }
+    },
+    {
+        "id": "hydration",
+        "name": "Hydration",
+        "subtitle": "Omnipool DEX",
+        "description": "Single-sided liquidity provisioning with concentrated depth across all assets.",
+        "stats": "$42M Liquidity",
+        "color": "#FF007A",
+        "icon": "opacity",
+        "orbit": {
+            "radius": 260,
+            "speed": 120,
+            "initialAngle": 72
+        }
+    },
+    {
+        "id": "bifrost",
+        "name": "Bifrost",
+        "subtitle": "Liquid Staking",
+        "stats": "18 vTokens Tracked",
+        "color": "#00CDFF",
+        "icon": "/biforst.svg",
+        "orbit": {
+            "radius": 240,
+            "speed": 100,
+            "initialAngle": 0
+        }
+    },
+    {
+        "id": "moonwell",
+        "name": "Moonwell",
+        "subtitle": "Lending & Borrowing",
+        "stats": "Cross-chain Assets",
+        "color": "#9333EA",
+        "icon": "nightlight",
+        "orbit": {
+            "radius": 230,
+            "speed": 140,
+            "initialAngle": 144
+        }
+    },
+    {
+        "id": "moonbeam",
+        "name": "Moonbeam",
+        "subtitle": "EVM Smart Contracts",
+        "stats": "Top dApp Hub",
+        "color": "#53CBC9",
+        "icon": "/moonbeam-glmr-logo.svg",
+        "orbit": {
+            "radius": 250,
+            "speed": 110,
+            "initialAngle": 216
+        }
+    },
+    {
+        "id": "astar",
+        "name": "Astar",
+        "subtitle": "WASM + EVM Platform",
+        "stats": "Multi-VM Network",
+        "color": "#1b6dc1",
+        "icon": "/astar-astr-logo.svg",
+        "orbit": {
+            "radius": 285,
+            "speed": 150,
+            "initialAngle": 100
+        }
+    },
+    {
+        "id": "kusama",
+        "name": "Kusama",
+        "subtitle": "Canary Network",
+        "stats": "Fast & Experimental",
+        "color": "#000000",
+        "icon": "/kusama-ksm-logo.svg",
+        "orbit": {
+            "radius": 310,
+            "speed": 180,
+            "initialAngle": 180
+        }
+    },
+    {
+        "id": "polkadot",
+        "name": "Polkadot",
+        "subtitle": "Relay Chain",
+        "stats": "The Motherboard",
+        "color": "#E6007A",
+        "icon": "/polkadot-new-dot-logo.svg"
+    },
+    {
+        "id": "phala",
+        "name": "Phala Network",
+        "subtitle": "Confidential Compute",
+        "stats": "Secure Workers",
+        "color": "#D1FE1D"
+    },
+    {
+        "id": "centrifuge",
+        "name": "Centrifuge",
+        "subtitle": "Real-World Assets",
+        "stats": "RWA Tokenization",
+        "color": "#FACC15"
+    },
+    {
+        "id": "interlay",
+        "name": "Interlay",
+        "subtitle": "Bitcoin Bridging",
+        "stats": "Wrapped BTC (iBTC)",
+        "color": "#F7931A"
+    },
+    {
+        "id": "parallel",
+        "name": "Parallel",
+        "subtitle": "DeFi Lending",
+        "stats": "Borrow / Lend",
+        "color": "#EF4444"
+    },
+    {
+        "id": "manta",
+        "name": "Manta Network",
+        "subtitle": "Modular Blockchain",
+        "stats": "Privacy-Preserving",
+        "color": "#11B4ED",
+        "icon": "/Manta_icon.svg"
+    },
+    {
+        "id": "nodle",
+        "name": "Nodle",
+        "subtitle": "IoT Connectivity",
+        "stats": "Mobile Network",
+        "color": "#00CDFF"
+    }
+]

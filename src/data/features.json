@@ -1,0 +1,20 @@
+[
+    {
+        "title": "Auto-Compounding",
+        "description": "Maximized returns with automated harvest and reinvest cycles, optimized for gas efficiency.",
+        "icon": "autorenew",
+        "rotate": 6
+    },
+    {
+        "title": "Multi-Chain Support",
+        "description": "Seamlessly move assets across the Polkadot parachain network with a single click.",
+        "icon": "hub",
+        "rotate": -3
+    },
+    {
+        "title": "Low Gas Fees",
+        "description": "Built on Substrate to ensure the most cost-efficient transactions for all yield seekers.",
+        "icon": "savings",
+        "rotate": 12
+    }
+]

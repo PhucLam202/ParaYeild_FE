@@ -23,18 +23,18 @@ export default function BreakdownTable({ simulationResult }: Props) {
     const { breakdown, summary, timeSeries } = simulationResult;
 
     return (
-        <div className="glass-card rounded-xl overflow-hidden border border-white/5">
-            <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                <h3 className="text-lg font-bold text-white">Component Breakdown</h3>
-                <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                    <span className="w-2 h-2 rounded-full bg-accent-neon"></span>
+        <div className="clay-inner-card overflow-hidden">
+            <div className="p-6 border-b border-primary/10 flex items-center justify-between">
+                <h3 className="text-xl font-bold font-display text-slate-800">Component Breakdown</h3>
+                <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-widest bg-white/50 px-3 py-1.5 rounded-full shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                     Live Data Sync
                 </div>
             </div>
             <div className="overflow-x-auto custom-scrollbar">
                 <table className="w-full text-left text-sm border-collapse">
                     <thead>
-                        <tr className="bg-white/5 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                        <tr className="bg-primary/5 text-slate-500 font-bold uppercase text-[10px] tracking-widest border-b border-primary/10">
                             <th className="px-6 py-4">Component</th>
                             <th className="px-6 py-4">Absolute Gain / Cost</th>
                             <th className="px-6 py-4">Trend (90d)</th>
@@ -42,38 +42,38 @@ export default function BreakdownTable({ simulationResult }: Props) {
                             <th className="px-6 py-4 text-right">Status</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-primary/5 bg-white/30 backdrop-blur-sm">
                         {breakdown.map((item, idx) => {
                             const displayApy = item.avgTotalApyPercent ?? item.avgApyPercent ?? 0;
                             return (
                                 <React.Fragment key={idx}>
-                                    <tr className="group hover:bg-white/[0.02] transition-colors relative">
-                                        <td className="px-6 py-4 font-medium text-white">
+                                    <tr className="group hover:bg-white/50 transition-colors relative">
+                                        <td className="px-6 py-4 font-bold text-slate-800">
                                             <div className="flex flex-col">
-                                                <span className="group-hover:text-accent-neon transition-colors flex items-center flex-wrap gap-1">
+                                                <span className="group-hover:text-primary transition-colors flex items-center flex-wrap gap-1">
                                                     Total Yield ({item.assetSymbol})
                                                     {item.isFallbackData && (
-                                                        <span title={item.warning} className="ml-1 text-xs bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded border border-amber-500/30 cursor-help">
+                                                        <span title={item.warning} className="ml-1 text-xs bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded shadow-sm cursor-help">
                                                             Estimated
                                                         </span>
                                                     )}
                                                     {item.hasHistoricalData === false && (
-                                                        <span className="text-xs text-red-400/80 ml-1">No historical data — APY: 0%</span>
+                                                        <span className="text-xs text-red-500 ml-1 bg-red-50 px-1.5 py-0.5 rounded shadow-sm">No historical data — APY: 0%</span>
                                                     )}
                                                 </span>
-                                                <span className="text-xs text-slate-500 font-normal">
+                                                <span className="text-xs text-slate-500 font-normal mt-1">
                                                     Protocol: {item.protocol.toUpperCase()}
                                                     {displayApy > 0 && (
-                                                        <span className="ml-2 text-accent-neon/70">~{displayApy.toFixed(2)}% APY</span>
+                                                        <span className="ml-2 text-primary/80 font-bold bg-primary/10 px-2 py-0.5 rounded-md">~{displayApy.toFixed(2)}% APY</span>
                                                     )}
                                                 </span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-accent-neon font-mono font-bold">
+                                        <td className="px-6 py-4 text-primary font-mono font-black text-lg">
                                             +${item.returnUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="w-20 h-8">
+                                            <div className="w-24 h-10 bg-white rounded-lg shadow-sm p-1 border border-slate-100 flex items-end">
                                                 <svg className="w-full h-full overflow-visible" viewBox="0 0 60 20">
                                                     <motion.path
                                                         initial={{ pathLength: 0, opacity: 0 }}
@@ -81,8 +81,8 @@ export default function BreakdownTable({ simulationResult }: Props) {
                                                         transition={{ duration: 1.5, delay: idx * 0.1 }}
                                                         d={generateSparklinePath(timeSeries, 'totalValueUsd')}
                                                         fill="none"
-                                                        stroke="#00FFA3"
-                                                        strokeWidth="1.5"
+                                                        stroke="#4CAF50"
+                                                        strokeWidth="2"
                                                         strokeLinecap="round"
                                                     />
                                                 </svg>
@@ -90,47 +90,47 @@ export default function BreakdownTable({ simulationResult }: Props) {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                                <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden shadow-inner">
                                                     <motion.div
                                                         initial={{ width: 0 }}
                                                         animate={{ width: `${80 + (idx * 5)}%` }}
                                                         transition={{ duration: 1, delay: 0.5 + idx * 0.1, ease: "easeOut" }}
-                                                        className="h-full bg-accent-neon shadow-[0_0_10px_rgba(0,255,163,0.5)]"
+                                                        className="h-full bg-primary"
                                                     />
                                                 </div>
-                                                <span className="text-[10px] font-mono text-slate-500">{80 + (idx * 5)}%</span>
+                                                <span className="text-[10px] font-black text-slate-400 bg-white px-2 py-0.5 rounded-md shadow-sm border border-slate-100">{80 + (idx * 5)}%</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-neon/10 text-accent-neon text-[10px] font-black uppercase tracking-wider border border-accent-neon/20">
-                                                <span className="w-1 h-1 rounded-full bg-accent-neon animate-pulse"></span>
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider shadow-sm border border-primary/20">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_5px_rgba(76,175,80,0.5)] animate-pulse"></span>
                                                 Harvested
                                             </span>
                                         </td>
                                     </tr>
                                     {item.yieldFarmingStats && (
-                                        <tr className="bg-white/[0.01]">
+                                        <tr className="bg-white/30 backdrop-blur-sm">
                                             <td colSpan={5} className="px-6 pb-4 pt-0">
-                                                <div className="glass-card rounded-lg p-3 border border-white/5 grid grid-cols-2 sm:grid-cols-5 gap-2 text-[10px]">
+                                                <div className="clay-inset rounded-xl p-3 grid grid-cols-2 sm:grid-cols-5 gap-3 text-[10px]">
                                                     <div className="flex flex-col gap-0.5">
                                                         <span className="text-slate-500 uppercase tracking-widest font-bold">Farm Rewards</span>
-                                                        <span className="text-accent-neon font-mono font-bold">+${item.yieldFarmingStats.totalFarmingRewardsEarnedUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
+                                                        <span className="text-primary font-mono font-black text-sm">+${item.yieldFarmingStats.totalFarmingRewardsEarnedUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
                                                     </div>
                                                     <div className="flex flex-col gap-0.5">
                                                         <span className="text-slate-500 uppercase tracking-widest font-bold">Compounded</span>
-                                                        <span className="text-white font-mono font-bold">+${item.yieldFarmingStats.totalCompoundedRewardsUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
+                                                        <span className="text-slate-800 font-mono font-black text-sm">+${item.yieldFarmingStats.totalCompoundedRewardsUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
                                                     </div>
                                                     <div className="flex flex-col gap-0.5">
                                                         <span className="text-slate-500 uppercase tracking-widest font-bold">Unclaimed</span>
-                                                        <span className="text-slate-300 font-mono font-bold">${item.yieldFarmingStats.remainingUnclaimedRewardsUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
+                                                        <span className="text-slate-600 font-mono font-bold text-sm">${item.yieldFarmingStats.remainingUnclaimedRewardsUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
                                                     </div>
                                                     <div className="flex flex-col gap-0.5">
                                                         <span className="text-slate-500 uppercase tracking-widest font-bold">Harvest Fees</span>
-                                                        <span className="text-red-400 font-mono font-bold">-${item.yieldFarmingStats.harvestFeesPaidUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
+                                                        <span className="text-red-500 font-mono font-bold text-sm">-${item.yieldFarmingStats.harvestFeesPaidUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
                                                     </div>
                                                     <div className="flex flex-col gap-0.5">
                                                         <span className="text-slate-500 uppercase tracking-widest font-bold">Harvest Events</span>
-                                                        <span className="text-slate-300 font-mono font-bold">{item.yieldFarmingStats.harvestEventsCount}</span>
+                                                        <span className="text-slate-600 font-mono font-bold text-sm">{item.yieldFarmingStats.harvestEventsCount}</span>
                                                     </div>
                                                 </div>
                                             </td>
@@ -141,15 +141,15 @@ export default function BreakdownTable({ simulationResult }: Props) {
                         })}
 
                         {breakdown.reduce((acc, curr) => acc + curr.ilLossUsd, 0) !== 0 && (
-                            <tr className="group hover:bg-white/[0.02] transition-colors relative">
-                                <td className="px-6 py-4 font-medium text-white">
-                                    <span className="group-hover:text-red-400 transition-colors">Impermanent Loss</span>
+                            <tr className="group hover:bg-white/50 transition-colors relative">
+                                <td className="px-6 py-4 font-bold text-slate-800">
+                                    <span className="group-hover:text-red-500 transition-colors">Impermanent Loss</span>
                                 </td>
-                                <td className="px-6 py-4 text-red-400 font-mono font-bold">
+                                <td className="px-6 py-4 text-red-500 font-mono font-black text-lg">
                                     -${Math.abs(breakdown.reduce((acc, curr) => acc + curr.ilLossUsd, 0)).toLocaleString('en-US', { maximumFractionDigits: 2 })}
                                 </td>
                                 <td className="px-6 py-4">
-                                    <div className="w-20 h-8 opacity-50">
+                                    <div className="w-24 h-10 bg-white rounded-lg shadow-sm p-1 border border-slate-100 flex items-end opacity-70">
                                         <svg className="w-full h-full overflow-visible" viewBox="0 0 60 20">
                                             <motion.path
                                                 initial={{ pathLength: 0, opacity: 0 }}
@@ -157,8 +157,8 @@ export default function BreakdownTable({ simulationResult }: Props) {
                                                 transition={{ duration: 1.5, delay: 0.8 }}
                                                 d="M0,5 L20,15 L40,8 L60,18"
                                                 fill="none"
-                                                stroke="#F87171"
-                                                strokeWidth="1.5"
+                                                stroke="#ef4444"
+                                                strokeWidth="2"
                                                 strokeLinecap="round"
                                                 strokeDasharray="2 2"
                                             />
@@ -167,7 +167,7 @@ export default function BreakdownTable({ simulationResult }: Props) {
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                        <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden shadow-inner">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: "12%" }}
@@ -175,11 +175,11 @@ export default function BreakdownTable({ simulationResult }: Props) {
                                                 className="h-full bg-red-400"
                                             />
                                         </div>
-                                        <span className="text-[10px] font-mono text-slate-500">12%</span>
+                                        <span className="text-[10px] font-black text-slate-400 bg-white px-2 py-0.5 rounded-md shadow-sm border border-slate-100">12%</span>
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-400/10 text-red-400 text-[10px] font-black uppercase tracking-wider border border-red-400/20">
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-slate-500 text-[10px] font-black uppercase tracking-wider shadow-sm border border-slate-200">
                                         Managed
                                     </span>
                                 </td>
@@ -187,13 +187,13 @@ export default function BreakdownTable({ simulationResult }: Props) {
                         )}
 
                         {summary.xcmFeesPaidUsd > 0 && (
-                            <tr className="group hover:bg-white/[0.02] transition-colors relative">
-                                <td className="px-6 py-4 font-medium text-white">XCM Gas Overhead</td>
-                                <td className="px-6 py-4 text-slate-400 font-mono font-bold">-${summary.xcmFeesPaidUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+                            <tr className="group hover:bg-white/50 transition-colors relative">
+                                <td className="px-6 py-4 font-bold text-slate-800">XCM Gas Overhead</td>
+                                <td className="px-6 py-4 text-slate-500 font-mono font-black text-lg">-${summary.xcmFeesPaidUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
                                 <td className="px-6 py-4">—</td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                        <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden shadow-inner">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: "5%" }}
@@ -201,11 +201,11 @@ export default function BreakdownTable({ simulationResult }: Props) {
                                                 className="h-full bg-slate-400"
                                             />
                                         </div>
-                                        <span className="text-[10px] font-mono text-slate-500">5%</span>
+                                        <span className="text-[10px] font-black text-slate-400 bg-white px-2 py-0.5 rounded-md shadow-sm border border-slate-100">5%</span>
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 text-slate-400 text-[10px] font-black uppercase tracking-wider border border-white/20 text-xs">
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-slate-500 text-[10px] font-black uppercase tracking-wider shadow-sm border border-slate-200">
                                         Deducted
                                     </span>
                                 </td>
@@ -213,13 +213,13 @@ export default function BreakdownTable({ simulationResult }: Props) {
                         )}
 
                         {(summary.slippageCostUsd ?? 0) > 0 && (
-                            <tr className="group hover:bg-white/[0.02] transition-colors relative">
-                                <td className="px-6 py-4 font-medium text-white">Slippage Cost</td>
-                                <td className="px-6 py-4 text-orange-400 font-mono font-bold">-${summary.slippageCostUsd!.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+                            <tr className="group hover:bg-white/50 transition-colors relative">
+                                <td className="px-6 py-4 font-bold text-slate-800">Slippage Cost</td>
+                                <td className="px-6 py-4 text-orange-500 font-mono font-black text-lg">-${summary.slippageCostUsd!.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
                                 <td className="px-6 py-4">—</td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                        <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden shadow-inner">
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: "3%" }}
@@ -227,11 +227,11 @@ export default function BreakdownTable({ simulationResult }: Props) {
                                                 className="h-full bg-orange-400"
                                             />
                                         </div>
-                                        <span className="text-[10px] font-mono text-slate-500">3%</span>
+                                        <span className="text-[10px] font-black text-slate-400 bg-white px-2 py-0.5 rounded-md shadow-sm border border-slate-100">3%</span>
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-400/10 text-orange-400 text-[10px] font-black uppercase tracking-wider border border-orange-400/20">
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-slate-500 text-[10px] font-black uppercase tracking-wider shadow-sm border border-slate-200">
                                         Deducted
                                     </span>
                                 </td>

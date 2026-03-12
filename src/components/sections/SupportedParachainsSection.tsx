@@ -2,19 +2,7 @@
 
 import { motion } from "framer-motion";
 
-const chains = [
-    { name: "Acala", subtitle: "Stablecoin & DeFi", stats: "24 Pools Indexed", color: "#FF3E3E", description: "Native stablecoin hub with deep liquidity across aUSD and DOT pairs." },
-    { name: "Hydration", subtitle: "Omnipool DEX", stats: "$42M Liquidity", color: "#FF007A", description: "Single-sided liquidity provisioning with concentrated depth across all assets." },
-    { name: "Bifrost", subtitle: "Liquid Staking", stats: "18 vTokens Tracked", color: "#00CDFF" },
-    { name: "Moonbeam", subtitle: "EVM Smart Contracts", stats: "Top dApp Hub", color: "#53CBC9" },
-    { name: "Astar", subtitle: "WASM + EVM Platform", stats: "Multi-VM Network", color: "#1b6dc1" },
-    { name: "Phala Network", subtitle: "Confidential Compute", stats: "Secure Workers", color: "#D1FE1D" },
-    { name: "Centrifuge", subtitle: "Real-World Assets", stats: "RWA Tokenization", color: "#FACC15" },
-    { name: "Interlay", subtitle: "Bitcoin Bridging", stats: "Wrapped BTC (iBTC)", color: "#F7931A" },
-    { name: "Parallel", subtitle: "DeFi Lending", stats: "Borrow / Lend", color: "#EF4444" },
-    { name: "Manta Network", subtitle: "Modular Blockchain", stats: "Privacy-Preserving", color: "#11B4ED" },
-    { name: "Nodle", subtitle: "IoT Connectivity", stats: "Mobile Network", color: "#00CDFF" },
-];
+import chains from "@/data/parachains.json";
 
 const featuredChains = chains.slice(0, 2);
 const regularChains = chains.slice(2);
@@ -62,13 +50,17 @@ export default function SupportedParachainsSection() {
                                 style={{ backgroundColor: chain.color }}
                             />
                             <div
-                                className="w-10 h-10 rounded-full mb-4 flex items-center justify-center"
+                                className="w-10 h-10 rounded-full mb-4 flex items-center justify-center overflow-hidden"
                                 style={{ backgroundColor: `${chain.color}18`, border: `1px solid ${chain.color}40` }}
                             >
-                                <div
-                                    className="w-4 h-4 rounded-full"
-                                    style={{ backgroundColor: chain.color, boxShadow: `0 0 10px ${chain.color}80` }}
-                                />
+                                {chain.icon?.startsWith("/") ? (
+                                    <img src={chain.icon} className="w-6 h-6 object-contain" alt={chain.name} />
+                                ) : (
+                                    <div
+                                        className="w-4 h-4 rounded-full"
+                                        style={{ backgroundColor: chain.color, boxShadow: `0 0 10px ${chain.color}80` }}
+                                    />
+                                )}
                             </div>
                             <h3 className="text-base font-bold text-white mb-1">{chain.name}</h3>
                             <p className="text-[11px] text-gray-500 uppercase tracking-wider font-mono mb-3">{chain.subtitle}</p>
@@ -103,13 +95,17 @@ export default function SupportedParachainsSection() {
                                 style={{ backgroundColor: chain.color }}
                             />
                             <div
-                                className="w-8 h-8 rounded-full mb-3 flex items-center justify-center"
+                                className="w-8 h-8 rounded-full mb-3 flex items-center justify-center overflow-hidden"
                                 style={{ backgroundColor: `${chain.color}18`, border: `1px solid ${chain.color}40` }}
                             >
-                                <div
-                                    className="w-3 h-3 rounded-full"
-                                    style={{ backgroundColor: chain.color, boxShadow: `0 0 8px ${chain.color}80` }}
-                                />
+                                {chain.icon?.startsWith("/") ? (
+                                    <img src={chain.icon} className="w-5 h-5 object-contain" alt={chain.name} />
+                                ) : (
+                                    <div
+                                        className="w-3 h-3 rounded-full"
+                                        style={{ backgroundColor: chain.color, boxShadow: `0 0 8px ${chain.color}80` }}
+                                    />
+                                )}
                             </div>
                             <h3 className="text-sm font-bold text-white mb-1">{chain.name}</h3>
                             <p className="text-[11px] text-gray-500 uppercase tracking-wider font-mono mb-3">{chain.subtitle}</p>

@@ -61,7 +61,7 @@ export const simulatorService = {
                 if (errorData && errorData.message) {
                     errorMessage = errorData.message;
                 }
-            } catch (e) {
+            } catch {
                 // If parsing fails, use fallback message
             }
             throw new Error(errorMessage);
@@ -101,7 +101,7 @@ export const simulatorService = {
         if (!response.ok) throw new Error("Failed to fetch tokens");
         const json = await response.json();
         const data = Array.isArray(json) ? json : json.data ?? [];
-        return data.map((t: any) => ({ symbol: t.symbol || t }));
+        return data.map((t: { symbol?: string } | string) => ({ symbol: typeof t === 'string' ? t : t.symbol || t }));
     },
 
     async getParachains() {
@@ -109,7 +109,7 @@ export const simulatorService = {
         if (!response.ok) throw new Error("Failed to fetch parachains");
         const json = await response.json();
         const data = Array.isArray(json) ? json : json.data ?? [];
-        return data.map((p: any) => ({ id: p.id || p, name: p.name || p.id || p }));
+        return data.map((p: { id?: string; name?: string } | string) => ({ id: typeof p === 'string' ? p : p.id || p, name: typeof p === 'string' ? p : p.name || p.id || p }));
     },
 
     async getLpFarms(params?: {
@@ -137,7 +137,7 @@ export const simulatorService = {
         if (!response.ok) throw new Error("Failed to fetch protocol types");
         const json = await response.json();
         const data = Array.isArray(json) ? json : json.data ?? [];
-        return data.map((t: any) => ({ id: t.id || t, label: t.label || t.id || t }));
+        return data.map((t: { id?: string; label?: string } | string) => ({ id: typeof t === 'string' ? t : t.id || t, label: typeof t === 'string' ? t : t.label || t.id || t }));
     },
 };
 

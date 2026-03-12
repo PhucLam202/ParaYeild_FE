@@ -25,139 +25,144 @@ export default function SimulationParameters({
     xcmFees, setXcmFees,
 }: Props) {
     return (
-        <>
-            {/* Amount + Time Range */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/5">
+        <div className="space-y-8">
+            {/* Amount */}
+            <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
                 <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 block">Initial Amount ($)</label>
+                    <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Capital Allocation (USD)</label>
                     <div className="relative">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+                        <span className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 font-black text-2xl">$</span>
                         <input
-                            className="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-8 pr-4 text-white focus:ring-accent-neon focus:border-accent-neon outline-none transition-colors hover:bg-white/10 hover:border-white/20"
+                            className="clay-inset w-full py-4 pl-12 pr-6 rounded-3xl font-black text-2xl text-slate-800 placeholder:text-slate-300 focus:ring-4 ring-primary/10 transition-all outline-none"
                             type="number"
                             value={amount}
                             onChange={(e) => setAmount(Number(e.target.value))}
                         />
                     </div>
                 </div>
+
+                {/* Time Range */}
                 <div className="space-y-2">
-                    <div className="flex gap-4">
-                        <div className="flex-1">
-                            <CustomSelect
-                                label="Time Range"
-                                value={timeRange}
-                                onChange={setTimeRange}
-                                options={[
-                                    { label: "90 Days", value: "90 Days" },
-                                    { label: "180 Days", value: "180 Days" },
-                                    { label: "1 Year", value: "1 Year" },
-                                    { label: "Custom Range", value: "Custom Range" }
-                                ]}
-                            />
-                        </div>
-                        {timeRange === "Custom Range" && (
-                            <div className="flex-[1.5] flex gap-2 items-end">
-                                <div className="flex-1 space-y-2">
-                                    <label className="text-[10px] uppercase tracking-tighter text-slate-500 block px-1">From</label>
-                                    <div className="relative group">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-base text-slate-500 group-hover:text-accent-neon transition-colors">calendar_today</span>
-                                        <input
-                                            type="date"
-                                            value={customRange.from}
-                                            max={customRange.to ? format(subDays(parseISO(customRange.to), 1), 'yyyy-MM-dd') : format(subDays(new Date(), 1), 'yyyy-MM-dd')}
-                                            onChange={(e) => {
-                                                const newFrom = e.target.value;
-                                                if (newFrom >= customRange.to) {
-                                                    setCustomRange({ from: newFrom, to: format(addDays(parseISO(newFrom), 1), 'yyyy-MM-dd') });
-                                                } else {
-                                                    setCustomRange({ ...customRange, from: newFrom });
-                                                }
-                                            }}
-                                            className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 pl-10 pr-3 text-sm text-white outline-none focus:border-accent-neon transition-colors hover:bg-white/10 hover:border-white/20 [color-scheme:dark]"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex-1 space-y-2">
-                                    <label className="text-[10px] uppercase tracking-tighter text-slate-500 block px-1">To</label>
-                                    <div className="relative group">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-base text-slate-500 group-hover:text-accent-neon transition-colors">calendar_today</span>
-                                        <input
-                                            type="date"
-                                            value={customRange.to}
-                                            min={customRange.from ? format(addDays(parseISO(customRange.from), 1), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')}
-                                            max={format(new Date(), 'yyyy-MM-dd')}
-                                            onChange={(e) => {
-                                                const newTo = e.target.value;
-                                                if (newTo <= customRange.from) {
-                                                    setCustomRange({ from: format(subDays(parseISO(newTo), 1), 'yyyy-MM-dd'), to: newTo });
-                                                } else {
-                                                    setCustomRange({ ...customRange, to: newTo });
-                                                }
-                                            }}
-                                            className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 pl-10 pr-3 text-sm text-white outline-none focus:border-accent-neon transition-colors hover:bg-white/10 hover:border-white/20 [color-scheme:dark]"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <CustomSelect
+                        label="Time Horizon"
+                        value={timeRange}
+                        onChange={setTimeRange}
+                        options={[
+                            { label: "90 Days", value: "90 Days" },
+                            { label: "180 Days", value: "180 Days" },
+                            { label: "1 Year", value: "1 Year" },
+                            { label: "Custom Range", value: "Custom Range" }
+                        ]}
+                    />
                 </div>
             </div>
 
-            {/* Advanced Parameters */}
-            <div className="glass-card rounded-xl p-6 space-y-6 md:col-span-2 relative z-10 border-t-0">
-                <div className="flex items-center gap-2 pb-4 border-b border-white/5">
-                    <div className="w-1 h-4 rounded-full bg-[#A78BFA]" />
-                    <span className="text-sm font-bold uppercase tracking-wider text-slate-300">Advanced Parameters</span>
-                    <span className="ml-auto text-xs font-mono text-slate-600 uppercase tracking-widest">Optional</span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center">
-                            <label className="text-sm text-slate-300">Slippage Tolerance</label>
-                            <span className="text-sm font-mono text-accent-neon">{slippage.toFixed(2)}%</span>
-                        </div>
-                        <div className="relative">
-                        <input
-                            className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent-neon [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(0,255,163,0.5)] [&::-webkit-slider-thumb]:cursor-pointer"
-                            style={{ background: `linear-gradient(to right, #00FFA3 ${((slippage - 0.1) / 4.9) * 100}%, rgba(255,255,255,0.1) ${((slippage - 0.1) / 4.9) * 100}%)` }}
-                            type="range"
-                            min="0.1"
-                            max="5"
-                            step="0.1"
-                            value={slippage}
-                            onChange={(e) => setSlippage(Number(e.target.value))}
-                        />
+            {timeRange === "Custom Range" && (
+                <div className="flex gap-4 p-4 clay-inset rounded-2xl animate-fade-in">
+                    <div className="flex-1 space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4 block">From</label>
+                        <div className="relative group">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60">calendar_today</span>
+                            <input
+                                type="date"
+                                value={customRange.from}
+                                max={customRange.to ? format(subDays(parseISO(customRange.to), 1), 'yyyy-MM-dd') : format(subDays(new Date(), 1), 'yyyy-MM-dd')}
+                                onChange={(e) => {
+                                    const newFrom = e.target.value;
+                                    if (newFrom >= customRange.to) {
+                                        setCustomRange({ from: newFrom, to: format(addDays(parseISO(newFrom), 1), 'yyyy-MM-dd') });
+                                    } else {
+                                        setCustomRange({ ...customRange, from: newFrom });
+                                    }
+                                }}
+                                className="w-full bg-white/60 border border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 ring-primary/20 transition-all"
+                            />
                         </div>
                     </div>
+                    <div className="flex-1 space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4 block">To</label>
+                        <div className="relative group">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60">calendar_today</span>
+                            <input
+                                type="date"
+                                value={customRange.to}
+                                min={customRange.from ? format(addDays(parseISO(customRange.from), 1), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')}
+                                max={format(new Date(), 'yyyy-MM-dd')}
+                                onChange={(e) => {
+                                    const newTo = e.target.value;
+                                    if (newTo <= customRange.from) {
+                                        setCustomRange({ from: format(subDays(parseISO(newTo), 1), 'yyyy-MM-dd'), to: newTo });
+                                    } else {
+                                        setCustomRange({ ...customRange, to: newTo });
+                                    }
+                                }}
+                                className="w-full bg-white/60 border border-slate-100 rounded-xl py-3 pl-12 pr-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 ring-primary/20 transition-all"
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Advanced Parameters */}
+            <div className="bg-white rounded-clay p-6 shadow-sm border border-slate-100 space-y-6">
+                <div className="flex items-center gap-2 pb-4 border-b border-slate-100">
+                    <span className="material-symbols-outlined text-primary font-bold">tune</span>
+                    <span className="text-sm font-bold uppercase tracking-wider text-slate-800">Advanced Parameters</span>
+                    <span className="ml-auto text-[10px] font-black uppercase tracking-widest text-slate-400 bg-slate-100 px-3 py-1 rounded-full">Optional</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {/* Slippage Slider */}
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center px-1">
+                            <label className="text-sm font-bold text-slate-700">Slippage Tolerance</label>
+                            <span className="text-sm font-black font-display text-primary">{slippage.toFixed(2)}%</span>
+                        </div>
+                        <div className="relative pt-2">
+                            <input
+                                className="w-full h-2 bg-slate-100 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer focus:outline-none"
+                                style={{ background: `linear-gradient(to right, #4CAF50 ${((slippage - 0.1) / 4.9) * 100}%, #F1F5F9 ${((slippage - 0.1) / 4.9) * 100}%)` }}
+                                type="range"
+                                min="0.1"
+                                max="5"
+                                step="0.1"
+                                value={slippage}
+                                onChange={(e) => setSlippage(Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Compound Yield Toggle */}
                     <div
                         onClick={() => setCompoundYield(!compoundYield)}
-                        className={`flex items-center justify-between p-3 rounded-lg border transition-all cursor-pointer ${compoundYield ? 'bg-accent-neon/5 border-accent-neon/30' : 'bg-white/5 border-white/5'}`}
+                        className={`flex items-center justify-between p-4 rounded-2xl transition-all cursor-pointer border-2 ${compoundYield ? 'bg-primary/5 border-primary/20 shadow-sm' : 'bg-slate-50 border-transparent hover:bg-slate-100'}`}
                     >
                         <div className="flex flex-col">
-                            <span className="text-sm text-slate-300">Compound Yield</span>
-                            <span className="text-xs text-slate-500">Auto-reinvest rewards</span>
+                            <span className="text-sm font-bold text-slate-800">Compound Yield</span>
+                            <span className="text-xs text-slate-500 font-medium">Auto-reinvest rewards</span>
                         </div>
                         <div className="relative inline-flex items-center cursor-pointer">
-                            <div className={`w-11 h-6 rounded-full transition-colors ${compoundYield ? 'bg-accent-neon' : 'bg-white/10'}`}></div>
-                            <div className={`absolute left-[2px] top-[2px] bg-black w-5 h-5 rounded-full transition-all ${compoundYield ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                            <div className={`w-12 h-6 rounded-full transition-colors shadow-inner ${compoundYield ? 'bg-primary' : 'bg-slate-300'}`}></div>
+                            <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform shadow-sm ${compoundYield ? 'translate-x-6' : 'translate-x-0'}`}></div>
                         </div>
                     </div>
+
+                    {/* XCM Fees Toggle */}
                     <div
                         onClick={() => setXcmFees(!xcmFees)}
-                        className={`flex items-center justify-between p-3 rounded-lg border transition-all cursor-pointer ${xcmFees ? 'bg-accent-neon/5 border-accent-neon/30' : 'bg-white/5 border-white/5'}`}
+                        className={`flex items-center justify-between p-4 rounded-2xl transition-all cursor-pointer border-2 ${xcmFees ? 'bg-primary/5 border-primary/20 shadow-sm' : 'bg-slate-50 border-transparent hover:bg-slate-100'}`}
                     >
                         <div className="flex flex-col">
-                            <span className="text-sm text-slate-300">XCM Fees Modeling</span>
-                            <span className="text-xs text-slate-500">Cross-chain overhead</span>
+                            <span className="text-sm font-bold text-slate-800">XCM Fees</span>
+                            <span className="text-xs text-slate-500 font-medium">Cross-chain overhead</span>
                         </div>
                         <div className="relative inline-flex items-center cursor-pointer">
-                            <div className={`w-11 h-6 rounded-full transition-colors ${xcmFees ? 'bg-accent-neon' : 'bg-white/10'}`}></div>
-                            <div className={`absolute left-[2px] top-[2px] bg-black w-5 h-5 rounded-full transition-all ${xcmFees ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                            <div className={`w-12 h-6 rounded-full transition-colors shadow-inner ${xcmFees ? 'bg-primary' : 'bg-slate-300'}`}></div>
+                            <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform shadow-sm ${xcmFees ? 'translate-x-6' : 'translate-x-0'}`}></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

@@ -51,12 +51,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     return (
         <div className={`relative ${className} ${isOpen ? 'z-[100]' : 'z-10'}`} ref={dropdownRef}>
             {label && (
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4 mb-2">
                     {label}
                 </label>
             )}
             <div
-                className={`w-full bg-white/5 border ${isOpen ? 'border-accent-neon outline-none ring-1 ring-accent-neon/50' : 'border-white/10'} rounded-lg py-3 px-4 flex items-center justify-between text-white transition-all ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-white/10 hover:border-white/20'}`}
+                className={`w-full clay-inset rounded-2xl p-4 flex items-center justify-between font-bold text-slate-700 transition-all ${isOpen ? 'ring-4 ring-primary/10' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:ring-2 hover:ring-primary/20'}`}
                 onClick={() => !disabled && setIsOpen(!isOpen)}
             >
                 <div className="flex items-center gap-2 truncate">
@@ -68,22 +68,22 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                                 </span>
                             )}
                             {selectedOption.colorIndicator && (
-                                <div className={`size-4 rounded-full ${selectedOption.colorIndicator} flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-white`}>
+                                <div className={`size-5 rounded-full ${selectedOption.colorIndicator} flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-white shadow-sm`}>
                                     {selectedOption.label[0]}
                                 </div>
                             )}
-                            <span className="truncate font-medium capitalize">{selectedOption.label}</span>
+                            <span className="truncate">{selectedOption.label}</span>
                         </>
                     ) : (
-                        <span className="text-slate-500 font-medium">{placeholder}</span>
+                        <span className="text-slate-400">{placeholder}</span>
                     )}
                 </div>
                 <motion.span
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
-                    className="material-symbols-outlined text-slate-400 flex-shrink-0"
+                    className="material-symbols-outlined text-primary/60 flex-shrink-0 pointer-events-none"
                 >
-                    arrow_drop_down
+                    expand_more
                 </motion.span>
             </div>
 
@@ -94,14 +94,14 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute z-50 w-full mt-2 bg-[#1A1A1A] border border-white/10 rounded-lg shadow-2xl overflow-hidden max-h-60 overflow-y-auto custom-scrollbar"
+                        className="absolute z-50 w-full mt-2 bg-white rounded-2xl shadow-clay-lg overflow-hidden max-h-60 overflow-y-auto px-2 py-2 border border-slate-100"
                     >
                         {options.map((option) => (
                             <div
                                 key={option.value}
-                                className={`px-4 py-3 cursor-pointer flex items-center gap-2 transition-colors ${value === option.value
-                                    ? "bg-accent-neon/10 text-accent-neon border-l-2 border-accent-neon"
-                                    : "text-slate-300 hover:bg-white/10 hover:text-white border-l-2 border-transparent"
+                                className={`px-4 py-3 cursor-pointer flex items-center gap-3 transition-colors rounded-xl font-bold ${value === option.value
+                                    ? "bg-primary/10 text-primary-dark"
+                                    : "text-slate-600 hover:bg-slate-50 hover:text-primary"
                                     }`}
                                 onClick={() => {
                                     onChange(option.value);
@@ -114,11 +114,11 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                                     </span>
                                 )}
                                 {option.colorIndicator && (
-                                    <div className={`size-4 rounded-full ${option.colorIndicator} flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-white`}>
+                                    <div className={`size-5 rounded-full ${option.colorIndicator} flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-white shadow-sm`}>
                                         {option.label[0]}
                                     </div>
                                 )}
-                                <span className="truncate capitalize font-medium">{option.label}</span>
+                                <span className="truncate capitalize">{option.label}</span>
                             </div>
                         ))}
                     </motion.div>

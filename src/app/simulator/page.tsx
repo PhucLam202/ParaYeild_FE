@@ -13,7 +13,7 @@ import {
     ResultsPanel,
     StrategyModal,
 } from "@/components/simulator";
-import { useSimulation, DEFAULT_TOKENS } from "@/hooks/useSimulation";
+import { useSimulation } from "@/hooks/useSimulation";
 import type { SuggestedStrategy } from "@/types/simulator";
 
 export default function SimulatorPage() {
@@ -37,20 +37,20 @@ export default function SimulatorPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[#1A1A1A] via-[#121212] to-[#0C0C0C] text-[#f1f1f1] font-sans selection:bg-[#00FFA3] selection:text-black relative overflow-hidden">
+        <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-primary/30 selection:text-primary relative overflow-hidden antialiased">
             {/* Background Elements */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-                <div className="absolute left-[20%] top-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-neon opacity-[0.07] blur-[120px]"></div>
-                <div className="absolute right-[10%] bottom-0 -z-10 h-[400px] w-[400px] translate-x-1/3 translate-y-1/3 rounded-full bg-[#352F36] opacity-30 blur-[100px]"></div>
-                <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-[800px] w-[800px] rounded-full bg-[#2B2B2B] opacity-10 blur-[150px] mix-blend-screen pointer-events-none z-[-1]"></div>
+            <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:32px_32px] opacity-40"></div>
+                <div className="absolute left-[10%] top-[-5%] -z-10 h-[600px] w-[600px] rounded-full bg-primary/20 blur-[120px]"></div>
+                <div className="absolute right-[5%] bottom-[10%] -z-10 h-[500px] w-[500px] rounded-full bg-violet-400/20 blur-[100px]"></div>
+                <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-[800px] w-[800px] rounded-full bg-emerald-300/10 blur-[150px] pointer-events-none"></div>
             </div>
 
             <AnimatePresence>
                 {sim.toastState && (
                     <Toast
                         message={sim.toastState.message}
-                        type={sim.toastState.type as any}
+                        type={sim.toastState.type as "success" | "error" | "info" | "warning"}
                         onClose={() => sim.setToastState(null)}
                     />
                 )}
@@ -63,51 +63,54 @@ export default function SimulatorPage() {
 
                         {/* Hero Section */}
                         <section className="space-y-4 text-center md:text-left">
-                            <div className="inline-flex flex-row items-center justify-center space-x-2 bg-accent-neon/10 border border-accent-neon/20 px-3 py-1 rounded-full mb-4">
-                                <span className="w-2 h-2 rounded-full bg-accent-neon animate-pulse"></span>
-                                <span className="text-xs font-bold text-accent-neon uppercase tracking-widest">Simulator Beta</span>
+                            <div className="inline-flex flex-row items-center justify-center space-x-2 bg-white px-4 py-2 rounded-full mb-4 shadow-sm border border-slate-100">
+                                <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(76,175,80,0.6)] animate-pulse"></span>
+                                <span className="text-xs font-black text-slate-600 uppercase tracking-widest">Simulator Beta</span>
                             </div>
-                            <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white lg:leading-tight">
+                            <h1 className="text-5xl md:text-7xl font-black font-display tracking-tight text-slate-800 lg:leading-[1.1]">
                                 Pro-Grade DeFi <br />
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent-neon to-emerald-400">Backtesting Engine</span>
+                                <span className="text-primary relative inline-block">
+                                    Backtesting Engine
+                                    <svg className="absolute -bottom-2 right-0 w-full h-3 text-primary/30" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,10 100,2" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" /></svg>
+                                </span>
                             </h1>
-                            <p className="text-lg md:text-xl text-slate-400 max-w-2xl leading-relaxed mx-auto md:mx-0">
+                            <p className="text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed mx-auto md:mx-0 font-medium pb-8 border-b border-slate-200">
                                 Simulate historical performance across Polkadot parachains. Optimize your yield strategies with high-precision XCM fee modeling and real-world slippage estimation.
                             </p>
                         </section>
 
                         {/* Configure Simulation */}
                         <section className="space-y-6">
-                            <div className="flex items-center gap-3 px-1 pb-2 border-b border-white/5">
-                                <div className="w-8 h-8 rounded-lg bg-accent-neon/10 border border-accent-neon/20 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-accent-neon text-base">settings</span>
+                            <div className="flex items-center gap-3 px-1 pb-2 border-b border-slate-200">
+                                <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-primary text-xl">tune</span>
                                 </div>
                                 <div>
-                                    <h2 className="text-lg font-bold text-white leading-none">Configure Simulation</h2>
-                                    <p className="text-xs text-slate-500 mt-0.5 font-mono">Select network, tokens, and parameters</p>
+                                    <h2 className="text-xl font-bold font-display text-slate-800 leading-none">Configure Simulation</h2>
+                                    <p className="text-xs text-slate-500 mt-1 font-bold">Select network, tokens, and parameters</p>
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="glass-card rounded-xl p-6 space-y-6 md:col-span-2 relative z-20">
+                                <div className="clay-card rounded-clay-lg p-6 lg:p-10 space-y-8 md:col-span-2 relative z-20">
                                     <AnimatePresence mode="wait">
                                         {sim.isLoadingInitial ? (
                                             <motion.div key="skeleton" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6">
                                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                     {[1, 2, 3].map((i) => (
                                                         <div key={i} className="space-y-2">
-                                                            <Skeleton className="h-4 w-24 bg-white/10" />
-                                                            <Skeleton className="h-12 w-full bg-white/5 rounded-lg" />
+                                                            <Skeleton className="h-4 w-24 bg-slate-200" />
+                                                            <Skeleton className="h-14 w-full bg-slate-100/50 rounded-2xl" />
                                                         </div>
                                                     ))}
                                                 </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/5">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-100">
                                                     <div className="space-y-2">
-                                                        <Skeleton className="h-4 w-32 bg-white/10" />
-                                                        <Skeleton className="h-12 w-full bg-white/5 rounded-lg" />
+                                                        <Skeleton className="h-4 w-32 bg-slate-200" />
+                                                        <Skeleton className="h-14 w-full bg-slate-100/50 rounded-2xl" />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <Skeleton className="h-4 w-24 bg-white/10" />
-                                                        <Skeleton className="h-12 w-full bg-white/5 rounded-lg" />
+                                                        <Skeleton className="h-4 w-24 bg-slate-200" />
+                                                        <Skeleton className="h-14 w-full bg-slate-100/50 rounded-2xl" />
                                                     </div>
                                                 </div>
                                             </motion.div>
@@ -160,7 +163,6 @@ export default function SimulatorPage() {
                             isSimulating={sim.isSimulating}
                             simulationSteps={sim.simulationSteps}
                             currentStepIndex={sim.currentStepIndex}
-                            isSimulatingActive={sim.isSimulating}
                             handleRunSimulation={sim.handleRunSimulation}
                             handleSuggestStrategies={sim.handleSuggestStrategies}
                             handleSelectStrategy={sim.handleSelectStrategy}
@@ -180,65 +182,80 @@ export default function SimulatorPage() {
                         {/* Methodology + Related Tools */}
                         <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             <div className="lg:col-span-2 space-y-6">
-                                <div className="flex items-center gap-2 px-1">
-                                    <span className="material-symbols-outlined text-slate-400">menu_book</span>
-                                    <h2 className="text-xl font-bold text-white">Methodology</h2>
-                                </div>
-                                <div className="space-y-3">
-                                    <div className="glass-card rounded-xl p-4 flex items-center justify-between group cursor-pointer hover:border-accent-neon/30 transition-colors">
-                                        <span className="text-sm text-slate-300 font-medium">How we calculate XCM fee modeling?</span>
-                                        <span className="material-symbols-outlined text-slate-500 group-hover:text-accent-neon">add</span>
+                                <div className="flex items-center gap-3 px-1">
+                                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-slate-500 text-xl">menu_book</span>
                                     </div>
-                                    <div className="glass-card rounded-xl p-4 flex items-center justify-between group cursor-pointer border-accent-neon/30 bg-accent-neon/5">
-                                        <div className="space-y-2">
-                                            <span className="text-sm text-accent-neon font-bold">Protocol Slippage Assumptions</span>
-                                            <p className="text-xs text-slate-400 leading-relaxed">We use a dynamic orderbook snapshot from the selected historical timestamp to calculate real-world execution price impact based on your trade size.</p>
+                                    <h2 className="text-xl font-bold font-display text-slate-800">Methodology</h2>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="clay-card rounded-2xl p-5 flex items-center justify-between group cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all">
+                                        <span className="text-sm text-slate-700 font-bold">How we calculate XCM fee modeling?</span>
+                                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                                            <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">add</span>
                                         </div>
-                                        <span className="material-symbols-outlined text-accent-neon self-start">remove</span>
+                                    </div>
+                                    <div className="clay-card rounded-2xl p-5 flex flex-col justify-between group cursor-pointer bg-white">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-sm text-primary font-black">Protocol Slippage Assumptions</span>
+                                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-primary">remove</span>
+                                            </div>
+                                        </div>
+                                        <p className="text-sm text-slate-500 leading-relaxed font-medium pb-2 border-b border-slate-100">
+                                            We use a dynamic orderbook snapshot from the selected historical timestamp to calculate real-world execution price impact based on your trade size.
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="border-l-4 border-orange-500 bg-orange-500/5 p-6 rounded-r-xl space-y-2">
-                                    <div className="flex items-center gap-2 text-orange-500">
+                                <div className="clay-card border-l-4 border-l-orange-400 p-6 rounded-2xl rounded-l-none space-y-3 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-orange-100 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+                                    <div className="flex items-center gap-2 text-orange-500 relative z-10">
                                         <span className="material-symbols-outlined">warning</span>
-                                        <span className="text-sm font-bold uppercase tracking-widest">Risk Disclaimer</span>
+                                        <span className="text-xs font-black uppercase tracking-widest">Risk Disclaimer</span>
                                     </div>
-                                    <p className="text-sm text-slate-400 leading-relaxed">
+                                    <p className="text-sm text-slate-600 leading-relaxed font-medium relative z-10">
                                         Backtesting is based on historical data and does not guarantee future results. DeFi protocols are subject to smart contract risks, liquidity crunches, and rapid market fluctuations. Simulation results do not include tax implications.
                                     </p>
                                 </div>
                             </div>
                             <div className="space-y-6">
-                                <div className="flex items-center gap-2 px-1">
-                                    <span className="material-symbols-outlined text-slate-400">extension</span>
-                                    <h2 className="text-xl font-bold text-white">Related Tools</h2>
+                                <div className="flex items-center gap-3 px-1">
+                                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center">
+                                        <span className="material-symbols-outlined text-slate-500 text-xl">extension</span>
+                                    </div>
+                                    <h2 className="text-xl font-bold font-display text-slate-800">Related Tools</h2>
                                 </div>
-                                <div className="grid grid-cols-1 gap-4">
-                                    <a className="glass-card p-5 rounded-xl hover:border-accent-neon/50 transition-all group" href="#">
-                                        <span className="material-symbols-outlined text-accent-neon mb-3">waves</span>
-                                        <h4 className="text-white font-bold mb-1">Pool Analytics</h4>
-                                        <p className="text-xs text-slate-500">Deep dive into specific parachain liquidity pools.</p>
+                                <div className="grid grid-cols-1 gap-5">
+                                    <a className="clay-button-tactile p-6 rounded-2xl group flex flex-col transition-all text-left" href="#">
+                                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                                            <span className="material-symbols-outlined text-primary group-hover:text-white">waves</span>
+                                        </div>
+                                        <h4 className="text-slate-800 font-black mb-2 font-display text-lg">Pool Analytics</h4>
+                                        <p className="text-sm text-slate-500 font-medium">Deep dive into specific parachain liquidity pools.</p>
                                     </a>
-                                    <a className="glass-card p-5 rounded-xl hover:border-accent-neon/50 transition-all group" href="#">
-                                        <span className="material-symbols-outlined text-accent-purple mb-3">calculate</span>
-                                        <h4 className="text-white font-bold mb-1">XCM Fee Calculator</h4>
-                                        <p className="text-xs text-slate-500">Instant cross-chain transfer cost estimator.</p>
+                                    <a className="clay-button-tactile p-6 rounded-2xl group flex flex-col transition-all text-left" href="#">
+                                        <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center mb-4 group-hover:bg-violet-500 group-hover:text-white transition-colors">
+                                            <span className="material-symbols-outlined text-violet-500 group-hover:text-white">calculate</span>
+                                        </div>
+                                        <h4 className="text-slate-800 font-black mb-2 font-display text-lg">XCM Fee Calculator</h4>
+                                        <p className="text-sm text-slate-500 font-medium">Instant cross-chain transfer cost estimator.</p>
                                     </a>
                                 </div>
                             </div>
                         </section>
                     </main>
 
-                    <footer className="border-t border-white/5 py-12 mt-12 bg-black/40">
-                        <div className="text-center max-w-4xl mx-auto mb-16">
-                            <div className="flex justify-center items-center gap-2">
-                                <div className="size-6 rounded-lg bg-accent-neon flex items-center justify-center text-[10px] text-black font-bold">PY</div>
-                                <span className="text-sm font-bold text-slate-300 tracking-tight">Built by ParaYield Labs</span>
+                    <footer className="mt-20 py-12 border-t border-slate-200">
+                        <div className="text-center max-w-4xl mx-auto mb-16 px-4">
+                            <div className="flex justify-center items-center gap-2 mb-4">
+                                <div className="size-8 rounded-xl bg-primary text-white flex items-center justify-center text-xs font-black shadow-[0_4px_10px_rgba(76,175,80,0.3)]">PY</div>
+                                <span className="text-sm font-black text-slate-700 tracking-tight font-display">Built by ParaYield Labs</span>
                             </div>
-                            <p className="text-xs text-slate-500">© 2024 ParaYield DeFi Simulator. Not financial advice. Data provided by ecosystem partners.</p>
-                            <div className="flex justify-center gap-6">
-                                <a className="text-slate-500 hover:text-accent-neon transition-colors" href="#"><span className="material-symbols-outlined text-xl">public</span></a>
-                                <a className="text-slate-500 hover:text-accent-neon transition-colors" href="#"><span className="material-symbols-outlined text-xl">terminal</span></a>
-                                <a className="text-slate-500 hover:text-accent-neon transition-colors" href="#"><span className="material-symbols-outlined text-xl">forum</span></a>
+                            <p className="text-xs text-slate-500 font-medium mb-8">© 2024 ParaYield DeFi Simulator. Not financial advice. Data provided by ecosystem partners.</p>
+                            <div className="flex justify-center gap-4">
+                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="#"><span className="material-symbols-outlined text-xl">public</span></a>
+                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="#"><span className="material-symbols-outlined text-xl">terminal</span></a>
+                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="#"><span className="material-symbols-outlined text-xl">forum</span></a>
                             </div>
                         </div>
                     </footer>
