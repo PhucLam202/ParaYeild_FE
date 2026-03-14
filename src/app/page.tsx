@@ -1,4 +1,4 @@
-import { HeroSection, KeyMetricsSection, CoreFeaturesSection, ParachainSection, FinalCtaSection } from "@/components/sections";
+import { HeroSection, KeyMetricsSection, CoreFeaturesSection, PoolsExplorerSection, ParachainSection, FinalCtaSection } from "@/components/sections";
 import { HeaderSection, FooterSection } from "@/components/layout";
 
 export default function Home() {
@@ -10,6 +10,7 @@ export default function Home() {
           <HeroSection />
           <KeyMetricsSection />
           <CoreFeaturesSection />
+          <PoolsExplorerSection />
           <ParachainSection />
           <FinalCtaSection />
         </main>

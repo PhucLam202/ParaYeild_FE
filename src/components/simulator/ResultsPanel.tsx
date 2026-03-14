@@ -2,8 +2,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import PerformanceChart from "./PerformanceChart";
+import BreakdownBarChart from "./BreakdownBarChart";
 import BreakdownTable from "./BreakdownTable";
-import type { SimulationResponse } from "@/types/simulator";
+import { Shield } from "lucide-react";
+import type { SimulationResponse, ChartMetricType } from "@/types/simulator";
 
 const HODL_RETURN_PERCENT = 3.5;
 
@@ -11,8 +13,8 @@ interface Props {
     simulationResult: SimulationResponse | null;
     isSimulating: boolean;
     showSuccessPulse: boolean;
-    chartMetric: "value" | "yield";
-    setChartMetric: (v: "value" | "yield") => void;
+    chartMetric: ChartMetricType;
+    setChartMetric: (v: ChartMetricType) => void;
     hoveredPoint: number | null;
     setHoveredPoint: (v: number | null) => void;
 }
@@ -173,6 +175,33 @@ export default function ResultsPanel({
                                             Variance & overhead
                                         </div>
                                     </motion.div>
+
+                                    {simulationResult.summary.riskScore != null && (
+                                        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+                                            className="metric-glow bg-white p-6 md:p-8 rounded-clay text-center space-y-2 relative overflow-hidden group"
+                                        >
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Risk Score</p>
+                                            <p className="text-3xl lg:text-4xl font-black font-display text-slate-800">
+                                                {simulationResult.summary.riskScore.toFixed(0)}
+                                            </p>
+                                            {simulationResult.summary.riskLevel && (
+                                                <div className="flex items-center justify-center gap-1.5 mt-2">
+                                                    <Shield className={`w-3.5 h-3.5 ${
+                                                        simulationResult.summary.riskLevel === 'low' ? 'text-primary' :
+                                                        simulationResult.summary.riskLevel === 'medium' ? 'text-amber-500' :
+                                                        'text-clay-red'
+                                                    }`} />
+                                                    <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                                                        simulationResult.summary.riskLevel === 'low' ? 'bg-primary/10 text-primary' :
+                                                        simulationResult.summary.riskLevel === 'medium' ? 'bg-amber-500/10 text-amber-600' :
+                                                        'bg-red-500/10 text-clay-red'
+                                                    }`}>
+                                                        {simulationResult.summary.riskLevel}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    )}
                                 </div>
                             );
                         })()}
@@ -184,6 +213,8 @@ export default function ResultsPanel({
                             hoveredPoint={hoveredPoint}
                             setHoveredPoint={setHoveredPoint}
                         />
+
+                        <BreakdownBarChart simulationResult={simulationResult} />
 
                         <BreakdownTable simulationResult={simulationResult} />
                     </motion.div>

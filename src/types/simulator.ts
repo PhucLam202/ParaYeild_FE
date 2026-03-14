@@ -36,6 +36,9 @@ export interface SimulationSummary {
     isCompound?: boolean;
     compoundFrequencyDays?: number | null;
     compoundFeeUsd?: number;
+    riskScore?: number;
+    riskLevel?: string;
+    slippageTolerancePercent?: number;
 }
 
 export interface YieldFarmingStats {
@@ -63,6 +66,8 @@ export interface SimulationBreakdownItem {
     avgSupplyApyPercent?: number;
     avgRewardApyPercent?: number;
     avgTotalApyPercent?: number;
+    minSupplyApyPercent?: number;
+    maxSupplyApyPercent?: number;
     yieldFarmingStats?: YieldFarmingStats;
     accruedRewardsUsd?: number;
     ilLossUsd: number;
@@ -75,6 +80,7 @@ export interface TimeSeriesPoint {
     date: string;
     totalValueUsd: number;
     dailyReturnPct: number;
+    unclaimedRewardsUsd?: number;
 }
 
 export interface SimulationResponse {
@@ -82,6 +88,9 @@ export interface SimulationResponse {
     breakdown: SimulationBreakdownItem[];
     timeSeries: TimeSeriesPoint[];
 }
+
+export type ChartMetricType = "value" | "profit" | "return" | "yield" | "rewards";
+
 
 export interface LpFarmPool {
     protocol: string;
@@ -95,6 +104,17 @@ export interface LpFarmPool {
     metadata: Record<string, unknown>;
     dataTimestamp: string;
     crawledAt: string;
+    apy30dAvg?: number | null;
+    apyTrend?: 'up' | 'down' | 'flat' | 'stable';
+    riskScore?: number | null;
+    riskLabel?: 'low' | 'medium' | 'high';
+    protocolLogo?: string;
+    tokenIcon?: string;
+    borrowApy?: number | null;
+    utilizationRate?: number | null;
+    volume24hUsd?: number | null;
+    snapshotDate?: string;
+    updatedAt?: string;
 }
 
 export interface PoolItem {
@@ -139,7 +159,28 @@ export interface BacktestMetadataMappingItem {
     poolTypes: string[];
 }
 
+export interface PoolTypeDetail {
+    label: string;
+    description: string;
+    hasIL: boolean;
+    riskLevel: string;
+    expectedApyRange: { min: number; max: number };
+}
+
+export interface StrategyTypeDetail {
+    label: string;
+    risk: string;
+    description: string;
+    apyRange: { min: number; max: number };
+}
+
+export interface BacktestMetadataEnums {
+    poolTypeDetails: Record<string, PoolTypeDetail>;
+    strategyTypeDetails: Record<string, StrategyTypeDetail>;
+}
+
 export interface BacktestMetadataResponse {
     protocols: string[];
     mappings: Record<string, BacktestMetadataMappingItem[]>;
+    enums?: BacktestMetadataEnums;
 }

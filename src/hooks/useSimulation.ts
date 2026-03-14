@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { format, subDays } from "date-fns";
 import {
     simulatorService,
@@ -13,6 +13,9 @@ import type {
     SuggestedStrategy,
     BacktestMetadataResponse,
     SimulationAllocation,
+    PoolTypeDetail,
+    StrategyTypeDetail,
+    ChartMetricType,
 } from "@/types/simulator";
 
 export const formatLabel = (str: string, separator: string = ' ') => {
@@ -77,8 +80,8 @@ export interface SimulationState {
     xcmFees: boolean;
     setXcmFees: (v: boolean) => void;
     // Chart
-    chartMetric: "value" | "yield";
-    setChartMetric: (v: "value" | "yield") => void;
+    chartMetric: ChartMetricType;
+    setChartMetric: (v: ChartMetricType) => void;
     hoveredPoint: number | null;
     setHoveredPoint: (v: number | null) => void;
     // Simulation state
@@ -98,6 +101,8 @@ export interface SimulationState {
     fetchedTokens: TokenEntry[];
     fetchedParachains: { id: string; name: string }[];
     fetchedProtocols: { id: string; label: string }[];
+    poolTypeDetails: Record<string, PoolTypeDetail>;
+    strategyTypeDetails: Record<string, StrategyTypeDetail>;
     // Derived
     dateRange: { from: string; to: string };
     // Handlers
@@ -121,7 +126,7 @@ export function useSimulation(): SimulationState {
     const [slippage, setSlippage] = useState(0.5);
     const [compoundYield, setCompoundYield] = useState(true);
     const [xcmFees, setXcmFees] = useState(true);
-    const [chartMetric, setChartMetric] = useState<"value" | "yield">("value");
+    const [chartMetric, setChartMetric] = useState<ChartMetricType>("value");
 
     const [isSimulating, setIsSimulating] = useState(false);
     const [isSuggesting, setIsSuggesting] = useState(false);
@@ -141,12 +146,18 @@ export function useSimulation(): SimulationState {
     const [fetchedProtocols, setFetchedProtocols] = useState<{ id: string; label: string }[]>([]);
     const [availableTokenAs, setAvailableTokenAs] = useState<TokenEntry[]>([]);
     const [availableTokenBs, setAvailableTokenBs] = useState<TokenEntry[]>([]);
+    const [poolTypeDetails, setPoolTypeDetails] = useState<Record<string, PoolTypeDetail>>({});
+    const [strategyTypeDetails, setStrategyTypeDetails] = useState<Record<string, StrategyTypeDetail>>({});
 
     useEffect(() => {
         const loadMetadata = async () => {
             try {
                 const data = await simulatorService.getBacktestMetadata();
                 setMetadata(data);
+                if (data.enums) {
+                    setPoolTypeDetails(data.enums.poolTypeDetails ?? {});
+                    setStrategyTypeDetails(data.enums.strategyTypeDetails ?? {});
+                }
                 const parachains = data.protocols.map(p => ({ id: p, name: p }));
                 setFetchedParachains(parachains);
                 if (parachains.length > 0) setNetwork(parachains[0].id);
@@ -178,14 +189,14 @@ export function useSimulation(): SimulationState {
         mappedTokens.forEach(t => (t.poolTypes ?? []).forEach((p: string) => allProtocols.add(p)));
         const protocols = Array.from(allProtocols)
             .filter((p: string) => p !== 'single_farming')
-            .map((p: string) => ({ id: p, label: formatLabel(p) }));
+            .map((p: string) => ({ id: p, label: poolTypeDetails[p]?.label || formatLabel(p) }));
         setFetchedProtocols(protocols);
 
         if (protocols.length > 0 && !protocols.find(p => p.id === protocol)) {
             setProtocol(protocols[0].id);
         }
         setIsLoadingInitial(false);
-    }, [network, metadata, protocol]);
+    }, [network, metadata, protocol, poolTypeDetails]);
 
     useEffect(() => {
         setIsPairProtocol(protocol === 'blp_farm' || protocol === 'lp_farm');
@@ -237,6 +248,36 @@ export function useSimulation(): SimulationState {
             setAvailableTokenBs([]);
         }
     }, [tokenA.symbol, protocol, isPairProtocol, fetchedTokens]);
+
+    // Pre-fill from URL params (e.g. from "Simulate" button on pools table)
+    const hasAppliedUrlParams = useRef(false);
+    useEffect(() => {
+        if (hasAppliedUrlParams.current || !metadata || typeof window === 'undefined') return;
+        const params = new URLSearchParams(window.location.search);
+        const urlNetwork = params.get('network');
+        const urlPoolType = params.get('poolType');
+        const urlAsset = params.get('asset');
+        const urlProtocol = params.get('protocol');
+        if (!urlNetwork && !urlPoolType && !urlAsset && !urlProtocol) return;
+        hasAppliedUrlParams.current = true;
+
+        if (urlProtocol || urlNetwork) setNetwork(urlProtocol || urlNetwork || '');
+        if (urlPoolType) setProtocol(urlPoolType);
+        if (urlAsset) {
+            const isPair = urlPoolType === 'blp_farm' || urlPoolType === 'lp_farm';
+            if (isPair && urlAsset.includes('-')) {
+                const [base, ...rest] = urlAsset.split('-');
+                const quote = rest.join('-');
+                const baseConfig = getTokenConfig(base);
+                const quoteConfig = getTokenConfig(quote);
+                setTokenA({ symbol: base, color: baseConfig.color, iconPath: baseConfig.iconPath });
+                setTokenB({ symbol: quote, color: quoteConfig.color, iconPath: quoteConfig.iconPath });
+            } else {
+                const config = getTokenConfig(urlAsset);
+                setTokenA({ symbol: urlAsset, color: config.color, iconPath: config.iconPath });
+            }
+        }
+    }, [metadata]);
 
     const dateRange = useMemo(() => {
         const today = new Date();
@@ -394,6 +435,7 @@ export function useSimulation(): SimulationState {
         toastState, setToastState,
         selectedStrategyForModal, setSelectedStrategyForModal,
         fetchedTokens, fetchedParachains, fetchedProtocols,
+        poolTypeDetails, strategyTypeDetails,
         dateRange,
         handleRunSimulation, handleSuggestStrategies, handleSelectStrategy,
     };

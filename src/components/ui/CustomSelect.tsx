@@ -56,11 +56,11 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 </label>
             )}
             <div
-                className={`w-full clay-inset rounded-2xl p-4 flex items-center justify-between font-bold text-slate-700 transition-all ${isOpen ? 'ring-4 ring-primary/10' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:ring-2 hover:ring-primary/20'}`}
+                className={`w-full rounded-2xl p-4 flex items-center justify-between font-bold transition-all ${isOpen ? 'ring-4 ring-primary/10' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:ring-2 hover:ring-primary/20'} ${selectedOption && value !== 'all' ? 'text-primary-dark bg-white shadow-clay-primary/20 shadow-md ring-2 ring-primary/20' : 'text-slate-600 bg-white/80 backdrop-blur-sm shadow-clay-sm border border-white/50'}`}
                 onClick={() => !disabled && setIsOpen(!isOpen)}
             >
                 <div className="flex items-center gap-2 truncate">
-                    {selectedOption ? (
+                    {selectedOption && (value !== 'all' || !placeholder) ? (
                         <>
                             {selectedOption.icon && (
                                 <span className="flex-shrink-0 flex items-center justify-center">
@@ -94,14 +94,14 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute z-50 w-full mt-2 bg-white rounded-2xl shadow-clay-lg overflow-hidden max-h-60 overflow-y-auto px-2 py-2 border border-slate-100"
+                        className="absolute z-50 w-full mt-2 bg-white/95 backdrop-blur-md rounded-2xl shadow-clay-lg overflow-hidden max-h-60 overflow-y-auto px-2 py-2 border border-white/50"
                     >
                         {options.map((option) => (
                             <div
                                 key={option.value}
                                 className={`px-4 py-3 cursor-pointer flex items-center gap-3 transition-colors rounded-xl font-bold ${value === option.value
-                                    ? "bg-primary/10 text-primary-dark"
-                                    : "text-slate-600 hover:bg-slate-50 hover:text-primary"
+                                    ? "bg-primary/10 text-primary-dark shadow-sm"
+                                    : "text-slate-600 hover:bg-primary/5 hover:text-primary"
                                     }`}
                                 onClick={() => {
                                     onChange(option.value);

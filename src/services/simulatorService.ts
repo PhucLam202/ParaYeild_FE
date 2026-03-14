@@ -13,6 +13,9 @@ export type {
     SuggestStrategiesResponse,
     BacktestMetadataMappingItem,
     BacktestMetadataResponse,
+    PoolTypeDetail,
+    StrategyTypeDetail,
+    BacktestMetadataEnums,
 } from "@/types/simulator";
 
 import type {
@@ -70,6 +73,13 @@ export const simulatorService = {
         return response.json();
     },
 
+    async getAllPoolsDetailed(): Promise<LpFarmPool[]> {
+        const response = await fetch(`${API_BASE_URL}/pools`);
+        if (!response.ok) throw new Error("Failed to fetch pools");
+        const json = await response.json();
+        return Array.isArray(json) ? json : json.data ?? [];
+    },
+
     async getPools(protocol?: string): Promise<PoolItem[]> {
         const url = protocol ? `${API_BASE_URL}/pools?protocol=${protocol}` : `${API_BASE_URL}/pools`;
         const response = await fetch(url);
@@ -118,13 +128,25 @@ export const simulatorService = {
         asset?: string;
         minApy?: number;
         limit?: number;
+        sortBy?: string;
+        sortOrder?: 'asc' | 'desc';
+        poolType?: string;
+        maxApy?: number;
+        minTvl?: number;
+        maxTvl?: number;
     }): Promise<LpFarmsResponse> {
         const qs = new URLSearchParams();
         if (params?.protocol) qs.append("protocol", params.protocol);
         if (params?.network) qs.append("network", params.network);
         if (params?.asset) qs.append("asset", params.asset);
         if (params?.minApy !== undefined) qs.append("minApy", params.minApy.toString());
+        if (params?.maxApy !== undefined) qs.append("maxApy", params.maxApy.toString());
         if (params?.limit !== undefined) qs.append("limit", params.limit.toString());
+        if (params?.sortBy) qs.append("sortBy", params.sortBy);
+        if (params?.sortOrder) qs.append("sortOrder", params.sortOrder);
+        if (params?.poolType) qs.append("poolType", params.poolType);
+        if (params?.minTvl !== undefined) qs.append("minTvl", params.minTvl.toString());
+        if (params?.maxTvl !== undefined) qs.append("maxTvl", params.maxTvl.toString());
         const url = `${API_BASE_URL}/pools/lp-farms${qs.toString() ? `?${qs}` : ""}`;
         const response = await fetch(url);
         if (!response.ok) throw new Error("Failed to fetch LP farms");
