@@ -84,7 +84,7 @@ export default function PoolsExplorerSection() {
     return (
         <section className="py-24 md:py-32 w-full relative z-10">
             {/* Header */}
-            <div className="text-center max-w-2xl mx-auto flex flex-col gap-4 mb-12">
+            <div className="text-center max-w-4xl mx-auto flex flex-col gap-4 mb-12">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +110,7 @@ export default function PoolsExplorerSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.15 }}
-                className="flex flex-wrap items-center gap-4 mb-8 relative z-50 p-3 bg-white/40 backdrop-blur-md rounded-3xl border border-white/60 shadow-clay-sm"
+                className="flex flex-wrap items-center gap-4 mb-8 relative z-50 p-3 bg-white/40 backdrop-blur-md rounded-3xl border border-white/60 shadow-clay-sm w-full"
             >
                 <div className="w-[160px]">
                     <CustomSelect

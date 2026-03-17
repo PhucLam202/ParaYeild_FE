@@ -12,7 +12,7 @@ export default function FinalCtaSection() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-4xl md:text-6xl font-bold text-slate-900 max-w-3xl"
+                className="text-4xl md:text-6xl font-bold text-slate-900 max-w-5xl"
             >
                 Ready to start earning smarter?
             </motion.h2>
@@ -21,7 +21,7 @@ export default function FinalCtaSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="text-slate-500 text-xl max-w-xl"
+                className="text-slate-500 text-xl max-w-3xl"
             >
                 Join over 120,000 users building the future of decentralized finance on Polkadot.
             </motion.p>
@@ -37,9 +37,7 @@ export default function FinalCtaSection() {
                         Launch App Now
                     </button>
                 </Link>
-                <button className="clay-button h-16 px-10 bg-slate-100 text-slate-700 text-xl font-bold rounded-2xl shadow-clay-md hover:-translate-y-1 transition-transform">
-                    Explore Assets
-                </button>
+
             </motion.div>
         </section>
     );

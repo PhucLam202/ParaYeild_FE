@@ -14,7 +14,7 @@ export default function HowItWorksSection() {
         <section id="how-it-works" className="py-24 md:py-32 bg-[#0A0C14] relative border-t border-white/5">
             <div className="ambient-glow absolute w-[500px] h-[500px] bg-[#552BBF]/8 right-0 top-0" />
 
-            <div className="container mx-auto px-6 max-w-6xl relative z-10">
+            <div className="container mx-auto px-6 max-w-[1440px] relative z-10">
                 <div className="text-center mb-20">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}

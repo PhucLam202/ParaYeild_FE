@@ -7,3 +7,5 @@ export { default as BreakdownBarChart } from "./BreakdownBarChart";
 export { default as BreakdownTable } from "./BreakdownTable";
 export { default as ResultsPanel } from "./ResultsPanel";
 export { default as StrategyModal } from "./StrategyModal";
+export { default as StrategyFlowTimeline } from "./StrategyFlowTimeline";
+export { default as PriceRangeVisual } from "./PriceRangeVisual";

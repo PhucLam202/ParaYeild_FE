@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { ArrowRight, Settings, Menu, X } from "lucide-react";
@@ -57,10 +58,10 @@ export default function HeaderSection() {
                 : "bg-transparent"
                 }`}
         >
-            <div className="flex items-center justify-between px-6 py-6 md:px-20">
+            <div className="flex items-center justify-between px-6 py-6 md:px-20 max-w-[1600px] mx-auto">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 flex items-center justify-center bg-primary rounded-xl shadow-clay-primary">
-                        <span className="material-symbols-outlined text-white text-2xl">account_balance_wallet</span>
+                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#020402] shadow-clay-sm overflow-hidden border border-white/5">
+                        <Image src="/logo_clay_transparent.png" alt="ParaYield Logo" width={48} height={48} className="object-contain" priority />
                     </div>
                     <Link href="/" className="text-slate-900 text-2xl font-bold tracking-tight">
                         ParaYield Lab

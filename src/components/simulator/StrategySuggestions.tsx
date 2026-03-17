@@ -11,6 +11,8 @@ interface Props {
     handleRunSimulation: (customAllocations?: SimulationAllocation[]) => Promise<void>;
     handleSuggestStrategies: (refresh?: boolean) => Promise<void>;
     handleSelectStrategy: (strategy: SuggestedStrategy, shouldRun?: boolean) => void;
+    // Pro Mode
+    setIsProMode: (v: boolean) => void;
 }
 
 export default function StrategySuggestions({
@@ -22,6 +24,7 @@ export default function StrategySuggestions({
     handleRunSimulation,
     handleSuggestStrategies,
     handleSelectStrategy,
+    setIsProMode,
 }: Props) {
     return (
         <section className="space-y-6">
@@ -188,6 +191,7 @@ export default function StrategySuggestions({
                         </>
                     )}
                 </button>
+
                 {!suggestedStrategies && (
                     <button
                         onClick={() => handleSuggestStrategies(false)}
@@ -205,6 +209,21 @@ export default function StrategySuggestions({
                                 Get AI Recommendations
                             </>
                         )}
+                    </button>
+                )}
+                
+                {!suggestedStrategies && !isSuggesting && (
+                    <button
+                        onClick={() => {
+                            setIsProMode(true);
+                            setTimeout(() => {
+                                document.getElementById('simulation-config')?.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
+                        }}
+                        className="py-4 sm:py-5 px-8 rounded-clay-lg font-bold transition-all flex items-center gap-3 justify-center text-lg bg-slate-800 text-white hover:bg-slate-700 shadow-xl border border-slate-700 active:scale-95"
+                    >
+                        <span className="material-symbols-outlined text-primary text-xl">construction</span>
+                        Build My Own Strategy
                     </button>
                 )}
             </div>

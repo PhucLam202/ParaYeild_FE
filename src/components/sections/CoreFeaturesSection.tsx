@@ -7,7 +7,7 @@ import features from "@/data/features.json";
 export default function CoreFeaturesSection() {
     return (
         <section className="flex flex-col gap-12 py-10 w-full relative z-10">
-            <div className="text-center max-w-2xl mx-auto flex flex-col gap-4">
+            <div className="text-center max-w-4xl mx-auto flex flex-col gap-4">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}

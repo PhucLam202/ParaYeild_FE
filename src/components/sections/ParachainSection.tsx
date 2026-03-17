@@ -19,11 +19,11 @@ const ParachainSection = () => {
                 </svg>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+            <div className="max-w-[1600px] mx-auto px-6 relative z-10 w-full">
                 <div className="text-center mb-16 flex flex-col gap-4">
                     <span className="text-primary font-bold text-xs uppercase tracking-[0.2em] bg-primary/10 px-4 py-2 rounded-full w-fit mx-auto">Interconnected Universe</span>
                     <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">The ParaYield Ecosystem</h2>
-                    <p className="text-slate-600 text-lg max-w-xl mx-auto font-medium">Harnessing the full power of Polkadot's parachain network through secure, mycelium-like cross-chain connections.</p>
+                    <p className="text-slate-600 text-lg max-w-4xl mx-auto font-medium">Harnessing the full power of Polkadot&apos;s parachain network through secure, mycelium-like cross-chain connections.</p>
                 </div>
 
                 <div className="relative h-[700px] flex items-center justify-center scale-90 md:scale-110">

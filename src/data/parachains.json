@@ -6,7 +6,7 @@
         "description": "Native stablecoin hub with deep liquidity across aUSD and DOT pairs.",
         "stats": "24 Pools Indexed",
         "color": "#FF3E3E",
-        "icon": "all_inclusive",
+        "icon": "/acala.svg",
         "orbit": {
             "radius": 270,
             "speed": 130,
@@ -20,7 +20,7 @@
         "description": "Single-sided liquidity provisioning with concentrated depth across all assets.",
         "stats": "$42M Liquidity",
         "color": "#FF007A",
-        "icon": "opacity",
+        "icon": "/hydration.svg",
         "orbit": {
             "radius": 260,
             "speed": 120,
@@ -40,19 +40,7 @@
             "initialAngle": 0
         }
     },
-    {
-        "id": "moonwell",
-        "name": "Moonwell",
-        "subtitle": "Lending & Borrowing",
-        "stats": "Cross-chain Assets",
-        "color": "#9333EA",
-        "icon": "nightlight",
-        "orbit": {
-            "radius": 230,
-            "speed": 140,
-            "initialAngle": 144
-        }
-    },
+
     {
         "id": "moonbeam",
         "name": "Moonbeam",

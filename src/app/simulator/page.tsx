@@ -12,6 +12,7 @@ import {
     StrategySuggestions,
     ResultsPanel,
     StrategyModal,
+    StrategyFlowTimeline,
 } from "@/components/simulator";
 import { useSimulation } from "@/hooks/useSimulation";
 import type { SuggestedStrategy } from "@/types/simulator";
@@ -59,7 +60,7 @@ export default function SimulatorPage() {
             <div className="relative z-10 flex flex-col min-h-screen">
                 <HeaderSection />
                 <div className="pt-36 pb-12 flex-grow">
-                    <main className="mx-auto max-w-7xl px-4 space-y-12">
+                    <main className="mx-auto max-w-[1600px] px-4 space-y-12">
 
                         {/* Hero Section */}
                         <section className="space-y-4 text-center md:text-left">
@@ -79,8 +80,7 @@ export default function SimulatorPage() {
                             </p>
                         </section>
 
-                        {/* Configure Simulation */}
-                        <section className="space-y-6">
+                        <section id="simulation-config" className="space-y-6 scroll-mt-36">
                             <div className="flex items-center gap-3 px-1 pb-2 border-b border-slate-200">
                                 <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center">
                                     <span className="material-symbols-outlined text-primary text-xl">tune</span>
@@ -91,7 +91,7 @@ export default function SimulatorPage() {
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="clay-card rounded-clay-lg p-6 lg:p-10 space-y-8 md:col-span-2 relative z-20">
+                                <div className="clay-card rounded-clay-lg p-6 lg:p-10 space-y-10 md:col-span-2 relative z-20">
                                     <AnimatePresence mode="wait">
                                         {sim.isLoadingInitial ? (
                                             <motion.div key="skeleton" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6">
@@ -133,6 +133,7 @@ export default function SimulatorPage() {
                                                         availableTokenBs={sim.availableTokenBs}
                                                         handleTokenAChange={sim.handleTokenAChange}
                                                         handleTokenBChange={sim.handleTokenBChange}
+                                                        selectedPool={sim.selectedPool}
                                                     />
                                                 </div>
                                                 <SimulationParameters
@@ -148,7 +149,38 @@ export default function SimulatorPage() {
                                                     setCompoundYield={sim.setCompoundYield}
                                                     xcmFees={sim.xcmFees}
                                                     setXcmFees={sim.setXcmFees}
+                                                    // Pro Mode
+                                                    isProMode={sim.isProMode}
+                                                    setIsProMode={sim.setIsProMode}
+                                                    baseApyOverride={sim.baseApyOverride}
+                                                    setBaseApyOverride={sim.setBaseApyOverride}
+                                                    reinvestmentRate={sim.reinvestmentRate}
+                                                    setReinvestmentRate={sim.setReinvestmentRate}
+                                                    volatilityAssumption={sim.volatilityAssumption}
+                                                    setVolatilityAssumption={sim.setVolatilityAssumption}
+                                                    maxAcceptableIl={sim.maxAcceptableIl}
+                                                    setMaxAcceptableIl={sim.setMaxAcceptableIl}
+                                                    compoundFrequency={sim.compoundFrequency}
+                                                    setCompoundFrequency={sim.setCompoundFrequency}
+                                                    priceRange={sim.priceRange}
+                                                    setPriceRange={sim.setPriceRange}
+                                                    historicalApyAverage={sim.historicalApyAverage}
                                                 />
+
+                                                {sim.isProMode && (
+                                                    <StrategyFlowTimeline
+                                                        steps={sim.strategySteps}
+                                                        addStep={(action) => sim.addStrategyStep({
+                                                            action,
+                                                            percentage: 20,
+                                                            asset: sim.tokenA.symbol,
+                                                            protocol: sim.protocol
+                                                        })}
+                                                        removeStep={sim.removeStrategyStep}
+                                                        updateStep={sim.updateStrategyStep}
+                                                        reorderSteps={sim.reorderStrategySteps}
+                                                    />
+                                                )}
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
@@ -166,6 +198,7 @@ export default function SimulatorPage() {
                             handleRunSimulation={sim.handleRunSimulation}
                             handleSuggestStrategies={sim.handleSuggestStrategies}
                             handleSelectStrategy={sim.handleSelectStrategy}
+                            setIsProMode={sim.setIsProMode}
                         />
 
                         {/* Simulation Results */}
@@ -253,9 +286,30 @@ export default function SimulatorPage() {
                             </div>
                             <p className="text-xs text-slate-500 font-medium mb-8">© 2024 ParaYield DeFi Simulator. Not financial advice. Data provided by ecosystem partners.</p>
                             <div className="flex justify-center gap-4">
-                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="#"><span className="material-symbols-outlined text-xl">public</span></a>
-                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="#"><span className="material-symbols-outlined text-xl">terminal</span></a>
-                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="#"><span className="material-symbols-outlined text-xl">forum</span></a>
+                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="#">
+                                    <span className="material-symbols-outlined text-xl">public</span>
+                                </a>
+                                <div className="flex gap-4">
+                                    <button 
+                                        onClick={() => {
+                                            const headers = "Date,Value,Return%\n";
+                                            const rows = sim.simulationResult?.timeSeries.map((d: any) => `${d.date},${d.totalValueUsd},${d.dailyReturnPct}`).join("\n") || "";
+                                            const blob = new Blob([headers + rows], { type: 'text/csv' });
+                                            const url = window.URL.createObjectURL(blob);
+                                            const a = document.createElement('a');
+                                            a.href = url;
+                                            a.download = 'parayield-simulation.csv';
+                                            a.click();
+                                        }}
+                                        className="w-12 h-12 clay-button-tactile rounded-2xl flex items-center justify-center text-slate-400 hover:text-primary transition-colors"
+                                        title="Export CSV"
+                                    >
+                                        <span className="material-symbols-outlined">download</span>
+                                    </button>
+                                    <button className="w-12 h-12 clay-button-tactile rounded-2xl flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+                                        <span className="material-symbols-outlined">share</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </footer>

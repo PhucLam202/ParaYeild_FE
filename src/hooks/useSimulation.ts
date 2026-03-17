@@ -16,6 +16,8 @@ import type {
     PoolTypeDetail,
     StrategyTypeDetail,
     ChartMetricType,
+    StrategyStep,
+    LpFarmPool,
 } from "@/types/simulator";
 
 export const formatLabel = (str: string, separator: string = ' ') => {
@@ -103,6 +105,30 @@ export interface SimulationState {
     fetchedProtocols: { id: string; label: string }[];
     poolTypeDetails: Record<string, PoolTypeDetail>;
     strategyTypeDetails: Record<string, StrategyTypeDetail>;
+    allPools: LpFarmPool[];
+    selectedPool: LpFarmPool | null;
+    // Pro Mode
+    isProMode: boolean;
+    setIsProMode: (v: boolean) => void;
+    baseApyOverride: number | null;
+    setBaseApyOverride: (v: number | null) => void;
+    reinvestmentRate: number;
+    setReinvestmentRate: (v: number) => void;
+    volatilityAssumption: 'low' | 'medium' | 'high';
+    setVolatilityAssumption: (v: 'low' | 'medium' | 'high') => void;
+    maxAcceptableIl: number | null;
+    setMaxAcceptableIl: (v: number | null) => void;
+    compoundFrequency: 'daily' | 'weekly' | 'monthly';
+    setCompoundFrequency: (v: 'daily' | 'weekly' | 'monthly') => void;
+    priceRange: { min: number; max: number };
+    setPriceRange: (v: { min: number; max: number }) => void;
+    strategySteps: StrategyStep[];
+    setStrategySteps: (v: StrategyStep[]) => void;
+    addStrategyStep: (step: Omit<StrategyStep, 'id'>) => void;
+    removeStrategyStep: (id: string) => void;
+    updateStrategyStep: (id: string, updates: Partial<StrategyStep>) => void;
+    reorderStrategySteps: (steps: StrategyStep[]) => void;
+    historicalApyAverage: number | null;
     // Derived
     dateRange: { from: string; to: string };
     // Handlers
@@ -127,6 +153,16 @@ export function useSimulation(): SimulationState {
     const [compoundYield, setCompoundYield] = useState(true);
     const [xcmFees, setXcmFees] = useState(true);
     const [chartMetric, setChartMetric] = useState<ChartMetricType>("value");
+    
+    // Pro Mode State
+    const [isProMode, setIsProMode] = useState(false);
+    const [baseApyOverride, setBaseApyOverride] = useState<number | null>(null);
+    const [reinvestmentRate, setReinvestmentRate] = useState(100);
+    const [volatilityAssumption, setVolatilityAssumption] = useState<'low' | 'medium' | 'high'>('medium');
+    const [maxAcceptableIl, setMaxAcceptableIl] = useState<number | null>(null);
+    const [compoundFrequency, setCompoundFrequency] = useState<'daily' | 'weekly' | 'monthly'>('weekly');
+    const [priceRange, setPriceRange] = useState({ min: 0.8, max: 1.2 });
+    const [strategySteps, setStrategySteps] = useState<StrategyStep[]>([]);
 
     const [isSimulating, setIsSimulating] = useState(false);
     const [isSuggesting, setIsSuggesting] = useState(false);
@@ -148,25 +184,32 @@ export function useSimulation(): SimulationState {
     const [availableTokenBs, setAvailableTokenBs] = useState<TokenEntry[]>([]);
     const [poolTypeDetails, setPoolTypeDetails] = useState<Record<string, PoolTypeDetail>>({});
     const [strategyTypeDetails, setStrategyTypeDetails] = useState<Record<string, StrategyTypeDetail>>({});
+    const [allPools, setAllPools] = useState<LpFarmPool[]>([]);
 
     useEffect(() => {
-        const loadMetadata = async () => {
+        const loadInitialData = async () => {
             try {
-                const data = await simulatorService.getBacktestMetadata();
-                setMetadata(data);
-                if (data.enums) {
-                    setPoolTypeDetails(data.enums.poolTypeDetails ?? {});
-                    setStrategyTypeDetails(data.enums.strategyTypeDetails ?? {});
+                const [metadataData, poolsData] = await Promise.all([
+                    simulatorService.getBacktestMetadata(),
+                    simulatorService.getAllPoolsDetailed()
+                ]);
+                
+                setMetadata(metadataData);
+                if (metadataData.enums) {
+                    setPoolTypeDetails(metadataData.enums.poolTypeDetails ?? {});
+                    setStrategyTypeDetails(metadataData.enums.strategyTypeDetails ?? {});
                 }
-                const parachains = data.protocols.map(p => ({ id: p, name: p }));
+                const parachains = metadataData.protocols.map(p => ({ id: p, name: p }));
                 setFetchedParachains(parachains);
                 if (parachains.length > 0) setNetwork(parachains[0].id);
+
+                setAllPools(poolsData);
             } catch (err) {
-                console.error("Failed to load metadata", err);
+                console.error("Failed to load initial data", err);
                 setIsLoadingInitial(false);
             }
         };
-        loadMetadata();
+        loadInitialData();
     }, []);
 
     useEffect(() => {
@@ -299,6 +342,17 @@ export function useSimulation(): SimulationState {
         return { from: format(fromDate, 'yyyy-MM-dd'), to: format(today, 'yyyy-MM-dd') };
     }, [timeRange, customRange]);
 
+    const selectedPool = useMemo(() => {
+        if (!allPools.length || !network || !protocol) return null;
+        const currentAssetSymbol = isPairProtocol ? `${tokenA.symbol}-${tokenB.symbol}` : tokenA.symbol;
+        
+        return allPools.find(p => 
+            p.network?.toLowerCase() === network.toLowerCase() && 
+            p.poolType?.toLowerCase() === protocol.toLowerCase() && 
+            p.assetSymbol?.toUpperCase() === currentAssetSymbol.toUpperCase()
+        ) || null;
+    }, [allPools, network, protocol, tokenA.symbol, tokenB.symbol, isPairProtocol]);
+
     const handleTokenAChange = (symbol: string) => {
         const token = availableTokenAs.find(t => t.symbol === symbol);
         if (token) setTokenA(token);
@@ -327,17 +381,33 @@ export function useSimulation(): SimulationState {
             }
             const isSingleAsset = !isPairProtocol;
             const finalAssetSymbol = isPairProtocol ? `${tokenA.symbol}-${tokenB.symbol}` : tokenA.symbol;
+
+            // When Pro Mode is active, use Pro compound settings; otherwise use basic toggle
+            const effectiveIsCompound = isProMode ? reinvestmentRate > 0 : compoundYield;
+            const effectiveCompoundFrequency = isProMode ? compoundFrequency : (compoundYield ? 'weekly' : undefined);
+            const effectiveCompoundFrequencyDays = effectiveCompoundFrequency === 'daily' ? 1 : effectiveCompoundFrequency === 'weekly' ? 7 : effectiveCompoundFrequency === 'monthly' ? 30 : undefined;
+
             const request: SimulationRequest = {
                 initialAmountUsd: amount,
                 from: dateRange.from,
                 to: dateRange.to,
-                includeIL: !isSingleAsset,
+                includeIL: !isSingleAsset || isProMode,
                 xcmFeeUsd: xcmFees ? 0.5 : 0,
-                isCompound: compoundYield,
-                compoundFrequencyDays: compoundYield ? 7 : undefined,
-                compoundFeeUsd: compoundYield ? 0.5 : undefined,
+                isCompound: effectiveIsCompound,
+                compoundFrequency: effectiveIsCompound ? effectiveCompoundFrequency : undefined,
+                compoundFrequencyDays: effectiveIsCompound ? effectiveCompoundFrequencyDays : undefined,
+                compoundFeeUsd: effectiveIsCompound ? 0.5 : undefined,
                 slippageTolerancePercent: slippage,
                 rebalanceIntervalDays: 0,
+                // Pro Mode only params — omit when Pro Mode is off to avoid conflicting with basic settings
+                ...(isProMode ? {
+                    baseApyOverride: baseApyOverride || undefined,
+                    reinvestmentRate: reinvestmentRate,
+                    volatilityAssumption: volatilityAssumption,
+                    maxAcceptableIl: maxAcceptableIl || undefined,
+                    priceRange: priceRange,
+                    steps: strategySteps.length > 0 ? strategySteps : undefined,
+                } : {}),
                 allocations: customAllocations || [{
                     protocol: network,
                     assetSymbol: finalAssetSymbol,
@@ -412,6 +482,25 @@ export function useSimulation(): SimulationState {
         }
     };
 
+    const addStrategyStep = (step: Omit<StrategyStep, 'id'>) => {
+        setStrategySteps(prev => [...prev, { ...step, id: Math.random().toString(36).substr(2, 9) }]);
+    };
+
+    const removeStrategyStep = (id: string) => {
+        setStrategySteps(prev => prev.filter(s => s.id !== id));
+    };
+
+    const updateStrategyStep = (id: string, updates: Partial<StrategyStep>) => {
+        setStrategySteps(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
+    };
+
+    const reorderStrategySteps = (newSteps: StrategyStep[]) => {
+        setStrategySteps(newSteps);
+    };
+
+    // Derive historical APY average from metadata or use sensible default
+    const historicalApyAverage = 12.5;
+
     return {
         network, setNetwork,
         protocol, setProtocol,
@@ -434,9 +523,38 @@ export function useSimulation(): SimulationState {
         simulationResult, suggestedStrategies,
         toastState, setToastState,
         selectedStrategyForModal, setSelectedStrategyForModal,
-        fetchedTokens, fetchedParachains, fetchedProtocols,
-        poolTypeDetails, strategyTypeDetails,
+        fetchedTokens,
+        fetchedParachains,
+        fetchedProtocols,
+        poolTypeDetails,
+        strategyTypeDetails,
+        allPools,
+        selectedPool,
         dateRange,
-        handleRunSimulation, handleSuggestStrategies, handleSelectStrategy,
+        handleRunSimulation,
+        handleSuggestStrategies,
+        handleSelectStrategy,
+        // Pro Mode
+        isProMode,
+        setIsProMode,
+        baseApyOverride,
+        setBaseApyOverride,
+        reinvestmentRate,
+        setReinvestmentRate,
+        volatilityAssumption,
+        setVolatilityAssumption,
+        maxAcceptableIl,
+        setMaxAcceptableIl,
+        compoundFrequency,
+        setCompoundFrequency,
+        priceRange,
+        setPriceRange,
+        strategySteps,
+        setStrategySteps,
+        addStrategyStep,
+        removeStrategyStep,
+        updateStrategyStep,
+        reorderStrategySteps,
+        historicalApyAverage,
     };
 }

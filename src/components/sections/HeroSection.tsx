@@ -25,7 +25,7 @@ export default function HeroSection() {
                             <h1 className="text-slate-900 text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight">
                                 Yield <span className="text-primary">Redefined</span> on Polkadot
                             </h1>
-                            <p className="text-slate-600 text-lg md:text-xl font-medium max-w-[540px] leading-relaxed">
+                            <p className="text-slate-600 text-lg md:text-xl font-medium max-w-[800px] leading-relaxed">
                                 Experience the next generation of DeFi with our tactile, secure, and high-yield liquidity protocols built on Substrate.
                             </p>
                         </div>
@@ -37,10 +37,7 @@ export default function HeroSection() {
                                 <span>Get Started</span>
                                 <span className="material-symbols-outlined">rocket_launch</span>
                             </Link>
-                            <button className="clay-button min-w-[180px] cursor-pointer h-14 px-8 bg-white text-slate-700 text-lg font-bold rounded-2xl shadow-clay-md border border-white/50 flex items-center justify-center gap-2 hover:-translate-y-1 transition-transform">
-                                <span>View Docs</span>
-                                <span className="material-symbols-outlined">description</span>
-                            </button>
+
                         </div>
                     </motion.div>
 

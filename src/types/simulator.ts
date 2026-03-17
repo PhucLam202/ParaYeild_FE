@@ -5,18 +5,37 @@ export interface SimulationAllocation {
     poolType?: string;
 }
 
+export type StrategyAction = 'stake' | 'unstake' | 'xcm' | 'farm' | 'compound' | 'withdraw' | 'borrow' | 'repay' | 'swap';
+
+export interface StrategyStep {
+    id: string;
+    action: StrategyAction;
+    protocol: string;
+    asset: string;
+    percentage: number;
+    chain?: string;
+    description?: string;
+}
+
 export interface SimulationRequest {
     initialAmountUsd: number;
     from: string;
     to: string;
     allocations: SimulationAllocation[];
+    steps?: StrategyStep[];
     includeIL?: boolean;
     rebalanceIntervalDays?: number;
     xcmFeeUsd?: number;
     isCompound?: boolean;
+    compoundFrequency?: 'daily' | 'weekly' | 'monthly';
     compoundFrequencyDays?: number;
     compoundFeeUsd?: number;
     slippageTolerancePercent?: number;
+    baseApyOverride?: number;
+    reinvestmentRate?: number;
+    volatilityAssumption?: 'low' | 'medium' | 'high';
+    maxAcceptableIl?: number;
+    priceRange?: { min: number; max: number };
 }
 
 export interface SimulationSummary {
