@@ -110,14 +110,14 @@ export default function BreakdownBarChart({ simulationResult }: Props) {
     }), []);
 
     return (
-        <div className="clay-card rounded-clay-lg p-6 md:p-8 lg:p-10 space-y-6">
+        <div className="clay-card rounded-clay-lg p-5 md:p-6 lg:p-8 space-y-5">
             <div>
-                <h3 className="text-2xl font-black font-display text-slate-800">Yield Breakdown</h3>
+                <h3 className="text-xl font-black font-display text-slate-800">Yield Breakdown</h3>
                 <p className="text-sm font-bold text-slate-400">
                     Yield earned vs losses from IL, fees, and slippage
                 </p>
             </div>
-            <div className="relative w-full h-[220px] clay-inset rounded-3xl p-4 md:p-6">
+            <div className="relative w-full h-[200px] clay-inset rounded-3xl p-4 md:p-5">
                 <Bar data={chartData} options={options} />
             </div>
         </div>

@@ -9,7 +9,7 @@ const PARACHAINS = parachainsData.filter(p => p.orbit);
 
 const ParachainSection = () => {
     return (
-        <section className="py-24 relative overflow-hidden w-full max-w-none my-12">
+        <section className="py-20 relative overflow-hidden w-full max-w-none my-10">
             <div className="absolute inset-0 opacity-10 pointer-events-none">
                 <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
                     <pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
@@ -19,21 +19,21 @@ const ParachainSection = () => {
                 </svg>
             </div>
 
-            <div className="max-w-[1600px] mx-auto px-6 relative z-10 w-full">
-                <div className="text-center mb-16 flex flex-col gap-4">
+            <div className="max-w-[1480px] mx-auto px-5 md:px-12 relative z-10 w-full">
+                <div className="text-center mb-14 flex flex-col gap-3">
                     <span className="text-primary font-bold text-xs uppercase tracking-[0.2em] bg-primary/10 px-4 py-2 rounded-full w-fit mx-auto">Interconnected Universe</span>
-                    <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">The ParaYield Ecosystem</h2>
-                    <p className="text-slate-600 text-lg max-w-4xl mx-auto font-medium">Harnessing the full power of Polkadot&apos;s parachain network through secure, mycelium-like cross-chain connections.</p>
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">The ParaYield Ecosystem</h2>
+                    <p className="text-slate-600 text-base md:text-lg max-w-4xl mx-auto font-medium">Harnessing the full power of Polkadot&apos;s parachain network through secure, mycelium-like cross-chain connections.</p>
                 </div>
 
-                <div className="relative h-[700px] flex items-center justify-center scale-90 md:scale-110">
+                <div className="relative h-[620px] flex items-center justify-center scale-[0.82] md:scale-100">
                     {/* Relay Chain Center */}
                     <div className="relative z-30 group">
-                        <div className="size-48 bg-white rounded-full shadow-clay-lg flex flex-col items-center justify-center text-slate-800 border border-white hover:scale-105 transition-transform duration-500">
-                            <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center mb-2 shadow-clay-sm overflow-hidden">
-                                <img src="/polkadot-new-dot-logo.svg" className="w-10 h-10 object-contain" alt="Polkadot" />
+                        <div className="size-40 bg-white rounded-full shadow-clay-lg flex flex-col items-center justify-center text-slate-800 border border-white hover:scale-105 transition-transform duration-500">
+                            <div className="size-14 bg-primary/10 rounded-full flex items-center justify-center mb-2 shadow-clay-sm overflow-hidden">
+                                <img src="/polkadot-new-dot-logo.svg" className="w-9 h-9 object-contain" alt="Polkadot" />
                             </div>
-                            <span className="text-xl font-bold tracking-widest uppercase text-slate-900">Relay</span>
+                            <span className="text-lg font-bold tracking-widest uppercase text-slate-900">Relay</span>
                             <span className="text-xs font-semibold text-slate-500 tracking-widest">CHAIN</span>
                             {/* Inner glow for clay effect */}
                             <div className="absolute inset-0 rounded-full pointer-events-none shadow-[inset_4px_4px_12px_rgba(255,255,255,0.8),inset_-4_4_12px_rgba(46,125,50,0.1)]"></div>
@@ -95,15 +95,15 @@ const ParachainSection = () => {
                                 >
                                     <motion.div
                                         whileHover={{ scale: 1.1 }}
-                                        className="size-24 bg-white rounded-3xl shadow-clay-md flex items-center justify-center border border-white hover:border-primary/30 transition-colors cursor-pointer group p-5 overflow-hidden"
+                                        className="size-20 bg-white rounded-3xl shadow-clay-md flex items-center justify-center border border-white hover:border-primary/30 transition-colors cursor-pointer group p-4 overflow-hidden"
                                     >
                                         {para.icon?.startsWith("/") ? (
-                                            <img src={para.icon} className="w-12 h-12 object-contain group-hover:scale-110 transition-transform" alt={para.name} />
+                                            <img src={para.icon} className="w-10 h-10 object-contain group-hover:scale-110 transition-transform" alt={para.name} />
                                         ) : (
-                                            <span className="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">{para.icon}</span>
+                                            <span className="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">{para.icon}</span>
                                         )}
                                     </motion.div>
-                                    <span className="text-slate-700 font-bold text-sm tracking-wide bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-white shadow-clay-sm whitespace-nowrap">
+                                    <span className="text-slate-700 font-bold text-[13px] tracking-wide bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-white shadow-clay-sm whitespace-nowrap">
                                         {para.name}
                                     </span>
                                 </motion.div>

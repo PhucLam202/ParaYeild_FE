@@ -58,18 +58,18 @@ export default function HeaderSection() {
                 : "bg-transparent"
                 }`}
         >
-            <div className="flex items-center justify-between px-6 py-6 md:px-20 max-w-[1600px] mx-auto">
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#020402] shadow-clay-sm overflow-hidden border border-white/5">
-                        <Image src="/logo_clay_transparent.png" alt="ParaYield Logo" width={48} height={48} className="object-contain" priority />
+            <div className="flex items-center justify-between px-5 py-4 md:px-16 max-w-[1480px] mx-auto">
+                <div className="flex items-center gap-2.5">
+                    <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#020402] shadow-clay-sm overflow-hidden border border-white/5">
+                        <Image src="/logo_clay_transparent.png" alt="ParaYield Logo" width={44} height={44} className="object-contain" priority />
                     </div>
-                    <Link href="/" className="text-slate-900 text-2xl font-bold tracking-tight">
+                    <Link href="/" className="text-slate-900 text-xl md:text-2xl font-bold tracking-tight">
                         ParaYield Lab
                     </Link>
                 </div>
 
                 {pathname !== "/simulator" && (
-                    <nav className="hidden md:flex items-center gap-10 bg-white/40 backdrop-blur-md px-8 py-3 rounded-full shadow-clay-sm">
+                    <nav className="hidden md:flex items-center gap-8 bg-white/40 backdrop-blur-md px-6 py-2.5 rounded-full shadow-clay-sm">
                         {navLinks.map((l, i) => (
                             <Link key={i} href={l.href} className="text-slate-700 text-sm font-semibold hover:text-primary transition-colors">
                                 {l.label}
@@ -83,7 +83,7 @@ export default function HeaderSection() {
                     {pathname !== "/simulator" && (
                         <Link
                             href="/simulator"
-                            className="clay-button hidden sm:flex min-w-[140px] cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-primary text-white text-base font-bold shadow-clay-primary hover:-translate-y-1 transition-transform"
+                            className="clay-button hidden sm:flex min-w-[132px] cursor-pointer items-center justify-center rounded-full h-11 px-5 bg-primary text-white text-sm font-bold shadow-clay-primary hover:-translate-y-1 transition-transform"
                         >
                             <span>Launch App</span>
                         </Link>

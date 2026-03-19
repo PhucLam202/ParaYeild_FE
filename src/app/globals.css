@@ -98,11 +98,19 @@
 
 html,
 body {
+  font-size: 15px;
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
   background: radial-gradient(circle at top left, #F5F5F5 0%, #E8F5E9 100%);
   background-attachment: fixed;
+}
+
+@media (min-width: 1536px) {
+  html,
+  body {
+    font-size: 15.5px;
+  }
 }
 
 /* Claymorphism Utility Classes */

@@ -82,14 +82,14 @@ export default function PoolsExplorerSection() {
     const isLoadingState = isLoading || isChangingPage;
 
     return (
-        <section className="py-24 md:py-32 w-full relative z-10">
+        <section className="py-20 md:py-24 w-full relative z-10">
             {/* Header */}
-            <div className="text-center max-w-4xl mx-auto flex flex-col gap-4 mb-12">
+            <div className="text-center max-w-4xl mx-auto flex flex-col gap-3 mb-10">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight"
+                    className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight"
                 >
                     Explore <span className="text-gradient">High-Yield Pools</span>
                 </motion.h2>
@@ -98,7 +98,7 @@ export default function PoolsExplorerSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="text-slate-600 text-lg"
+                    className="text-slate-600 text-base md:text-lg"
                 >
                     Discover and simulate the best yield opportunities across the Polkadot ecosystem.
                 </motion.p>
@@ -110,9 +110,9 @@ export default function PoolsExplorerSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.15 }}
-                className="flex flex-wrap items-center gap-4 mb-8 relative z-50 p-3 bg-white/40 backdrop-blur-md rounded-3xl border border-white/60 shadow-clay-sm w-full"
+                className="flex flex-wrap items-center gap-3 mb-7 relative z-50 p-2.5 bg-white/40 backdrop-blur-md rounded-3xl border border-white/60 shadow-clay-sm w-full"
             >
-                <div className="w-[160px]">
+                <div className="w-[152px]">
                     <CustomSelect
                         value={chain}
                         onChange={setChain}
@@ -124,7 +124,7 @@ export default function PoolsExplorerSection() {
                     />
                 </div>
 
-                <div className="w-[160px]">
+                <div className="w-[152px]">
                     <CustomSelect
                         value={category}
                         onChange={setCategory}
@@ -136,7 +136,7 @@ export default function PoolsExplorerSection() {
                     />
                 </div>
 
-                <div className="w-[180px]">
+                <div className="w-[172px]">
                     <CustomSelect
                         value={tvlRange}
                         onChange={(val: string) => setTvlRange(val as TvlRange)}
@@ -151,7 +151,7 @@ export default function PoolsExplorerSection() {
                     />
                 </div>
 
-                <div className="w-[180px]">
+                <div className="w-[172px]">
                     <CustomSelect
                         value={apyRange}
                         onChange={(val: string) => setApyRange(val as ApyRange)}
@@ -169,7 +169,7 @@ export default function PoolsExplorerSection() {
                 {hasActiveFilters && (
                     <button
                         onClick={clearFilters}
-                        className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 rounded-xl transition-all clay-button shadow-sm"
+                        className="flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 rounded-xl transition-all clay-button shadow-sm"
                     >
                         <X className="w-3.5 h-3.5" />
                         Clear Filters
@@ -187,7 +187,7 @@ export default function PoolsExplorerSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="clay-card rounded-clay-lg p-6 lg:p-10 overflow-hidden shadow-clay-md min-h-[500px] flex flex-col"
+                className="clay-card rounded-clay-lg p-5 lg:p-8 overflow-hidden shadow-clay-md min-h-[460px] flex flex-col"
             >
                 <AnimatePresence mode="wait">
                     {isLoadingState ? (

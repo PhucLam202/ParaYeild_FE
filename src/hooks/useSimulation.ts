@@ -84,8 +84,6 @@ export interface SimulationState {
     // Chart
     chartMetric: ChartMetricType;
     setChartMetric: (v: ChartMetricType) => void;
-    hoveredPoint: number | null;
-    setHoveredPoint: (v: number | null) => void;
     // Simulation state
     isSimulating: boolean;
     isSuggesting: boolean;
@@ -160,7 +158,7 @@ export function useSimulation(): SimulationState {
     const [reinvestmentRate, setReinvestmentRate] = useState(100);
     const [volatilityAssumption, setVolatilityAssumption] = useState<'low' | 'medium' | 'high'>('medium');
     const [maxAcceptableIl, setMaxAcceptableIl] = useState<number | null>(null);
-    const [compoundFrequency, setCompoundFrequency] = useState<'daily' | 'weekly' | 'monthly'>('weekly');
+    const [compoundFrequency, setCompoundFrequency] = useState<'daily' | 'weekly' | 'monthly'>('daily');
     const [priceRange, setPriceRange] = useState({ min: 0.8, max: 1.2 });
     const [strategySteps, setStrategySteps] = useState<StrategyStep[]>([]);
 
@@ -174,7 +172,6 @@ export function useSimulation(): SimulationState {
     const [suggestedStrategies, setSuggestedStrategies] = useState<SuggestStrategiesResponse | null>(null);
     const [toastState, setToastState] = useState<{ message: string; type: 'error' | 'success' | 'info' | 'warning' } | null>(null);
     const [selectedStrategyForModal, setSelectedStrategyForModal] = useState<SuggestedStrategy | null>(null);
-    const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
 
     const [metadata, setMetadata] = useState<BacktestMetadataResponse | null>(null);
     const [fetchedTokens, setFetchedTokens] = useState<TokenEntry[]>(DEFAULT_TOKENS);
@@ -215,9 +212,8 @@ export function useSimulation(): SimulationState {
     useEffect(() => {
         if (!network || !metadata) return;
         setIsLoadingInitial(true);
-        const fallbackColors = ["bg-blue-500", "bg-green-500", "bg-purple-500", "bg-orange-500", "bg-pink-500"];
         const tokensData = metadata.mappings[network] || [];
-        const mappedTokens = tokensData.map((t, i) => {
+        const mappedTokens = tokensData.map((t) => {
             const config = getTokenConfig(t.symbol);
             return {
                 symbol: t.symbol,
@@ -268,7 +264,7 @@ export function useSimulation(): SimulationState {
         if (validTokenAs.length > 0 && !validTokenAs.find(t => t.symbol === tokenA.symbol)) {
             setTokenA(validTokenAs[0]);
         }
-    }, [protocol, fetchedTokens]);
+    }, [protocol, fetchedTokens, tokenA.symbol]);
 
     useEffect(() => {
         if (!isPairProtocol) return;
@@ -290,7 +286,7 @@ export function useSimulation(): SimulationState {
         } else if (validTokenBs.length === 0) {
             setAvailableTokenBs([]);
         }
-    }, [tokenA.symbol, protocol, isPairProtocol, fetchedTokens]);
+    }, [tokenA.symbol, tokenB.symbol, protocol, isPairProtocol, fetchedTokens]);
 
     // Pre-fill from URL params (e.g. from "Simulate" button on pools table)
     const hasAppliedUrlParams = useRef(false);
@@ -384,7 +380,7 @@ export function useSimulation(): SimulationState {
 
             // When Pro Mode is active, use Pro compound settings; otherwise use basic toggle
             const effectiveIsCompound = isProMode ? reinvestmentRate > 0 : compoundYield;
-            const effectiveCompoundFrequency = isProMode ? compoundFrequency : (compoundYield ? 'weekly' : undefined);
+            const effectiveCompoundFrequency = isProMode ? compoundFrequency : (compoundYield ? 'daily' : undefined);
             const effectiveCompoundFrequencyDays = effectiveCompoundFrequency === 'daily' ? 1 : effectiveCompoundFrequency === 'weekly' ? 7 : effectiveCompoundFrequency === 'monthly' ? 30 : undefined;
 
             const request: SimulationRequest = {
@@ -516,7 +512,6 @@ export function useSimulation(): SimulationState {
         compoundYield, setCompoundYield,
         xcmFees, setXcmFees,
         chartMetric, setChartMetric,
-        hoveredPoint, setHoveredPoint,
         isSimulating, isSuggesting,
         simulationSteps, currentStepIndex,
         showSuccessPulse, isLoadingInitial,

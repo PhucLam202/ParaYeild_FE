@@ -5,8 +5,8 @@ export default function Home() {
   return (
     <>
       <HeaderSection />
-      <div className="layout-container flex h-full grow flex-col max-w-[1600px] mx-auto w-full">
-        <main className="flex-1 px-6 md:px-20 py-10 flex flex-col items-center">
+      <div className="layout-container flex h-full grow flex-col max-w-[1480px] mx-auto w-full">
+        <main className="flex-1 px-5 md:px-16 py-8 flex flex-col items-center">
           <HeroSection />
           <KeyMetricsSection />
           <CoreFeaturesSection />

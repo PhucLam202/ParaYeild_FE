@@ -33,7 +33,7 @@ export default function StrategySuggestions({
                     <div className="p-2 md:p-3 clay-inset rounded-xl md:rounded-2xl">
                         <span className="material-symbols-outlined text-primary font-bold">auto_awesome</span>
                     </div>
-                    <h2 className="text-xl md:text-2xl font-black font-display text-slate-800">AI Suggestions</h2>
+                    <h2 className="text-lg md:text-xl font-black font-display text-slate-800">AI Suggestions</h2>
                 </div>
                 <button
                     onClick={() => handleSuggestStrategies(true)}
@@ -114,7 +114,7 @@ export default function StrategySuggestions({
                                         </div>
                                     </div>
                                     <div className="text-right shrink-0">
-                                        <p className="text-xl font-black text-primary font-display">{strategy.estimatedApyMin}-{strategy.estimatedApyMax}%</p>
+                                        <p className="text-lg font-black text-primary font-display">{strategy.estimatedApyMin}-{strategy.estimatedApyMax}%</p>
                                         <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Est. APY</p>
                                     </div>
                                 </div>
@@ -155,7 +155,7 @@ export default function StrategySuggestions({
                 <button
                     onClick={() => handleRunSimulation()}
                     disabled={isSimulating}
-                    className={`relative flex-1 py-4 sm:py-5 rounded-clay-lg font-black text-lg uppercase tracking-wider transition-all flex items-center justify-center gap-3 overflow-hidden ${isSimulating
+                    className={`relative flex-1 py-3.5 sm:py-4 rounded-clay-lg font-black text-base uppercase tracking-wider transition-all flex items-center justify-center gap-3 overflow-hidden ${isSimulating
                         ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-inner'
                         : 'clay-button-primary active:scale-[0.98]'
                         }`}
@@ -186,7 +186,7 @@ export default function StrategySuggestions({
                         </div>
                     ) : (
                         <>
-                            <span className="material-symbols-outlined text-2xl">bolt</span>
+                            <span className="material-symbols-outlined text-xl">bolt</span>
                             Run Simulation
                         </>
                     )}
@@ -196,7 +196,7 @@ export default function StrategySuggestions({
                     <button
                         onClick={() => handleSuggestStrategies(false)}
                         disabled={isSuggesting || isSimulating}
-                        className={`py-4 sm:py-5 px-8 rounded-clay-lg font-bold transition-all flex items-center gap-3 justify-center text-lg ${isSuggesting || isSimulating ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-inner' : 'clay-button-tactile text-slate-600 hover:text-primary'}`}
+                        className={`py-3.5 sm:py-4 px-7 rounded-clay-lg font-bold transition-all flex items-center gap-3 justify-center text-base ${isSuggesting || isSimulating ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-inner' : 'clay-button-tactile text-slate-600 hover:text-primary'}`}
                     >
                         {isSuggesting ? (
                             <div className="flex items-center gap-2">
@@ -220,7 +220,7 @@ export default function StrategySuggestions({
                                 document.getElementById('simulation-config')?.scrollIntoView({ behavior: 'smooth' });
                             }, 100);
                         }}
-                        className="py-4 sm:py-5 px-8 rounded-clay-lg font-bold transition-all flex items-center gap-3 justify-center text-lg bg-slate-800 text-white hover:bg-slate-700 shadow-xl border border-slate-700 active:scale-95"
+                        className="py-3.5 sm:py-4 px-7 rounded-clay-lg font-bold transition-all flex items-center gap-3 justify-center text-base bg-slate-800 text-white hover:bg-slate-700 shadow-xl border border-slate-700 active:scale-95"
                     >
                         <span className="material-symbols-outlined text-primary text-xl">construction</span>
                         Build My Own Strategy

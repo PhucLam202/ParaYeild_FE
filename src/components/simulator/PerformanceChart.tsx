@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, useCallback } from "react";
+import { useRef, useMemo } from "react";
 import { format } from "date-fns";
 import {
     Chart as ChartJS,
@@ -24,16 +24,12 @@ interface Props {
     simulationResult: SimulationResponse;
     chartMetric: ChartMetricType;
     setChartMetric: (v: ChartMetricType) => void;
-    hoveredPoint: number | null;
-    setHoveredPoint: (v: number | null) => void;
 }
 
 export default function PerformanceChart({
     simulationResult,
     chartMetric,
     setChartMetric,
-    hoveredPoint,
-    setHoveredPoint,
 }: Props) {
     const chartRef = useRef<ChartJS<"line">>(null);
     const initialAmount = simulationResult.summary.initialAmountUsd;
@@ -68,7 +64,7 @@ export default function PerformanceChart({
 
     const hodlData = useMemo(() => {
         return ts.map((_, i) => {
-            let hodlValue = initialAmount * (1 + (HODL_RETURN_PERCENT / 100) * (i / 365));
+            const hodlValue = initialAmount * (1 + (HODL_RETURN_PERCENT / 100) * (i / 365));
             switch (chartMetric) {
                 case "value":
                     return hodlValue;
@@ -118,7 +114,7 @@ export default function PerformanceChart({
                 tension: 0.3,
             },
             {
-                label: "HODL",
+                label: "HODL Baseline",
                 data: hodlData,
                 borderColor: "rgba(148,163,184,0.7)",
                 borderWidth: 2,
@@ -140,13 +136,6 @@ export default function PerformanceChart({
         interaction: {
             mode: "index" as const,
             intersect: false,
-        },
-        onHover: (_event, elements) => {
-            if (elements.length > 0) {
-                setHoveredPoint(elements[0].index);
-            } else {
-                setHoveredPoint(null);
-            }
         },
         plugins: {
             legend: { display: false },
@@ -211,7 +200,7 @@ export default function PerformanceChart({
                 },
             },
         },
-    }), [chartMetric, ts, setHoveredPoint]);
+    }), [chartMetric, ts]);
 
     const getSubtitleText = () => {
         switch (chartMetric) {
@@ -225,12 +214,12 @@ export default function PerformanceChart({
     };
 
     return (
-        <div className="clay-card rounded-clay-lg p-6 md:p-8 lg:p-10 space-y-8">
+        <div className="clay-card rounded-clay-lg p-5 md:p-6 lg:p-8 space-y-6">
             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-black font-display text-slate-800">Portfolio Performance</h3>
+                    <h3 className="text-xl font-black font-display text-slate-800">Portfolio Performance</h3>
                     <p className="text-sm font-bold text-slate-400">
-                        Simulated strategy {getSubtitleText()} over {simulationResult.summary.durationDays} days
+                        Simulated strategy {getSubtitleText()} over {simulationResult.summary.durationDays} days against a static 3.5% HODL baseline
                     </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 clay-inset p-1.5 rounded-2xl w-full xl:w-auto">
@@ -256,7 +245,7 @@ export default function PerformanceChart({
                 </div>
             </div>
 
-            <div className="relative w-full h-[400px] clay-inset rounded-[3rem] p-4 md:p-8 overflow-hidden">
+            <div className="relative w-full h-[360px] clay-inset rounded-[3rem] p-4 md:p-6 overflow-hidden">
                 <Line ref={chartRef} data={chartData} options={options} />
 
                 <div className="absolute bottom-6 right-10 flex gap-6">
@@ -266,7 +255,7 @@ export default function PerformanceChart({
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full bg-slate-400/70 shadow-sm border border-slate-300"></div>
-                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">HODL</span>
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">HODL Baseline</span>
                     </div>
                 </div>
             </div>

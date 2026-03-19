@@ -1,5 +1,6 @@
+import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, CalendarRange, Info } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import PerformanceChart from "./PerformanceChart";
 import BreakdownBarChart from "./BreakdownBarChart";
@@ -9,14 +10,29 @@ import type { SimulationResponse, ChartMetricType } from "@/types/simulator";
 
 const HODL_RETURN_PERCENT = 3.5;
 
+function formatSignedCurrency(value: number, maximumFractionDigits = 0) {
+    const absValue = Math.abs(value).toLocaleString("en-US", { maximumFractionDigits });
+    if (value > 0) return `+$${absValue}`;
+    if (value < 0) return `-$${absValue}`;
+    return `$${absValue}`;
+}
+
+function formatSignedPercent(value: number, digits = 2) {
+    const prefix = value > 0 ? "+" : "";
+    return `${prefix}${value.toFixed(digits)}%`;
+}
+
+function formatSignedPoints(value: number, digits = 1) {
+    const prefix = value > 0 ? "+" : "";
+    return `${prefix}${value.toFixed(digits)} pts`;
+}
+
 interface Props {
     simulationResult: SimulationResponse | null;
     isSimulating: boolean;
     showSuccessPulse: boolean;
     chartMetric: ChartMetricType;
     setChartMetric: (v: ChartMetricType) => void;
-    hoveredPoint: number | null;
-    setHoveredPoint: (v: number | null) => void;
 }
 
 export default function ResultsPanel({
@@ -25,16 +41,14 @@ export default function ResultsPanel({
     showSuccessPulse,
     chartMetric,
     setChartMetric,
-    hoveredPoint,
-    setHoveredPoint,
 }: Props) {
     if (!simulationResult && !isSimulating) return null;
 
     return (
-        <section id="simulation-results" className="clay-card rounded-clay-xl p-6 md:p-10 lg:p-14 space-y-10 relative min-h-[800px] mt-8">
+        <section id="simulation-results" className="clay-card rounded-clay-xl p-5 md:p-8 lg:p-10 space-y-8 relative min-h-[720px] mt-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1">
-                    <h2 className="text-3xl md:text-4xl font-black font-display text-slate-800 tracking-tight">
+                    <h2 className="text-2xl md:text-3xl font-black font-display text-slate-800 tracking-tight">
                         Simulation <span className="text-primary italic">Results</span>
                     </h2>
                     <p className="text-slate-400 font-bold text-sm tracking-wide">Projected Performance Insights</p>
@@ -58,9 +72,9 @@ export default function ResultsPanel({
                         exit={{ opacity: 0 }}
                         className="space-y-8"
                     >
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                             {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="metric-glow bg-white p-8 rounded-clay space-y-4 flex flex-col items-center justify-center h-40">
+                                <div key={i} className="metric-glow bg-white p-6 rounded-clay space-y-4 flex flex-col items-center justify-center h-36">
                                     <Skeleton className="h-4 w-24 bg-slate-100" />
                                     <Skeleton className="h-10 w-32 bg-slate-200" />
                                 </div>
@@ -73,7 +87,7 @@ export default function ResultsPanel({
                             </div>
                             <Skeleton className="h-[250px] w-full bg-slate-100 rounded-2xl" />
                         </div>
-                        <div className="metric-glow bg-white rounded-clay p-8">
+                        <div className="metric-glow bg-white rounded-clay p-6">
                             <Skeleton className="h-6 w-48 bg-slate-200 mb-6" />
                             <div className="space-y-5">
                                 {[1, 2, 3].map((i) => (
@@ -96,7 +110,7 @@ export default function ResultsPanel({
                             ease: [0.22, 1, 0.36, 1],
                             scale: { duration: 0.4, ease: "easeOut" }
                         }}
-                        className={`space-y-8 relative transition-all duration-300 ${isSimulating ? 'opacity-40 blur-sm pointer-events-none' : ''}`}
+                        className={`space-y-6 relative transition-all duration-300 ${isSimulating ? 'opacity-40 blur-sm pointer-events-none' : ''}`}
                     >
                         {isSimulating && (
                             <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/50 backdrop-blur-sm rounded-[3rem]">
@@ -116,72 +130,128 @@ export default function ResultsPanel({
 
                         {/* Metrics Cards */}
                         {(() => {
+                            const firstPoint = simulationResult.timeSeries[0];
+                            const lastPoint = simulationResult.timeSeries[simulationResult.timeSeries.length - 1];
+                            const hasRiskScore = simulationResult.summary.riskScore != null;
                             const totalIlAndFees = Math.abs(
                                 simulationResult.breakdown.reduce((acc, curr) => acc + curr.ilLossUsd, 0) +
                                 simulationResult.summary.xcmFeesPaidUsd +
                                 (simulationResult.summary.slippageCostUsd ?? 0)
                             );
                             const returnVsHodl = simulationResult.summary.totalReturnPercent - HODL_RETURN_PERCENT;
+                            const totalReturnUsd = simulationResult.summary.totalReturnUsd;
+                            const totalReturnPercent = simulationResult.summary.totalReturnPercent;
+                            const isProfitPositive = totalReturnUsd >= 0;
+                            const isReturnPositive = totalReturnPercent >= 0;
                             return (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+                                <div className="space-y-5 relative z-10">
+                                    <div className="grid grid-cols-1 xl:grid-cols-[1.8fr_1fr] gap-4">
+                                        <div className="clay-inset rounded-[2rem] p-4 md:p-5">
+                                            <div className="flex items-start gap-3">
+                                                <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                                    <Info className="w-5 h-5" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
+                                                        How To Read This
+                                                    </p>
+                                                    <p className="text-sm font-bold text-slate-700 leading-relaxed">
+                                                        <span className="text-slate-900">Period Return</span> is the realized gain for this simulation window.
+                                                        <span className="text-slate-500"> Annualized Net APY</span> normalizes that result to a 1-year rate. Taxes are not modeled.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="clay-inset rounded-[2rem] p-4 md:p-5">
+                                            <div className="flex items-start gap-3">
+                                                <div className="w-10 h-10 rounded-2xl bg-slate-900/[0.04] text-slate-600 flex items-center justify-center shrink-0">
+                                                    <CalendarRange className="w-5 h-5" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
+                                                        Simulation Window
+                                                    </p>
+                                                    <p className="text-sm font-bold text-slate-800">
+                                                        {firstPoint && lastPoint
+                                                            ? `${format(new Date(firstPoint.date), "MMM dd, yyyy")} -> ${format(new Date(lastPoint.date), "MMM dd, yyyy")}`
+                                                            : `${simulationResult.summary.durationDays} simulated days`}
+                                                    </p>
+                                                    <p className="text-xs font-bold text-slate-400">
+                                                        {simulationResult.summary.durationDays} historical days evaluated
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className={`grid grid-cols-1 sm:grid-cols-2 ${hasRiskScore ? "lg:grid-cols-3 xl:grid-cols-5" : "lg:grid-cols-4"} gap-5`}>
                                     {/* Final Value */}
                                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-                                        className="metric-glow bg-white p-6 md:p-8 rounded-clay text-center space-y-2 relative overflow-hidden group"
+                                        className="metric-glow bg-white p-5 md:p-6 rounded-clay text-center space-y-2 relative overflow-hidden group"
                                     >
                                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Final Value</p>
-                                        <p className="text-3xl lg:text-4xl font-black font-display text-slate-800">
+                                        <p className="text-2xl lg:text-3xl font-black font-display text-slate-800">
                                             ${simulationResult.summary.finalAmountUsd.toLocaleString("en-US", { maximumFractionDigits: 0 })}
                                         </p>
-                                        <div className="flex items-center justify-center gap-1 text-xs font-bold text-primary mt-2">
-                                            <TrendingUp className="w-3.5 h-3.5" />
-                                            +${simulationResult.summary.totalReturnUsd.toLocaleString("en-US", { maximumFractionDigits: 0 })} profit
+                                        <div className={`flex items-center justify-center gap-1 text-xs font-bold mt-2 ${isProfitPositive ? "text-primary" : "text-clay-red"}`}>
+                                            {isProfitPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                                            {formatSignedCurrency(totalReturnUsd)} net change
                                         </div>
                                     </motion.div>
 
-                                    {/* Total Return */}
+                                    {/* Period Return */}
                                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                                        className="metric-glow bg-white p-6 md:p-8 rounded-clay text-center space-y-2 relative overflow-hidden group"
+                                        className="metric-glow bg-white p-5 md:p-6 rounded-clay text-center space-y-2 relative overflow-hidden group"
                                     >
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total Return</p>
-                                        <p className="text-3xl lg:text-4xl font-black font-display text-primary">+{simulationResult.summary.totalReturnPercent.toFixed(2)}%</p>
-                                        <div className={`flex items-center justify-center gap-1 text-xs font-bold mt-2 ${returnVsHodl >= 0 ? "text-primary" : "text-clay-red"}`}>
-                                            {returnVsHodl >= 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-                                            {returnVsHodl >= 0 ? "+" : ""}{returnVsHodl.toFixed(1)}% vs HODL
-                                        </div>
-                                    </motion.div>
-
-                                    {/* Net APY */}
-                                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-                                        className="metric-glow bg-white p-6 md:p-8 rounded-clay text-center space-y-2 relative overflow-hidden group"
-                                    >
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Net APY</p>
-                                        <p className="text-3xl lg:text-4xl font-black font-display text-primary">{simulationResult.summary.annualizedApyPercent.toFixed(2)}%</p>
+                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Period Return</p>
+                                        <p className={`text-2xl lg:text-3xl font-black font-display ${isReturnPositive ? "text-primary" : "text-clay-red"}`}>
+                                            {formatSignedPercent(totalReturnPercent)}
+                                        </p>
                                         <div className="flex items-center justify-center gap-1 text-xs font-bold text-slate-400 mt-2">
                                             <Minus className="w-3 h-3" />
-                                            Over {simulationResult.summary.durationDays} days
+                                            Across {simulationResult.summary.durationDays} simulated days
+                                        </div>
+                                        <div className={`flex items-center justify-center gap-1 text-xs font-bold mt-1 ${returnVsHodl >= 0 ? "text-primary" : "text-clay-red"}`}>
+                                            {returnVsHodl >= 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                                            {formatSignedPoints(returnVsHodl)} vs 3.5% HODL baseline
                                         </div>
                                     </motion.div>
 
-                                    {/* IL & Fees */}
-                                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                                        className="metric-glow bg-white p-6 md:p-8 rounded-clay text-center space-y-2 relative overflow-hidden group"
+                                    {/* Annualized Net APY */}
+                                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+                                        className="metric-glow bg-white p-5 md:p-6 rounded-clay text-center space-y-2 relative overflow-hidden group"
                                     >
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">IL & Fees</p>
-                                        <p className="text-3xl lg:text-4xl font-black font-display text-clay-red">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Annualized Net APY</p>
+                                        <p className={`text-2xl lg:text-3xl font-black font-display ${simulationResult.summary.annualizedApyPercent >= 0 ? "text-primary" : "text-clay-red"}`}>
+                                            {formatSignedPercent(simulationResult.summary.annualizedApyPercent)}
+                                        </p>
+                                        <div className="flex items-center justify-center gap-1 text-xs font-bold text-slate-400 mt-2">
+                                            <Minus className="w-3 h-3" />
+                                            Annualized from the realized {simulationResult.summary.durationDays}-day result
+                                        </div>
+                                    </motion.div>
+
+                                    {/* IL + Costs */}
+                                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                                        className="metric-glow bg-white p-5 md:p-6 rounded-clay text-center space-y-2 relative overflow-hidden group"
+                                    >
+                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">IL + Costs</p>
+                                        <p className="text-2xl lg:text-3xl font-black font-display text-clay-red">
                                             -${totalIlAndFees.toLocaleString("en-US", { maximumFractionDigits: 0 })}
                                         </p>
                                         <div className="flex items-center justify-center gap-1 text-xs font-bold text-slate-400 mt-2">
                                             <TrendingDown className="w-3.5 h-3.5 text-clay-red/60" />
-                                            Variance & overhead
+                                            IL, XCM fees, and slippage drag
                                         </div>
                                     </motion.div>
 
                                     {simulationResult.summary.riskScore != null && (
                                         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-                                            className="metric-glow bg-white p-6 md:p-8 rounded-clay text-center space-y-2 relative overflow-hidden group"
+                                            className="metric-glow bg-white p-5 md:p-6 rounded-clay text-center space-y-2 relative overflow-hidden group"
                                         >
                                             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Risk Score</p>
-                                            <p className="text-3xl lg:text-4xl font-black font-display text-slate-800">
+                                            <p className="text-2xl lg:text-3xl font-black font-display text-slate-800">
                                                 {simulationResult.summary.riskScore.toFixed(0)}
                                             </p>
                                             {simulationResult.summary.riskLevel && (
@@ -203,6 +273,7 @@ export default function ResultsPanel({
                                         </motion.div>
                                     )}
                                 </div>
+                                </div>
                             );
                         })()}
 
@@ -210,8 +281,6 @@ export default function ResultsPanel({
                             simulationResult={simulationResult}
                             chartMetric={chartMetric}
                             setChartMetric={setChartMetric}
-                            hoveredPoint={hoveredPoint}
-                            setHoveredPoint={setHoveredPoint}
                         />
 
                         <BreakdownBarChart simulationResult={simulationResult} />
