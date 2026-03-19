@@ -1,23 +1,23 @@
 [
     {
-        "label": "Total Value Locked",
-        "value": "$450M",
-        "icon": "lock",
-        "trend": "up",
-        "trendLabel": "+12.5% this month"
+        "label": "Historical Coverage",
+        "value": "3 Core Chains",
+        "icon": "hub",
+        "trend": "dataset",
+        "trendLabel": "Acala, Bifrost, Hydration"
     },
     {
-        "label": "Active Users",
-        "value": "120K+",
-        "icon": "group",
-        "trend": "bolt",
-        "trendLabel": "+8.2% new wallets"
+        "label": "Simulation Speed",
+        "value": "< 1s",
+        "icon": "bolt",
+        "trend": "schedule",
+        "trendLabel": "Fast iteration while tuning assumptions"
     },
     {
-        "label": "Total Yield Paid",
-        "value": "$12.5M",
+        "label": "Decision Clarity",
+        "value": "IL + Fees",
         "icon": "payments",
-        "trend": "verified",
-        "trendLabel": "100% distribution rate"
+        "trend": "visibility",
+        "trendLabel": "Returns broken down instead of blended"
     }
 ]

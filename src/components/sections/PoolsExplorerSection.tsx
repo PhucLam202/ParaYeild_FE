@@ -91,7 +91,7 @@ export default function PoolsExplorerSection() {
                     viewport={{ once: true }}
                     className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight"
                 >
-                    Explore <span className="text-gradient">High-Yield Pools</span>
+                    Find pools worth <span className="text-gradient">simulating</span>
                 </motion.h2>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -100,7 +100,7 @@ export default function PoolsExplorerSection() {
                     transition={{ delay: 0.1 }}
                     className="text-slate-600 text-base md:text-lg"
                 >
-                    Discover and simulate the best yield opportunities across the Polkadot ecosystem.
+                    Filter by chain, category, TVL, and APY to focus on opportunities that deserve a deeper backtest, not just a flashy headline number.
                 </motion.p>
             </div>
 

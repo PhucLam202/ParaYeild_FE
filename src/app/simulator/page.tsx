@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import Toast from "@/components/ui/Toast";
@@ -17,7 +18,7 @@ import {
 import { useSimulation } from "@/hooks/useSimulation";
 import type { SuggestedStrategy, StrategyAction } from "@/types/simulator";
 
-export default function SimulatorPage() {
+function SimulatorPageContent() {
     const sim = useSimulation();
     const [showProAdvanced, setShowProAdvanced] = React.useState(false);
 
@@ -174,6 +175,10 @@ export default function SimulatorPage() {
                                                     setIsProMode={sim.setIsProMode}
                                                     showAdvancedOptions={showProAdvanced}
                                                     setShowAdvancedOptions={setShowProAdvanced}
+                                                    isBaseApyOverrideEnabled={sim.isBaseApyOverrideEnabled}
+                                                    setIsBaseApyOverrideEnabled={sim.setIsBaseApyOverrideEnabled}
+                                                    baseApyOverride={sim.baseApyOverride}
+                                                    setBaseApyOverride={sim.setBaseApyOverride}
                                                     reinvestmentRate={sim.reinvestmentRate}
                                                     setReinvestmentRate={sim.setReinvestmentRate}
                                                     compoundFrequency={sim.compoundFrequency}
@@ -347,4 +352,11 @@ export default function SimulatorPage() {
             />
         </div>
     );
+}
+
+export default function SimulatorPage() {
+    const searchParams = useSearchParams();
+    const selectionKey = searchParams.toString() || "default";
+
+    return <SimulatorPageContent key={selectionKey} />;
 }

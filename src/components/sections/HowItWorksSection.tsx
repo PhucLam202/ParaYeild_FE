@@ -6,7 +6,7 @@ import stepsData from "@/data/how-it-works.json";
 
 const steps = stepsData.map(step => ({
     ...step,
-    icon: (LucideIcons as any)[step.iconName] || LucideIcons.HelpCircle
+    icon: LucideIcons[step.iconName as keyof typeof LucideIcons] || LucideIcons.HelpCircle
 }));
 
 export default function HowItWorksSection() {
@@ -22,7 +22,7 @@ export default function HowItWorksSection() {
                         viewport={{ once: true }}
                         className="text-4xl md:text-5xl font-sans font-bold mb-6 text-white"
                     >
-                        Simulation <span className="text-gradient">Pipeline</span>
+                        From raw market data to a <span className="text-gradient">clearer decision</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 10 }}
@@ -31,7 +31,7 @@ export default function HowItWorksSection() {
                         transition={{ delay: 0.1 }}
                         className="text-gray-400 text-lg max-w-2xl mx-auto font-sans"
                     >
-                        Four steps to backtest and optimize your DeFi yield strategies.
+                        A simple four-step flow for evaluating whether a yield opportunity deserves your capital.
                     </motion.p>
                 </div>
 
@@ -41,7 +41,7 @@ export default function HowItWorksSection() {
 
                     <div className="space-y-16 md:space-y-24">
                         {steps.map((step, index) => {
-                            const Icon = step.icon;
+                            const Icon = step.icon as React.ElementType;
                             const isEven = index % 2 === 0;
 
                             return (

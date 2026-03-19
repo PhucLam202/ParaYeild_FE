@@ -21,9 +21,9 @@ const ParachainSection = () => {
 
             <div className="max-w-[1480px] mx-auto px-5 md:px-12 relative z-10 w-full">
                 <div className="text-center mb-14 flex flex-col gap-3">
-                    <span className="text-primary font-bold text-xs uppercase tracking-[0.2em] bg-primary/10 px-4 py-2 rounded-full w-fit mx-auto">Interconnected Universe</span>
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">The ParaYield Ecosystem</h2>
-                    <p className="text-slate-600 text-base md:text-lg max-w-4xl mx-auto font-medium">Harnessing the full power of Polkadot&apos;s parachain network through secure, mycelium-like cross-chain connections.</p>
+                    <span className="text-primary font-bold text-xs uppercase tracking-[0.2em] bg-primary/10 px-4 py-2 rounded-full w-fit mx-auto">Cross-Chain Context</span>
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">One view across the Polkadot yield landscape</h2>
+                    <p className="text-slate-600 text-base md:text-lg max-w-4xl mx-auto font-medium">Track how liquidity opportunities connect across parachains so you can compare routes, pools, and strategy assumptions without stitching the data together yourself.</p>
                 </div>
 
                 <div className="relative h-[620px] flex items-center justify-center scale-[0.82] md:scale-100">

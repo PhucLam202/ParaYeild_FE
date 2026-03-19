@@ -14,7 +14,7 @@ export default function FinalCtaSection() {
                 viewport={{ once: true }}
                 className="text-3xl md:text-5xl font-bold text-slate-900 max-w-5xl"
             >
-                Ready to start earning smarter?
+                Your next yield move should be backed by data
             </motion.h2>
             <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -23,7 +23,7 @@ export default function FinalCtaSection() {
                 transition={{ delay: 0.1 }}
                 className="text-slate-500 text-lg max-w-3xl"
             >
-                Join over 120,000 users building the future of decentralized finance on Polkadot.
+                Run the scenario, inspect the tradeoffs, and enter the market with a clearer view of risk, fees, and upside.
             </motion.p>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -34,7 +34,7 @@ export default function FinalCtaSection() {
             >
                 <Link href="/simulator">
                     <button className="clay-button h-12 px-8 bg-primary text-white text-base font-bold rounded-2xl shadow-clay-primary hover:-translate-y-1 transition-transform">
-                        Launch App Now
+                        Open The Simulator
                     </button>
                 </Link>
 

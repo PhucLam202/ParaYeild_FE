@@ -7,6 +7,12 @@ import { motion } from "framer-motion";
  * HeroSection
  * ----------------------------------------------------------------------- */
 export default function HeroSection() {
+    const proofPoints = [
+        "Historical pool data across Polkadot DeFi",
+        "Yield, IL, and fee breakdown in one view",
+        "Scenario testing before you move capital",
+    ];
+
     return (
         <section className="relative pt-28 pb-20 md:pt-40 md:pb-24 overflow-hidden">
             <main className="flex-1 px-5 md:px-16 py-8">
@@ -20,13 +26,13 @@ export default function HeroSection() {
                     >
                         <div className="flex flex-col gap-4">
                             <span className="bg-primary/10 text-primary-dark font-bold text-[11px] uppercase tracking-widest px-3.5 py-1.5 rounded-full w-fit shadow-clay-sm">
-                                Polkadot Ecosystem
+                                Polkadot DeFi Intelligence
                             </span>
                             <h1 className="text-slate-900 text-4xl md:text-6xl font-extrabold leading-[1.08] tracking-tight">
-                                Yield <span className="text-primary">Redefined</span> on Polkadot
+                                Stop guessing your yield. <span className="text-primary">Backtest it first.</span>
                             </h1>
                             <p className="text-slate-600 text-base md:text-lg font-medium max-w-[720px] leading-relaxed">
-                                Experience the next generation of DeFi with our tactile, secure, and high-yield liquidity protocols built on Substrate.
+                                ParaYield Lab helps you compare pools, model impermanent loss, and evaluate real opportunities across Polkadot using historical on-chain data.
                             </p>
                         </div>
                         <div className="flex flex-wrap gap-4">
@@ -34,10 +40,20 @@ export default function HeroSection() {
                                 href="/simulator"
                                 className="clay-button min-w-[160px] cursor-pointer h-12 px-7 bg-primary text-white text-base font-bold rounded-2xl shadow-clay-primary flex items-center justify-center gap-2 hover:-translate-y-1 transition-transform"
                             >
-                                <span>Get Started</span>
+                                <span>Run Your First Simulation</span>
                                 <span className="material-symbols-outlined">rocket_launch</span>
                             </Link>
 
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                            {proofPoints.map((point) => (
+                                <div
+                                    key={point}
+                                    className="rounded-2xl border border-white/70 bg-white/70 px-4 py-3 text-sm font-semibold text-slate-700 shadow-clay-sm backdrop-blur-sm"
+                                >
+                                    {point}
+                                </div>
+                            ))}
                         </div>
                     </motion.div>
 

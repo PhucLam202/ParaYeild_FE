@@ -14,7 +14,7 @@ export default function CoreFeaturesSection() {
                     viewport={{ once: true }}
                     className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight"
                 >
-                    Why Choose ParaYield?
+                    Why DeFi decisions feel clearer here
                 </motion.h2>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -23,7 +23,7 @@ export default function CoreFeaturesSection() {
                     transition={{ delay: 0.1 }}
                     className="text-slate-600 text-base md:text-lg"
                 >
-                    We combine Polkadot&apos;s interoperability with a playful, user-centric interface that makes DeFi feel like magic.
+                    Every screen is designed to answer the question that matters most: is this pool still worth entering after fees, slippage, and impermanent loss?
                 </motion.p>
             </div>
 

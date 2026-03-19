@@ -108,6 +108,8 @@ export interface SimulationState {
     // Pro Mode
     isProMode: boolean;
     setIsProMode: (v: boolean) => void;
+    isBaseApyOverrideEnabled: boolean;
+    setIsBaseApyOverrideEnabled: (v: boolean) => void;
     baseApyOverride: number | null;
     setBaseApyOverride: (v: number | null) => void;
     reinvestmentRate: number;
@@ -154,6 +156,7 @@ export function useSimulation(): SimulationState {
     
     // Pro Mode State
     const [isProMode, setIsProMode] = useState(false);
+    const [isBaseApyOverrideEnabled, setIsBaseApyOverrideEnabled] = useState(false);
     const [baseApyOverride, setBaseApyOverride] = useState<number | null>(null);
     const [reinvestmentRate, setReinvestmentRate] = useState(100);
     const [volatilityAssumption, setVolatilityAssumption] = useState<'low' | 'medium' | 'high'>('medium');
@@ -397,7 +400,7 @@ export function useSimulation(): SimulationState {
                 rebalanceIntervalDays: 0,
                 // Pro Mode only params — omit when Pro Mode is off to avoid conflicting with basic settings
                 ...(isProMode ? {
-                    baseApyOverride: baseApyOverride || undefined,
+                    baseApyOverride: isBaseApyOverrideEnabled ? (baseApyOverride ?? 0) : undefined,
                     reinvestmentRate: reinvestmentRate,
                     volatilityAssumption: volatilityAssumption,
                     maxAcceptableIl: maxAcceptableIl || undefined,
@@ -532,6 +535,8 @@ export function useSimulation(): SimulationState {
         // Pro Mode
         isProMode,
         setIsProMode,
+        isBaseApyOverrideEnabled,
+        setIsBaseApyOverrideEnabled,
         baseApyOverride,
         setBaseApyOverride,
         reinvestmentRate,

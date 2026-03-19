@@ -1,52 +1,52 @@
 [
     {
         "num": "01",
-        "title": "Select Data Sources",
-        "heading": "Historical On-Chain Data",
-        "description": "Choose from multiple Polkadot parachains to fetch highly accurate historical liquidity and pricing data. Our indexer continually synchronizes with Acala, Bifrost, and Hydration.",
+        "title": "Choose The Market",
+        "heading": "Start with historical on-chain data",
+        "description": "Select a parachain, protocol, and pool to pull the historical liquidity and pricing context behind each opportunity. ParaYield Lab focuses the workflow on data you can actually inspect.",
         "features": [
-            "Multi-chain data aggregation",
-            "High-fidelity tick data",
-            "Real-time synchronization"
+            "Polkadot-native pool coverage",
+            "Historical liquidity context",
+            "Structured market inputs"
         ],
         "iconName": "Database",
         "color": "#00FFA3"
     },
     {
         "num": "02",
-        "title": "Configure Parameters",
-        "heading": "Set Your Strategy Variables",
-        "description": "Define token weights, virtual amounts, fee tiers, and the historical timeframe. Fine-tune slippage tolerance and choose whether to model XCM cross-chain overhead.",
+        "title": "Set The Assumptions",
+        "heading": "Model the strategy you would actually run",
+        "description": "Define token weights, capital size, fee tiers, and time range. Adjust slippage and XCM overhead so the simulation reflects the costs that shape real outcomes.",
         "features": [
             "Custom timeframes",
-            "Dynamic token weights",
-            "Fee tier configuration"
+            "Capital and weight controls",
+            "Fee and routing inputs"
         ],
         "iconName": "SlidersHorizontal",
         "color": "#60A5FA"
     },
     {
         "num": "03",
-        "title": "Run Simulation",
-        "heading": "Local Compute Engine",
-        "description": "Execute the backtest engine. Our simulator locally computes exact impermanent loss, accrued fees, and overall yield based on configured parameters in milliseconds.",
+        "title": "Run The Backtest",
+        "heading": "Turn assumptions into a result",
+        "description": "Execute the simulation to estimate fees earned, impermanent loss, and net performance from the exact setup you configured, without reducing everything to a single vanity metric.",
         "features": [
-            "Local compute engine",
-            "Millisecond execution",
-            "Accurate IL math"
+            "Net performance estimates",
+            "IL-aware analysis",
+            "Fast iteration loops"
         ],
         "iconName": "Play",
         "color": "#A78BFA"
     },
     {
         "num": "04",
-        "title": "Analyze Results",
-        "heading": "Visualize & Optimize",
-        "description": "Study the equity curve, break down yields versus impermanent loss, and discover XCM routing optimizations to maximize returns on your next deployment.",
+        "title": "Decide With Context",
+        "heading": "Read the tradeoffs before you commit",
+        "description": "Inspect the equity curve, compare yield against impermanent loss, and use the breakdown to decide whether to enter, skip, or refine the strategy.",
         "features": [
             "Equity curve visualization",
-            "XCM fee comparison",
-            "Yield breakdown"
+            "Return component breakdown",
+            "More confident deployment decisions"
         ],
         "iconName": "LineChart",
         "color": "#FB923C"

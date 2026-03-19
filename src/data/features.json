@@ -1,20 +1,20 @@
 [
     {
-        "title": "Auto-Compounding",
-        "description": "Maximized returns with automated harvest and reinvest cycles, optimized for gas efficiency.",
-        "icon": "autorenew",
+        "title": "See The Real Return",
+        "description": "Break projected performance into yield, fees, and impermanent loss so headline APY does not hide the full story.",
+        "icon": "analytics",
         "rotate": 6
     },
     {
-        "title": "Multi-Chain Support",
-        "description": "Seamlessly move assets across the Polkadot parachain network with a single click.",
+        "title": "Compare Across Parachains",
+        "description": "Evaluate opportunities from multiple Polkadot protocols in one workflow instead of jumping between dashboards.",
         "icon": "hub",
         "rotate": -3
     },
     {
-        "title": "Low Gas Fees",
-        "description": "Built on Substrate to ensure the most cost-efficient transactions for all yield seekers.",
-        "icon": "savings",
+        "title": "Test Before You Deploy",
+        "description": "Adjust timeframe, allocation, and strategy assumptions before moving capital into a live position.",
+        "icon": "rule",
         "rotate": 12
     }
 ]
