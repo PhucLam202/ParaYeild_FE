@@ -81,7 +81,7 @@ function SimulatorPageContent() {
             <div className="relative z-10 flex flex-col min-h-screen">
                 <HeaderSection />
                 <div className="pt-32 pb-10 flex-grow">
-                    <main className="mx-auto max-w-[1480px] px-4 space-y-10">
+                    <main className="mx-auto max-w-7xl px-4 space-y-10">
 
                         {/* Hero Section */}
                         <section className="space-y-4 text-center md:text-left">
@@ -154,6 +154,7 @@ function SimulatorPageContent() {
                                                         availableTokenBs={sim.availableTokenBs}
                                                         handleTokenAChange={sim.handleTokenAChange}
                                                         handleTokenBChange={sim.handleTokenBChange}
+                                                        hasValidTokenSelection={sim.hasValidTokenSelection}
                                                         selectedPool={sim.selectedPool}
                                                     />
                                                 </div>
@@ -221,6 +222,7 @@ function SimulatorPageContent() {
                             suggestedStrategies={sim.suggestedStrategies}
                             isSuggesting={sim.isSuggesting}
                             isSimulating={sim.isSimulating}
+                            canRunSimulation={sim.hasValidTokenSelection}
                             simulationSteps={sim.simulationSteps}
                             currentStepIndex={sim.currentStepIndex}
                             handleRunSimulation={sim.handleRunSimulation}
@@ -310,10 +312,13 @@ function SimulatorPageContent() {
                                 <div className="size-8 rounded-xl bg-primary text-white flex items-center justify-center text-xs font-black shadow-[0_4px_10px_rgba(76,175,80,0.3)]">PY</div>
                                 <span className="text-sm font-black text-slate-700 tracking-tight font-display">Built by ParaYield Labs</span>
                             </div>
-                            <p className="text-xs text-slate-500 font-medium mb-8">© 2024 ParaYield DeFi Simulator. Not financial advice. Data provided by ecosystem partners.</p>
+                            <p className="text-xs text-slate-500 font-medium mb-8">© 2026 ParaYield Lab. Built on Polkadot. Not financial advice.</p>
                             <div className="flex justify-center gap-4">
-                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="#">
+                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="https://x.com/PLtheCoder" target="_blank" title="X (Twitter)">
                                     <span className="material-symbols-outlined text-xl">public</span>
+                                </a>
+                                <a className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-primary hover:-translate-y-1 transition-all" href="https://github.com/PhucLam202" target="_blank" title="GitHub">
+                                    <span className="material-symbols-outlined text-xl">code</span>
                                 </a>
                                 <div className="flex gap-4">
                                     <button 

@@ -59,10 +59,10 @@ export default function PriceRangeVisual({
                     whileTap={{ scale: 0.98 }}
                     type="button"
                     onClick={onAutoFill}
-                    className="inline-flex items-center justify-center gap-2 block w-full sm:w-auto rounded-xl border border-primary/20 bg-primary/5 px-4 py-2.5 text-xs font-bold text-primary transition-colors hover:bg-primary/10 hover:border-primary/30"
+                    className="inline-flex items-center justify-center shrink-0 gap-1.5 w-full sm:w-auto rounded-xl border border-primary/20 bg-primary/5 px-3 py-2 sm:px-4 sm:py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary transition-colors hover:bg-primary/10 hover:border-primary/30"
                 >
-                    <span className="material-symbols-outlined text-sm">auto_fix_high</span>
-                    Auto-Fill History
+                    <span className="material-symbols-outlined text-[14px]">auto_fix_high</span>
+                    Auto-Fill
                 </motion.button>
             </div>
 

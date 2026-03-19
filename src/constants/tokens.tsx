@@ -163,31 +163,54 @@ export const TOKEN_CONFIG: Record<string, TokenInfo> = {
     }
 };
 
-export const getTokenConfig = (symbol: string): TokenInfo => {
-    const originalSymbol = symbol.split('-')[0].toUpperCase();
+const toLookupSymbol = (symbol: string): string => symbol.trim().toUpperCase();
 
-    // Check for exact match first
-    if (TOKEN_CONFIG[originalSymbol]) {
-        return TOKEN_CONFIG[originalSymbol];
+export const resolveSupportedTokenSymbol = (symbol: string): string | null => {
+    const lookupSymbol = toLookupSymbol(symbol);
+
+    if (!lookupSymbol) return null;
+
+    if (lookupSymbol.includes("DOT")) {
+        return TOKEN_CONFIG.DOT.iconPath ? "DOT" : null;
     }
 
-    // Handle v-prefix (vDOT, vASTR, etc.) or l-prefix (LDOT)
-    let baseSymbol = originalSymbol;
-    if (originalSymbol.startsWith('V') && originalSymbol.length > 1) {
-        baseSymbol = originalSymbol.substring(1);
-    } else if (originalSymbol.startsWith('L') && originalSymbol.length > 3) {
-        // e.g. LDOT -> DOT
-        baseSymbol = originalSymbol.substring(1);
+    if (TOKEN_CONFIG[lookupSymbol]?.iconPath) {
+        return lookupSymbol;
     }
 
-    const baseConfig = TOKEN_CONFIG[baseSymbol];
+    if (lookupSymbol.startsWith("V") && lookupSymbol.length > 1) {
+        const baseSymbol = lookupSymbol.substring(1);
+        if (TOKEN_CONFIG[baseSymbol]?.iconPath) {
+            return baseSymbol;
+        }
+    }
+
+    if (lookupSymbol.startsWith("L") && lookupSymbol.length > 3) {
+        const baseSymbol = lookupSymbol.substring(1);
+        if (TOKEN_CONFIG[baseSymbol]?.iconPath) {
+            return baseSymbol;
+        }
+    }
+
+    return null;
+};
+
+export const hasSupportedTokenIcon = (symbol: string): boolean => {
+    return resolveSupportedTokenSymbol(symbol) !== null;
+};
+
+export const getTokenConfig = (symbol: string): TokenInfo | null => {
+    const supportedSymbol = resolveSupportedTokenSymbol(symbol);
+
+    if (!supportedSymbol) {
+        return null;
+    }
+
+    const baseConfig = TOKEN_CONFIG[supportedSymbol];
 
     return {
-        symbol: originalSymbol,
-        label: originalSymbol,
-        // Inherit logo and color from base token if it exists
-        icon: baseConfig?.icon,
-        iconPath: baseConfig?.iconPath,
-        color: baseConfig?.color || "bg-slate-400"
+        ...baseConfig,
+        symbol,
+        label: symbol,
     };
 };

@@ -13,9 +13,8 @@ const AVAILABLE_TOKENS = Object.keys(TOKEN_CONFIG).filter(s => ["DOT", "KSM", "A
 
 const navLinks = [
     { label: "Ecosystem", href: "#ecosystem" },
-    { label: "Governance", href: "#" },
-    { label: "Docs", href: "#" },
-    { label: "Staking", href: "#" },
+    { label: "Pools", href: "#pools-explorer" },
+    { label: "Decision Clarity", href: "#decision-clarity" },
 ];
 
 export default function HeaderSection() {
@@ -58,15 +57,15 @@ export default function HeaderSection() {
                 : "bg-transparent"
                 }`}
         >
-            <div className="flex items-center justify-between px-5 py-4 md:px-16 max-w-[1480px] mx-auto">
-                <div className="flex items-center gap-2.5">
-                    <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#020402] shadow-clay-sm overflow-hidden border border-white/5">
+            <div className="flex items-center justify-between px-5 py-4 md:px-16 max-w-7xl mx-auto">
+                <Link href="/" className="flex items-center gap-2.5 group">
+                    <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#020402] shadow-clay-sm overflow-hidden border border-white/5 group-hover:scale-105 transition-transform">
                         <Image src="/logo_clay_transparent.png" alt="ParaYield Logo" width={44} height={44} className="object-contain" priority />
                     </div>
-                    <Link href="/" className="text-slate-900 text-xl md:text-2xl font-bold tracking-tight">
+                    <span className="text-slate-900 text-xl md:text-2xl font-bold tracking-tight">
                         ParaYield Lab
-                    </Link>
-                </div>
+                    </span>
+                </Link>
 
                 {pathname !== "/simulator" && (
                     <nav className="hidden md:flex items-center gap-8 bg-white/40 backdrop-blur-md px-6 py-2.5 rounded-full shadow-clay-sm">

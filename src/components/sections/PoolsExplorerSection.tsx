@@ -82,7 +82,7 @@ export default function PoolsExplorerSection() {
     const isLoadingState = isLoading || isChangingPage;
 
     return (
-        <section className="py-20 md:py-24 w-full relative z-10">
+        <section id="pools-explorer" className="py-20 md:py-24 w-full relative z-10 scroll-mt-32">
             {/* Header */}
             <div className="text-center max-w-4xl mx-auto flex flex-col gap-3 mb-10">
                 <motion.h2

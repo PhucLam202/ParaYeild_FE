@@ -6,7 +6,7 @@ import features from "@/data/features.json";
 
 export default function CoreFeaturesSection() {
     return (
-        <section className="flex flex-col gap-10 py-8 w-full relative z-10">
+        <section id="decision-clarity" className="flex flex-col gap-10 py-8 w-full relative z-10 scroll-mt-32">
             <div className="text-center max-w-4xl mx-auto flex flex-col gap-4">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}

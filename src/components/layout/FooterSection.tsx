@@ -9,12 +9,10 @@ export default function FooterSection() {
                     <span className="text-xl font-bold text-slate-900">ParaYield Lab</span>
                 </div>
                 <div className="flex gap-8 text-slate-500 font-semibold">
-                    <Link className="hover:text-primary transition-colors" href="#">Twitter</Link>
-                    <Link className="hover:text-primary transition-colors" href="#">Discord</Link>
-                    <Link className="hover:text-primary transition-colors" href="#">Github</Link>
-                    <Link className="hover:text-primary transition-colors" href="#">Medium</Link>
+                    <Link className="hover:text-primary transition-colors" href="https://x.com/PLtheCoder" target="_blank">X</Link>
+                    <Link className="hover:text-primary transition-colors" href="https://github.com/PhucLam202" target="_blank">Github</Link>
                 </div>
-                <p className="text-slate-400 text-sm">© 2024 ParaYield Lab. Built on Polkadot.</p>
+                <p className="text-slate-400 text-sm">© 2026 ParaYield Lab. Built on Polkadot.</p>
             </div>
         </footer>
     );

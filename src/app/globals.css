@@ -106,6 +106,10 @@ body {
   background-attachment: fixed;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @media (min-width: 1536px) {
   html,
   body {

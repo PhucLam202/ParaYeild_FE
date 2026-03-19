@@ -5,7 +5,7 @@ import { format, subDays } from "date-fns";
 import {
     simulatorService,
 } from "@/services/simulatorService";
-import { TOKEN_CONFIG, getTokenConfig } from "@/constants/tokens";
+import { TOKEN_CONFIG, getTokenConfig, hasSupportedTokenIcon } from "@/constants/tokens";
 import type {
     SimulationResponse,
     SimulationRequest,
@@ -45,12 +45,40 @@ export const DEFAULT_TOKENS = [
     { symbol: "USDC", color: TOKEN_CONFIG.USDC.color, iconPath: TOKEN_CONFIG.USDC.iconPath },
     { symbol: "USDT", color: TOKEN_CONFIG.USDT.color, iconPath: TOKEN_CONFIG.USDT.iconPath },
     { symbol: "LDOT", color: TOKEN_CONFIG.LDOT.color, iconPath: TOKEN_CONFIG.LDOT.iconPath },
-    { symbol: "ACA", color: TOKEN_CONFIG.ACA.color },
 ];
 
 export const HODL_RETURN_PERCENT = 3.5;
 
 export type TokenEntry = { symbol: string; color: string; poolTypes?: string[]; iconPath?: string };
+const EMPTY_TOKEN_ENTRY: TokenEntry = { symbol: "", color: "bg-slate-300" };
+
+function createTokenEntry(symbol: string, poolTypes?: string[]): TokenEntry | null {
+    const config = getTokenConfig(symbol);
+
+    if (!config?.iconPath) {
+        return null;
+    }
+
+    return {
+        symbol,
+        poolTypes,
+        color: config.color,
+        iconPath: config.iconPath,
+    };
+}
+
+function isSupportedAssetSymbol(symbol: string): boolean {
+    if (!symbol) return false;
+
+    if (!symbol.includes("-")) {
+        return hasSupportedTokenIcon(symbol);
+    }
+
+    const [baseSymbol, ...quoteParts] = symbol.split("-");
+    const quoteSymbol = quoteParts.join("-");
+
+    return Boolean(baseSymbol && quoteSymbol) && hasSupportedTokenIcon(baseSymbol) && hasSupportedTokenIcon(quoteSymbol);
+}
 
 export interface SimulationState {
     // Network & protocol
@@ -68,6 +96,7 @@ export interface SimulationState {
     availableTokenBs: TokenEntry[];
     handleTokenAChange: (symbol: string) => void;
     handleTokenBChange: (symbol: string) => void;
+    hasValidTokenSelection: boolean;
     // Parameters
     amount: number;
     setAmount: (v: number) => void;
@@ -140,8 +169,16 @@ export interface SimulationState {
 export function useSimulation(): SimulationState {
     const [network, setNetwork] = useState("");
     const [protocol, setProtocol] = useState("");
-    const [tokenA, setTokenA] = useState<TokenEntry>({ symbol: "DOT", color: "polkadot-gradient" });
-    const [tokenB, setTokenB] = useState<TokenEntry>({ symbol: "vDOT", color: "bg-pink-500" });
+    const [tokenA, setTokenA] = useState<TokenEntry>({
+        symbol: "DOT",
+        color: TOKEN_CONFIG.DOT.color,
+        iconPath: TOKEN_CONFIG.DOT.iconPath,
+    });
+    const [tokenB, setTokenB] = useState<TokenEntry>({
+        symbol: "vDOT",
+        color: TOKEN_CONFIG.VDOT.color,
+        iconPath: TOKEN_CONFIG.VDOT.iconPath,
+    });
     const [isPairProtocol, setIsPairProtocol] = useState(true);
     const [amount, setAmount] = useState(10000);
     const [timeRange, setTimeRange] = useState("90 Days");
@@ -216,14 +253,13 @@ export function useSimulation(): SimulationState {
         if (!network || !metadata) return;
         setIsLoadingInitial(true);
         const tokensData = metadata.mappings[network] || [];
-        const mappedTokens = tokensData.map((t) => {
-            const config = getTokenConfig(t.symbol);
-            return {
-                symbol: t.symbol,
-                poolTypes: t.poolTypes,
-                color: config.color,
-                iconPath: config.iconPath
-            };
+        const mappedTokens = tokensData.flatMap((t) => {
+            if (!isSupportedAssetSymbol(t.symbol)) {
+                return [];
+            }
+
+            const tokenEntry = createTokenEntry(t.symbol, t.poolTypes);
+            return tokenEntry ? [tokenEntry] : [];
         });
         setFetchedTokens(mappedTokens);
 
@@ -236,6 +272,8 @@ export function useSimulation(): SimulationState {
 
         if (protocols.length > 0 && !protocols.find(p => p.id === protocol)) {
             setProtocol(protocols[0].id);
+        } else if (protocols.length === 0) {
+            setProtocol("");
         }
         setIsLoadingInitial(false);
     }, [network, metadata, protocol, poolTypeDetails]);
@@ -243,19 +281,24 @@ export function useSimulation(): SimulationState {
     useEffect(() => {
         setIsPairProtocol(protocol === 'blp_farm' || protocol === 'lp_farm');
         let validTokenAs: TokenEntry[] = [];
+        if (!protocol) {
+            setAvailableTokenAs([]);
+            setAvailableTokenBs([]);
+            setTokenA(EMPTY_TOKEN_ENTRY);
+            setTokenB(EMPTY_TOKEN_ENTRY);
+            return;
+        }
+
         if (protocol === 'blp_farm' || protocol === 'lp_farm') {
             const baseTokensMap = new Map<string, TokenEntry>();
             fetchedTokens.forEach(t => {
                 if (t.poolTypes?.includes(protocol) && t.symbol.includes('-')) {
                     const baseSymbol = t.symbol.split('-')[0];
                     if (!baseTokensMap.has(baseSymbol)) {
-                        const config = getTokenConfig(baseSymbol);
-                        baseTokensMap.set(baseSymbol, {
-                            symbol: baseSymbol,
-                            color: config.color,
-                            poolTypes: t.poolTypes,
-                            iconPath: config.iconPath
-                        });
+                        const tokenEntry = createTokenEntry(baseSymbol, t.poolTypes);
+                        if (tokenEntry) {
+                            baseTokensMap.set(baseSymbol, tokenEntry);
+                        }
                     }
                 }
             });
@@ -264,30 +307,42 @@ export function useSimulation(): SimulationState {
             validTokenAs = fetchedTokens.filter(t => t.poolTypes?.includes(protocol) && !t.symbol.includes('-'));
         }
         setAvailableTokenAs(validTokenAs);
-        if (validTokenAs.length > 0 && !validTokenAs.find(t => t.symbol === tokenA.symbol)) {
+        if (validTokenAs.length === 0) {
+            setAvailableTokenBs([]);
+            setTokenA(EMPTY_TOKEN_ENTRY);
+            setTokenB(EMPTY_TOKEN_ENTRY);
+        } else if (!validTokenAs.find(t => t.symbol === tokenA.symbol)) {
             setTokenA(validTokenAs[0]);
         }
     }, [protocol, fetchedTokens, tokenA.symbol]);
 
     useEffect(() => {
-        if (!isPairProtocol) return;
+        if (!isPairProtocol) {
+            setAvailableTokenBs([]);
+            if (!tokenA.symbol) {
+                setTokenB(EMPTY_TOKEN_ENTRY);
+            }
+            return;
+        }
+
+        if (!tokenA.symbol) {
+            setAvailableTokenBs([]);
+            setTokenB(EMPTY_TOKEN_ENTRY);
+            return;
+        }
+
         const validTokenBs = fetchedTokens
             .filter(t => t.poolTypes?.includes(protocol) && t.symbol.startsWith(`${tokenA.symbol}-`))
-            .map(t => {
+            .flatMap(t => {
                 const quoteSymbol = t.symbol.split('-').slice(1).join('-');
-                const config = getTokenConfig(quoteSymbol);
-                return {
-                    symbol: quoteSymbol,
-                    color: config.color,
-                    poolTypes: t.poolTypes,
-                    iconPath: config.iconPath
-                };
+                const tokenEntry = createTokenEntry(quoteSymbol, t.poolTypes);
+                return tokenEntry ? [tokenEntry] : [];
             });
         setAvailableTokenBs(validTokenBs);
         if (validTokenBs.length > 0 && !validTokenBs.find(t => t.symbol === tokenB.symbol)) {
             setTokenB(validTokenBs[0]);
         } else if (validTokenBs.length === 0) {
-            setAvailableTokenBs([]);
+            setTokenB(EMPTY_TOKEN_ENTRY);
         }
     }, [tokenA.symbol, tokenB.symbol, protocol, isPairProtocol, fetchedTokens]);
 
@@ -310,16 +365,28 @@ export function useSimulation(): SimulationState {
             if (isPair && urlAsset.includes('-')) {
                 const [base, ...rest] = urlAsset.split('-');
                 const quote = rest.join('-');
-                const baseConfig = getTokenConfig(base);
-                const quoteConfig = getTokenConfig(quote);
-                setTokenA({ symbol: base, color: baseConfig.color, iconPath: baseConfig.iconPath });
-                setTokenB({ symbol: quote, color: quoteConfig.color, iconPath: quoteConfig.iconPath });
+                const baseToken = createTokenEntry(base);
+                const quoteToken = createTokenEntry(quote);
+                if (baseToken && quoteToken) {
+                    setTokenA(baseToken);
+                    setTokenB(quoteToken);
+                }
             } else {
-                const config = getTokenConfig(urlAsset);
-                setTokenA({ symbol: urlAsset, color: config.color, iconPath: config.iconPath });
+                const tokenEntry = createTokenEntry(urlAsset);
+                if (tokenEntry) {
+                    setTokenA(tokenEntry);
+                }
             }
         }
     }, [metadata]);
+
+    const hasValidTokenSelection = useMemo(() => {
+        if (!protocol || !tokenA.symbol) return false;
+        if (isPairProtocol) {
+            return Boolean(tokenB.symbol && availableTokenBs.find(t => t.symbol === tokenB.symbol));
+        }
+        return Boolean(availableTokenAs.find(t => t.symbol === tokenA.symbol));
+    }, [availableTokenAs, availableTokenBs, isPairProtocol, protocol, tokenA.symbol, tokenB.symbol]);
 
     const dateRange = useMemo(() => {
         const today = new Date();
@@ -363,6 +430,11 @@ export function useSimulation(): SimulationState {
     };
 
     const handleRunSimulation = async (customAllocations?: SimulationAllocation[]) => {
+        if (!customAllocations && !hasValidTokenSelection) {
+            setToastState({ message: "No supported assets available for this protocol yet.", type: "warning" });
+            return;
+        }
+
         setIsSimulating(true);
         setToastState(null);
         setSimulationSteps([
@@ -466,11 +538,18 @@ export function useSimulation(): SimulationState {
             if (isPair && first.assetSymbol.includes('-')) {
                 const baseSymbol = first.assetSymbol.split('-')[0];
                 const quoteSymbol = first.assetSymbol.split('-').slice(1).join('-');
-                setTokenA({ symbol: baseSymbol, color: DEFAULT_TOKENS.find(t => t.symbol === baseSymbol)?.color || "bg-blue-500" });
-                setTokenB({ symbol: quoteSymbol, color: DEFAULT_TOKENS.find(t => t.symbol === quoteSymbol)?.color || "bg-pink-500" });
+                const baseToken = createTokenEntry(baseSymbol);
+                const quoteToken = createTokenEntry(quoteSymbol);
+                if (baseToken) setTokenA(baseToken);
+                if (quoteToken) setTokenB(quoteToken);
             } else {
                 const matchedToken = fetchedTokens.find(t => t.symbol === first.assetSymbol);
-                if (matchedToken) setTokenA(matchedToken);
+                if (matchedToken) {
+                    setTokenA(matchedToken);
+                } else {
+                    const tokenEntry = createTokenEntry(first.assetSymbol);
+                    if (tokenEntry) setTokenA(tokenEntry);
+                }
             }
             handleRunSimulation(strategy.allocations.map(a => ({
                 protocol: a.protocol,
@@ -508,6 +587,7 @@ export function useSimulation(): SimulationState {
         isPairProtocol,
         availableTokenAs, availableTokenBs,
         handleTokenAChange, handleTokenBChange,
+        hasValidTokenSelection,
         amount, setAmount,
         timeRange, setTimeRange,
         customRange, setCustomRange,

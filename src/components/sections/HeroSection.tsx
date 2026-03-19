@@ -43,7 +43,6 @@ export default function HeroSection() {
                                 <span>Run Your First Simulation</span>
                                 <span className="material-symbols-outlined">rocket_launch</span>
                             </Link>
-
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
                             {proofPoints.map((point) => (
@@ -70,9 +69,9 @@ export default function HeroSection() {
                             <motion.div
                                 animate={{ y: [0, -15, 0], rotate: [12, 15, 12] }}
                                 transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                                className="relative w-56 h-56 bg-gradient-to-br from-primary-light to-primary-dark rounded-full shadow-clay-lg flex items-center justify-center transform rotate-12"
+                                className="relative w-56 h-56 bg-white rounded-full shadow-clay-lg flex items-center justify-center transform rotate-12 border border-white"
                             >
-                                <span className="material-symbols-outlined text-[104px] text-white/90">currency_bitcoin</span>
+                                <img src="/polkadot-new-dot-logo.svg" className="w-40 h-40 object-contain" alt="Polkadot" />
 
                                 {/* Small orbiting elements */}
                                 <motion.div
@@ -80,8 +79,8 @@ export default function HeroSection() {
                                     transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
                                     className="absolute inset-[-34px] rounded-full pointer-events-none"
                                 >
-                                    <div className="absolute top-0 right-8 w-20 h-20 bg-white rounded-3xl shadow-clay-md flex items-center justify-center transform -rotate-12 pointer-events-auto">
-                                        <span className="material-symbols-outlined text-3xl text-primary">token</span>
+                                    <div className="absolute top-0 right-8 w-20 h-20 bg-white rounded-3xl shadow-clay-md flex items-center justify-center transform -rotate-12 pointer-events-auto border border-white p-3">
+                                        <img src="/hydration.svg" className="w-full h-full object-contain" alt="Hydration" />
                                     </div>
                                 </motion.div>
 
@@ -90,8 +89,8 @@ export default function HeroSection() {
                                     transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
                                     className="absolute inset-[-48px] rounded-full pointer-events-none"
                                 >
-                                    <div className="absolute bottom-8 left-0 w-28 h-28 bg-slate-100 rounded-full shadow-clay-md flex items-center justify-center transform rotate-45 pointer-events-auto">
-                                        <span className="material-symbols-outlined text-4xl text-primary-dark">show_chart</span>
+                                    <div className="absolute bottom-8 left-0 w-28 h-28 bg-white rounded-3xl shadow-clay-md flex items-center justify-center transform rotate-45 pointer-events-auto border border-white p-5">
+                                        <img src="/biforst.svg" className="w-full h-full object-contain" alt="Bifrost" />
                                     </div>
                                 </motion.div>
                             </motion.div>

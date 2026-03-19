@@ -6,6 +6,7 @@ interface Props {
     suggestedStrategies: SuggestStrategiesResponse | null;
     isSuggesting: boolean;
     isSimulating: boolean;
+    canRunSimulation: boolean;
     simulationSteps: string[];
     currentStepIndex: number;
     handleRunSimulation: (customAllocations?: SimulationAllocation[]) => Promise<void>;
@@ -19,6 +20,7 @@ export default function StrategySuggestions({
     suggestedStrategies,
     isSuggesting,
     isSimulating,
+    canRunSimulation,
     simulationSteps,
     currentStepIndex,
     handleRunSimulation,
@@ -154,9 +156,11 @@ export default function StrategySuggestions({
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
                 <button
                     onClick={() => handleRunSimulation()}
-                    disabled={isSimulating}
+                    disabled={isSimulating || !canRunSimulation}
                     className={`relative flex-1 py-3.5 sm:py-4 rounded-clay-lg font-black text-base uppercase tracking-wider transition-all flex items-center justify-center gap-3 overflow-hidden ${isSimulating
                         ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-inner'
+                        : !canRunSimulation
+                            ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-inner'
                         : 'clay-button-primary active:scale-[0.98]'
                         }`}
                 >

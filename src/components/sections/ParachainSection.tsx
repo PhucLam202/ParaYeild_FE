@@ -9,7 +9,7 @@ const PARACHAINS = parachainsData.filter(p => p.orbit);
 
 const ParachainSection = () => {
     return (
-        <section className="py-20 relative overflow-hidden w-full max-w-none my-10">
+        <section id="cross-chain-context" className="py-20 relative overflow-hidden w-full max-w-none my-10 scroll-mt-32">
             <div className="absolute inset-0 opacity-10 pointer-events-none">
                 <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
                     <pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
@@ -19,7 +19,7 @@ const ParachainSection = () => {
                 </svg>
             </div>
 
-            <div className="max-w-[1480px] mx-auto px-5 md:px-12 relative z-10 w-full">
+            <div className="max-w-7xl mx-auto px-5 md:px-12 relative z-10 w-full">
                 <div className="text-center mb-14 flex flex-col gap-3">
                     <span className="text-primary font-bold text-xs uppercase tracking-[0.2em] bg-primary/10 px-4 py-2 rounded-full w-fit mx-auto">Cross-Chain Context</span>
                     <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">One view across the Polkadot yield landscape</h2>

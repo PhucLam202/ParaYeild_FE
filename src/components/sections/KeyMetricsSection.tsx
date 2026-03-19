@@ -6,7 +6,7 @@ import metrics from "@/data/metrics.json";
 
 export default function KeyMetricsSection() {
     return (
-        <section className="mb-20 relative z-10 w-full">
+        <section id="historical-coverage" className="mb-20 relative z-10 w-full scroll-mt-32">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {metrics.map((metric, index) => (
                     <motion.div

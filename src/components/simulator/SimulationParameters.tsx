@@ -48,9 +48,9 @@ const VOLATILITY_OPTIONS = [
 ];
 
 const COMPOUND_FREQUENCY_INFO = {
-    daily: { label: "Daily", helper: "365 compounds/year" },
-    weekly: { label: "Weekly", helper: "52 compounds/year" },
-    monthly: { label: "Monthly", helper: "12 compounds/year" },
+    daily: { label: "Daily", helper: "365x/YR" },
+    weekly: { label: "Weekly", helper: "52x/YR" },
+    monthly: { label: "Monthly", helper: "12x/YR" },
 };
 
 const COMPOUND_FREQUENCY_TOOLTIP = {
@@ -302,27 +302,27 @@ export default function SimulationParameters({
                                 <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] gap-8 pt-6">
                                     <motion.div layout className="space-y-4">
                                         <motion.div layout className="rounded-3xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow p-5">
-                                            <motion.div layout className="flex items-start justify-between gap-4">
-                                                <div>
+                                            <motion.div layout className="flex items-start justify-between gap-3 sm:gap-4">
+                                                <div className="flex-1">
                                                     <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">APY</label>
-                                                    <p className="text-lg font-black text-slate-800">
+                                                    <p className="text-base sm:text-lg font-black text-slate-800">
                                                         {isBaseApyOverrideEnabled
                                                             ? `Using custom ${baseApyOverride?.toFixed(1) ?? "—"}%`
                                                             : `Using historical ~${historicalApyAverage?.toFixed(1) ?? "—"}%`}
                                                     </p>
-                                                    <p className="mt-2 text-sm text-slate-500 font-medium">
-                                                        Advanced mode can override the historical APY when you want to simulate a target yield scenario.
+                                                    <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+                                                        Override historical APY to simulate custom yield scenarios.
                                                     </p>
                                                 </div>
                                                 <button
                                                     type="button"
                                                     onClick={handleToggleBaseApyOverride}
-                                                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${isBaseApyOverrideEnabled ? "border-primary/20 bg-primary/10 text-primary" : "border-slate-200 bg-white text-slate-500 hover:border-primary/30 hover:text-primary"}`}
+                                                    className={`shrink-0 inline-flex items-center gap-1.5 rounded-full border px-2.5 sm:px-3 py-1.5 sm:py-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-colors ${isBaseApyOverrideEnabled ? "border-primary/20 bg-primary/10 text-primary" : "border-slate-200 bg-white text-slate-500 hover:border-primary/30 hover:text-primary"}`}
                                                 >
-                                                    <span className={`material-symbols-outlined text-sm ${isBaseApyOverrideEnabled ? "text-primary" : "text-slate-400"}`}>
+                                                    <span className={`material-symbols-outlined text-[14px] ${isBaseApyOverrideEnabled ? "text-primary" : "text-slate-400"}`}>
                                                         {isBaseApyOverrideEnabled ? "tune" : "history"}
                                                     </span>
-                                                    {isBaseApyOverrideEnabled ? "Custom APY" : "Use Custom"}
+                                                    {isBaseApyOverrideEnabled ? "Custom" : "Use Custom"}
                                                 </button>
                                             </motion.div>
 
@@ -380,12 +380,12 @@ export default function SimulationParameters({
 
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                             <motion.div layout className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm hover:shadow-md transition-shadow space-y-4">
-                                                <div className="flex items-start justify-between gap-4">
-                                                    <div>
-                                                        <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Reinvestment</label>
-                                                        <p className="text-sm text-slate-500 font-medium">Defaulted to near-full compounding for yield-loop scenarios.</p>
+                                                <div className="flex items-start justify-between gap-3">
+                                                    <div className="flex-1">
+                                                        <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1 sm:mb-2">Reinvestment</label>
+                                                        <p className="text-xs sm:text-sm text-slate-500 font-medium leading-snug">Defaulted to near-full compounding for optimal yield.</p>
                                                     </div>
-                                                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-black text-primary">{reinvestmentRate}%</span>
+                                                    <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] sm:text-xs font-black text-primary">{reinvestmentRate}%</span>
                                                 </div>
                                                 <input
                                                     className="w-full h-1.5 bg-slate-100 rounded-full appearance-none cursor-pointer accent-primary [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 hover:[&::-webkit-slider-thumb]:scale-125 [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer focus:outline-none"
@@ -403,40 +403,42 @@ export default function SimulationParameters({
                                             </motion.div>
 
                                             <motion.div layout className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-4">
-                                                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                                    <div>
-                                                        <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Compound</label>
-                                                        <p className="text-lg font-black text-slate-800">{COMPOUND_FREQUENCY_INFO[compoundFrequency].label}</p>
+                                                <div className="flex flex-col gap-3">
+                                                    <div className="flex items-start justify-between gap-2">
+                                                        <div>
+                                                            <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Compound</label>
+                                                            <p className="text-base sm:text-lg font-black text-slate-800 leading-none mt-1">{COMPOUND_FREQUENCY_INFO[compoundFrequency].label}</p>
+                                                        </div>
+                                                        <span
+                                                            title={COMPOUND_FREQUENCY_TOOLTIP[compoundFrequency]}
+                                                            className="inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-slate-100 px-2 sm:px-2.5 py-1 text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-slate-500"
+                                                        >
+                                                            {COMPOUND_FREQUENCY_INFO[compoundFrequency].helper}
+                                                            <span className="material-symbols-outlined text-[10px] text-slate-400">info</span>
+                                                        </span>
                                                     </div>
-                                                    <span
-                                                        title={COMPOUND_FREQUENCY_TOOLTIP[compoundFrequency]}
-                                                        className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-black uppercase tracking-wider text-slate-500"
-                                                    >
-                                                        {COMPOUND_FREQUENCY_INFO[compoundFrequency].helper}
-                                                        <span className="material-symbols-outlined text-sm text-slate-400">info</span>
-                                                    </span>
-                                                </div>
-                                                <div className="flex bg-slate-50/80 p-1.5 rounded-2xl border border-slate-100">
-                                                    {(Object.keys(COMPOUND_FREQUENCY_INFO) as Array<keyof typeof COMPOUND_FREQUENCY_INFO>).map((frequency) => {
-                                                        const isActive = compoundFrequency === frequency;
-                                                        return (
-                                                            <button
-                                                                key={frequency}
-                                                                type="button"
-                                                                onClick={() => setCompoundFrequency(frequency)}
-                                                                className={`relative flex-1 rounded-xl px-2 py-2 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] transition-colors z-10 ${isActive ? "text-primary flex items-center justify-center gap-1.5" : "text-slate-500 hover:text-primary flex items-center justify-center gap-1.5"}`}
-                                                            >
-                                                                {isActive && (
-                                                                    <motion.div
-                                                                        layoutId="compound-activebg"
-                                                                        className="absolute inset-0 bg-primary/10 border border-primary/20 rounded-xl -z-10 shadow-sm"
-                                                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                                                    />
-                                                                )}
-                                                                {COMPOUND_FREQUENCY_INFO[frequency].label}
-                                                            </button>
-                                                        );
-                                                    })}
+                                                    <div className="flex bg-slate-50/80 p-1 rounded-xl border border-slate-100 mt-2">
+                                                        {(Object.keys(COMPOUND_FREQUENCY_INFO) as Array<keyof typeof COMPOUND_FREQUENCY_INFO>).map((frequency) => {
+                                                            const isActive = compoundFrequency === frequency;
+                                                            return (
+                                                                <button
+                                                                    key={frequency}
+                                                                    type="button"
+                                                                    onClick={() => setCompoundFrequency(frequency)}
+                                                                    className={`relative flex-1 rounded-lg px-1 sm:px-2 py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-colors z-10 ${isActive ? "text-primary flex items-center justify-center gap-1" : "text-slate-500 hover:text-primary flex items-center justify-center gap-1"}`}
+                                                                >
+                                                                    {isActive && (
+                                                                        <motion.div
+                                                                            layoutId="compound-activebg"
+                                                                            className="absolute inset-0 bg-primary/10 border border-primary/20 rounded-lg -z-10 shadow-sm"
+                                                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                                                        />
+                                                                    )}
+                                                                    {COMPOUND_FREQUENCY_INFO[frequency].label}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
                                                 </div>
                                             </motion.div>
                                         </div>

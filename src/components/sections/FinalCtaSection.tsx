@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function FinalCtaSection() {
     return (
-        <section className="mt-20 mb-10 p-10 md:p-14 rounded-2xl shadow-clay-lg bg-white relative overflow-hidden flex flex-col items-center text-center gap-6 border border-white w-full">
+        <section id="final-cta" className="mt-20 mb-10 p-10 md:p-14 rounded-2xl shadow-clay-lg bg-white relative overflow-hidden flex flex-col items-center text-center gap-6 border border-white w-full scroll-mt-32">
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -ml-32 -mb-32"></div>
             <motion.h2
